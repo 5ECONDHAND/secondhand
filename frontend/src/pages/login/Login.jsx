@@ -1,38 +1,47 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import splash from '../../assets/images/login-splash.png'
 import Box from '@mui/material/Box'
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-} from '@mui/material'
-import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { Link } from '@mui/material'
+import { LoginForm, RegisterForm } from '../../components/molecules'
+import { useLocation } from 'react-router-dom'
+
+const FormChange = ({ text, status }) => {
+  return (
+    <>
+      <Box mt="3rem" sx={{ textAlign: 'center' }}>
+        <p style={{ display: 'inline' }}>{text} punya akun?</p>
+        <Link
+          href={text === 'Belum' ? '/register' : '/login'}
+          underline="none"
+          sx={{ color: '#7126B5', fontWeight: 'bold' }}
+        >
+          {' '}
+          {status} di sini
+        </Link>
+      </Box>
+    </>
+  )
+}
 
 const Login = () => {
-  const [values, setValues] = React.useState({
-    amount: '',
-    password: '',
-    weight: '',
-    weightRange: '',
-    showPassword: false,
-  })
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    })
+  const location = useLocation()
+  const [status, setStatus] = useState('')
+  const getLocation = () => {
+    switch (location.pathname) {
+      case '/login':
+        return 'Masuk'
+      case '/register':
+        return 'Daftar'
+      default:
+        return 'Masuk'
+    }
   }
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault()
-  }
+  useEffect(() => {
+    setStatus(getLocation())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location])
+
   return (
     <>
       <Box sx={{ display: 'flex', width: '100vw', height: '100vh' }}>
@@ -59,62 +68,19 @@ const Login = () => {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mx: 'auto' }}>
           <Box>
-            <h1 style={{ marginBottom: '2rem' }}>Masuk</h1>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            >
-              <FormControl sx={{ minWidth: '50ch' }}>
-                <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
-                  Email
-                </FormHelperText>
-                <OutlinedInput
-                  placeholder="Contoh: johndee@gmail.com"
-                  sx={{ borderRadius: '1rem', mb: '1rem' }}
-                />
-              </FormControl>
-              <FormControl sx={{ minWidth: '50ch', mb: '2rem' }}>
-                <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
-                  Password
-                </FormHelperText>
-                <OutlinedInput
-                  placeholder="Masukkan password"
-                  sx={{ borderRadius: '1rem' }}
-                  type={values.showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  onChange={handleChange('password')}
-                  endAdornment={
-                    <InputAdornment position="end" sx={{ mr: '0.5rem' }}>
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {values.showPassword ? <FiEyeOff /> : <FiEye />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                size="large"
-                disableElevation
-                sx={{
-                  borderRadius: '1rem',
-                  textTransform: 'none',
-                  background: '#7126B5',
-                  py: '15px',
-                }}
-              >
-                Masuk
-              </Button>
-            </Box>
+            {status === 'Masuk' ? (
+              <>
+                <h1 style={{ marginBottom: '2rem' }}>{status}</h1>
+                <LoginForm />
+                <FormChange text="Belum" status="Daftar" />
+              </>
+            ) : (
+              <>
+                <h1 style={{ marginBottom: '2rem' }}>{status}</h1>
+                <RegisterForm />
+                <FormChange text="Sudah" status="Masuk" />
+              </>
+            )}
           </Box>
         </Box>
       </Box>

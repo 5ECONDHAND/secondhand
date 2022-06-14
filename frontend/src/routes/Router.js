@@ -10,6 +10,7 @@ const router = () => {
         <Routes>
           <Route path="*" element={<div>404</div>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Login />} />
           <Route path="/" element={<Home />}>
             {/* <Route index element={<Home />} />
             <Route path="teams" element={<Teams />}>
