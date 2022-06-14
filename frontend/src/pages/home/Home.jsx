@@ -1,23 +1,21 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { decrement, increment } from '../../redux/slices/counterSlice'
-
+import { Box, Container, Typography } from '@mui/material';
+import Buttons from '../../components/buttons/Buttons';
 const Home = () => {
-  const count = useSelector((state) => state.counter.value)
-  const dispatch = useDispatch()
+
 
   return (
     <>
-      <div>
-        TESTING REACT REDUX TOOLKIT
-        <button aria-label="Increment value" onClick={() => dispatch(increment())}>
-          Increment
-        </button>
-        <span>{count}</span>
-        <button aria-label="Decrement value" onClick={() => dispatch(decrement())}>
-          Decrement
-        </button>
-      </div>
+      <Box sx={{ width: '100%', backgroundColor: 'red', height: '200px' }}>
+
+      </Box>
+      <Container maxWidth='xl' sx={{ marginTop: '40px' }}>
+        <Typography variant='h6' sx={{ fontSize: '16px' }}>
+          Telusuri Kategori
+        </Typography>
+        <Buttons />
+      </Container>
+
     </>
   )
 }
