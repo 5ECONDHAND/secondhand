@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from '../pages/home/Home'
-import Login from '../pages/login/Login'
+import Auth from '../pages/auth/Auth'
 
 const router = () => {
   return (
@@ -9,8 +9,8 @@ const router = () => {
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<div>404</div>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Login />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Auth />} />
           <Route path="/" element={<Home />}>
             {/* <Route index element={<Home />} />
             <Route path="teams" element={<Teams />}>
