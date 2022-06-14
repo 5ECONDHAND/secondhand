@@ -1,0 +1,569 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+const dotenv = require('dotenv');
+const stringify = require('dotenv-stringify');
+const path = require('path');
+const inquirer = require('inquirer');
+const fs = require("fs");
+
+/**
+ * Definition of the toolbox.
+ */
+
+process.env.ROOT_PATH = path.resolve(__dirname, '..');
+const envFilePath = path.resolve(__dirname, "../.env");
+
+ /**
+  * Finds the key in .env files and returns the corresponding value
+  *
+  * @param {Object<string, any>} object
+  * @param {string} key Key to find
+  * @returns {string|null} Value of the key
+  */
+const getEnvValue = (object, key) => {
+  if (!key || !object) {
+    return null;
+  }
+
+  return object[key];
+};
+
+ /**
+  * Updates value for existing key or creates a new key=value line
+  *
+  * @param {Object<string, any>} object
+  * @param {string} key Key to update/insert
+  * @param {string} value Value to update/insert
+  */
+const setEnvValue = (object, key, value) => {
+  if (!key || !value || !object) {
+    return;
+  }
+
+  // if the key already exists, update the value
+  object[key] = value;
+  // write everything back to the file system
+  fs.writeFileSync(envFilePath, stringify(object));
+};
+
+  /**
+   *
+   * @param {Object<string, any>} object
+   * @param {string} key
+   */
+const removeEnvValue = (object, key) => {
+  if (!key || !object) {
+    return;
+  }
+
+  // remove the key from the object
+  delete object[key];
+  // write everything back to the file system
+  fs.writeFileSync(envFilePath, stringify(object));
+};
+
+/**
+ *
+ * @typedef {import('inquirer')} inquirer
+ */
+
+/**
+ *
+ * @param questions {inquirer.QuestionCollection<inquirer.Answers>}
+ * @param answers  {Partial<inquirer.Answers>}
+ * @return {Promise<inquirer.Answers>}
+ * @throws {Error}
+ */
+function promptAsync(questions, answers){
+  return inquirer.prompt(questions, answers);
+}
+
+function beautyPrintEnvVars(colors = false) {
+  const config = dotenv.parse(fs.readFileSync(envFilePath));
+
+  if (colors) {
+    console.log("\n");
+    console.log("\x1b[36m%s\x1b[0m", "Your .env file has been loaded with the following values:");
+    console.log("\n");
+    Object.keys(config).forEach((key) => {
+      console.log("\x1b[36m%s\x1b[0m", `${key}=${config[key]}`);
+    });
+    console.log("\n");
+  } else {
+    console.log("\n");
+    console.log("Your .env file has been loaded with the following values:");
+    console.log("\n");
+    Object.keys(config).forEach((key) => {
+      console.log(`${key}=${config[key]}`);
+    });
+    console.log("\n");
+  }
+}
+
+/**
+ * @typedef {Object} IRoute
+ * @property {string} path
+ * @property {Record<string, any>} methods
+ * @property {Array<ILayer>} stack
+ */
+
+/**
+ * @typedef {Object} ILayer
+ * @property {Function} handle
+ * @property {string} path
+ * @property {string} name
+ * @property {RegExp} regexp
+ * @property {string} [method]
+ * @property {IRoute} [route]
+ */
+
+/**
+ *
+ * @param router {import('express').Router}
+ */
+function printRoutes(router, postfix = '') {
+  var outString = "";
+  outString += "Routes ("+ postfix +"):\n";
+  outString += "=====================================================\n";
+  outString += "Method\t\tPath\n";
+  outString += "=====================================================\n";
+  router.stack.forEach(
+    /**
+     *
+     * @param layer {Record<string, any> & ILayer}
+     */
+    (layer) => {
+      if (layer.route) {
+        Object.keys(layer.route.methods).forEach((method) => {
+          outString += `${method}\t\t${layer.route.path}\n`;
+        });
+      }
+  });
+  outString += "=====================================================\n";
+  console.log(outString);
+}
+
+async function pressEnterContinue() {
+  const { continue: continueAnswer } = await promptAsync([
+    {
+      type: "confirm",
+      name: "continue",
+      message: "Press enter to continue...",
+      default: true,
+    },
+  ]);
+  if (!continueAnswer) {
+    process.exit(0);
+  }
+}
+
+/**
+ * Main function.
+ */
+function errorAndQuit(err) {
+  console.error(err);
+  process.exit(1);
+}
+
+function quit() {
+  console.clear();
+  console.log('Bye!');
+  console.log("\n\nCreated by: GoogleX");
+  process.exit(0);
+}
+
+async function changeDb() {
+  console.clear();
+  const config = dotenv.parse(fs.readFileSync(envFilePath));
+
+  var type = 'list';
+  var name = 'dbms';
+  var message = 'Pilih database (dbms)';
+  var def = 'back';
+  var choices = [
+    {
+      name: 'MongoDB',
+      value: 'mongodb+srv'
+    },
+    {
+      name: 'MySQL',
+      value: 'mysql'
+    },
+    {
+      name: 'PostgreSQL',
+      value: 'postgresql'
+    },
+    new inquirer.Separator(),
+    {
+      name: 'Back',
+      value: 'back'
+    }
+  ];
+
+  const { dbms } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def,
+    choices
+  }).catch(errorAndQuit);
+
+  if (dbms === 'back') {
+    return prisma();
+  }
+
+  var type = 'input';
+  var name = 'db_host';
+  var message = 'Database host';
+  var def = 'localhost';
+
+  const { db_host } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  var type = 'input';
+  var name = 'db_port';
+  var message = 'Database port';
+  var def = '27017';
+
+  const { db_port } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  var type = 'input';
+  var name = 'db_name';
+  var message = 'Database name';
+  var def = 'prisma';
+
+  const { db_name } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  var type = 'input';
+  var name = 'db_user';
+  var message = 'Database user';
+  var def = 'root';
+
+  const { db_user } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  var type = 'password';
+  var name = 'db_password';
+  var message = 'Database password';
+  var def = '';
+
+  const { db_password } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  var type = 'input';
+  var name = 'db_options';
+  var message = 'Database options (include \'?\')';
+  var def = '';
+
+  const { db_options } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  const db_url = `${dbms}://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}${db_options}`;
+  setEnvValue(config, 'DATABASE_URL', db_url);
+
+  console.log("===============================");
+  console.log("New URL: " + db_url);
+  console.log("Don't forget to change provider datasource in prisma.schema");
+  console.log("===============================");
+  await pressEnterContinue();
+  prisma();
+}
+
+async function prisma() {
+  console.clear();
+
+  const type = 'list';
+  const name = 'prisma';
+  const message = 'Pilih menu (prisma)';
+  const def = 'back';
+  const choices = [
+    {
+      name: 'Change db connection',
+      value: 'change-db',
+    },
+    {
+      name: 'Back',
+      value: 'back',
+    },
+    new inquirer.Separator(),
+    {
+      name: 'Quit',
+      value: 'quit',
+    }
+  ];
+
+  const goto = {
+    'change-db': changeDb,
+    'back': main,
+    'quit': quit,
+  };
+
+  const { prisma: answer } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def,
+    choices
+  }).catch(errorAndQuit);
+
+  goto[answer]();
+}
+
+async function deleteSetup() {
+  console.clear();
+  const config = dotenv.parse(fs.readFileSync(envFilePath));
+
+  var type = 'list';
+  var name = 'key';
+  var message = 'Pilih key';
+  var def = 'back';
+  const choices = [
+    ...Object.keys(config).map((key) => ({
+      name: key,
+      value: key
+    })),
+    new inquirer.Separator(),
+    {
+      name: 'Back',
+      value: 'back'
+    }
+  ];
+
+  const { key } = await promptAsync({
+    type,
+    name,
+    message,
+    choices,
+    default: def
+  }).catch(errorAndQuit);
+
+  if (key === 'back') {
+    return setup();
+  }
+
+  removeEnvValue(config, key);
+  setup();
+}
+
+async function updateSetup() {
+  console.clear();
+  const config = dotenv.parse(fs.readFileSync(envFilePath));
+
+  var type = 'list';
+  var name = 'key';
+  var message = 'Pilih key';
+  var def = 'back';
+  const choices = [
+    ...Object.keys(config).map((key) => ({
+      name: key,
+      value: key
+    })),
+    new inquirer.Separator(),
+    {
+      name: 'Back',
+      value: 'back'
+    }
+  ];
+
+  const { key } = await promptAsync({
+    type,
+    name,
+    message,
+    choices,
+    default: def
+  }).catch(errorAndQuit);
+
+  if (key === 'back') {
+    return setup();
+  }
+
+  var type = 'input';
+  var name = 'value';
+  var message = 'New value of key ('+key+')';
+  var def = null;
+
+  const { value } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def
+  }).catch(errorAndQuit);
+
+  setEnvValue(config, key, value);
+  setup();
+}
+
+async function insertSetup() {
+  console.clear();
+  const config = dotenv.parse(fs.readFileSync(envFilePath));
+
+  var type = 'input';
+  var name = 'key';
+  var message = 'New Key';
+  var def = null;
+
+  const { key } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def,
+  }).catch(errorAndQuit);
+
+  var type = 'input';
+  var name = 'value';
+  var message = 'Value of new key';
+  var def = null;
+
+  const { value } = await promptAsync({
+    type,
+    name,
+    message,
+    default: def,
+  }).catch(errorAndQuit);
+
+  setEnvValue(config, key, value);
+  setup();
+}
+
+async function setup() {
+  console.clear();
+  beautyPrintEnvVars();
+
+  const type = 'list';
+  const name = 'setup';
+  const message = 'Pilih aksi';
+  const def = 'back';
+  const choices = [
+    {
+      name: 'Insert / New',
+      value: 'insert-setup'
+    },
+    {
+      name: 'Update / Change',
+      value: 'update-setup'
+    },
+    {
+      name: 'Delete / Remove',
+      value: 'delete-setup'
+    },
+    {
+      name: 'Back',
+      value: 'back'
+    },
+    new inquirer.Separator(),
+    {
+      name: 'Quit',
+      value: 'quit'
+    }
+  ];
+  const goto = {
+    'insert-setup': insertSetup,
+    'update-setup': updateSetup,
+    'delete-setup': deleteSetup,
+    'back': main,
+    'quit': quit
+  };
+
+  const { setup: answer } = await promptAsync({
+    type,
+    name,
+    message,
+    choices,
+    default: def
+  }).catch(errorAndQuit);
+
+  goto[answer]();
+}
+
+async function routes() {
+  console.clear();
+
+  printRoutes(require(__dirname + '/../routes/api.js'), 'API');
+  printRoutes(require(__dirname + '/../routes/web.js'), 'WEB');
+
+  await pressEnterContinue();
+  main();
+}
+
+async function main() {
+  console.clear();
+
+  // welcome message
+  console.log("===============================");
+  console.log("Welcome to the Epress Toolbox");
+  console.log("This toolbox will help you to do things with Epress");
+  console.log("\n\nCreated by: GoogleX");
+  console.log("===============================");
+
+  const type = 'list';
+  const name = 'main';
+  const message = 'Pilih menu';
+  const def = 'quit';
+  const choices = [
+    {
+      name: 'Prisma',
+      value: 'prisma'
+    },
+    {
+      name: 'Route list',
+      value: 'routes'
+    },
+    {
+      name: 'Setup (env)',
+      value: 'setup'
+    },
+    new inquirer.Separator(),
+    {
+      name: 'Quit',
+      value: 'quit'
+    }
+  ];
+  const goto = {
+    'prisma': prisma,
+    'routes': routes,
+    'setup': setup,
+    'quit': quit
+  };
+
+  const { main: answer } = await promptAsync({
+    type,
+    name,
+    message,
+    choices,
+    default: def
+  }).catch(errorAndQuit);
+
+  goto[answer]();
+}
+
+main()
