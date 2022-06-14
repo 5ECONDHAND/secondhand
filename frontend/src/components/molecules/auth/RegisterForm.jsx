@@ -10,9 +10,10 @@ import {
 } from '@mui/material'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [values, setValues] = useState({
+    fullname: '',
     email: '',
     password: '',
   })
@@ -30,11 +31,20 @@ const LoginForm = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault()
   }
-
   return (
     <>
       <Box component="form" autoComplete="off" sx={{ display: 'flex', flexDirection: 'column' }}>
-        <FormControl sx={{ minWidth: '50ch' }}>
+        <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+          <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>Nama</FormHelperText>
+          <OutlinedInput
+            placeholder="Nama Lengkap"
+            type="text"
+            value={values.fullname}
+            onChange={handleChange('fullname')}
+            sx={{ borderRadius: '1rem', mb: '1rem' }}
+          />
+        </FormControl>
+        <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
           <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>Email</FormHelperText>
           <OutlinedInput
             placeholder="Contoh: johndee@gmail.com"
@@ -44,7 +54,7 @@ const LoginForm = () => {
             sx={{ borderRadius: '1rem', mb: '1rem' }}
           />
         </FormControl>
-        <FormControl sx={{ minWidth: '50ch', mb: '2rem' }}>
+        <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' }, mb: '2rem' }}>
           <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>Password</FormHelperText>
           <OutlinedInput
             placeholder="Masukkan password"
@@ -60,7 +70,7 @@ const LoginForm = () => {
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {values.showPassword ? <FiEyeOff /> : <FiEye />}
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
                 </IconButton>
               </InputAdornment>
             }
@@ -79,11 +89,11 @@ const LoginForm = () => {
             py: '15px',
           }}
         >
-          Masuk
+          Daftar
         </Button>
       </Box>
     </>
   )
 }
 
-export default LoginForm
+export default RegisterForm
