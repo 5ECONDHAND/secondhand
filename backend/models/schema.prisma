@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./pgclient"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Table names are generally spelled in PascalCase. Column names in camelCase.
+// Model names should use the singular form (for example, User instead of user, users or Users)
+
+// Relation scalar naming conventions
+// Because a relation scalar field always belongs to a relation field, the following naming convention is common:
+// Relation field: author
+// Relation scalar field: authorId (relation field name + Id)
