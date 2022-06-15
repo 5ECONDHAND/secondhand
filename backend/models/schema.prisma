@@ -10,6 +10,51 @@ datasource db {
 
 // Table names are generally spelled in PascalCase. Column names in camelCase.
 // Model names should use the singular form (for example, User instead of user, users or Users)
+model User {
+  id  BigInt     @id @default(autoincrement())
+  email   String  @unique
+  fullname  String
+  password String
+  phoneNo String? @unique
+  address String?
+  products Product[]
+  transactions Transaction[]
+  notifications Notification[]
+}
+
+model Product {
+  id  BigInt     @id @default(autoincrement())
+  itemName   String
+  offeredPrice Decimal
+  itemDescription String @db.Text
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  userId BigInt
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId BigInt
+}
+
+model Category {
+  id  BigInt     @id @default(autoincrement())
+  categoryName String @unique
+  products Product[]
+}
+
+model Notification {
+  id  BigInt     @id @default(autoincrement())
+  data String 
+  user User @relation(fields: [userId], references: [id])
+  userId BigInt
+}
+
+model Transaction {
+  id  BigInt     @id @default(autoincrement())
+  transactionDate   DateTime  
+  finalPrice  Decimal
+  productID BigInt 
+  user User @relation(fields: [userId], references: [id])
+  userId BigInt
+}
 
 // Relation scalar naming conventions
 // Because a relation scalar field always belongs to a relation field, the following naming convention is common:
