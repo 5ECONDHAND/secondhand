@@ -5,7 +5,7 @@ const Banner = () => {
   return (
     <>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '32px', gap: '16px' }}>
-        <Box display={{ xs: 'none', md: 'block' }} sx={{ width: '236px', height: '224px', backgroundColor: '#B6D4A8', borderRadius: '0 20px 20px 0' }}></Box>
+        <Box display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }} sx={{ width: '236px', height: '224px', backgroundColor: '#B6D4A8', borderRadius: '0 20px 20px 0' }}></Box>
         <Box sx={{ width: '100%', height: '288px', backgroundColor: '#FFE9CA', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: { xs: '10px', sm: '10px', md: '10px', lg: '80px' } }}>
           <Box sx={{ width: { xs: '100%', md: '100%', lg: '50%' } }}>
             <Typography variant='h3'>Bulan Ramadhan  Banyak diskon!</Typography>
@@ -25,7 +25,7 @@ const Banner = () => {
             />
           </Box>
         </Box>
-        <Box display={{ xs: 'none', md: 'block' }} sx={{ width: '236px', height: '224px', backgroundColor: '#E2D4F0', borderRadius: '20px 0 0 20px' }}></Box>
+        <Box display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }} sx={{ width: '236px', height: '224px', backgroundColor: '#E2D4F0', borderRadius: '20px 0 0 20px' }}></Box>
       </Box>
     </>
   )

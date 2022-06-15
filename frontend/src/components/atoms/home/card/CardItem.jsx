@@ -5,7 +5,7 @@ import casio1 from '../../../../assets/images/casio1.png'
 const CardItem = () => {
   return (
     <>
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ maxWidth: 345, marginX: 'auto' }}>
         <CardMedia
           component="img"
           height="140"

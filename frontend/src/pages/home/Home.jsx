@@ -2,12 +2,14 @@ import React from 'react'
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { Banner, Buttons, CardItem } from '../../components/atoms/home';
 import { FiPlus } from 'react-icons/fi';
+import { Navbar } from '../../components/molecules';
 
 
 const Home = () => {
 
   return (
     <>
+      <Navbar />
       <Banner />
       <Container maxWidth='xl' sx={{ marginY: '40px', position: 'relative' }}>
         <Typography variant='h6' sx={{ fontSize: '16px' }}>

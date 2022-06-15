@@ -13,7 +13,7 @@ const Buttons = () => {
     <>
       <Box sx={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
         {type.map(item => (
-          <Button sx={{
+          <Button key={item} sx={{
             borderRadius: '12px',
             backgroundColor: `${active === item ? '#7126B5' : '#E2D4F0'}`,
             color: `${active === item ? 'white' : 'black'}`,
