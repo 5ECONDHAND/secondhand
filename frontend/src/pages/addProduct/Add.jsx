@@ -6,10 +6,10 @@ const Add = () => {
   return (
     <Box mt="3rem" sx={{ textAlign: "center" }}>
       <Grid container>
-        <Grid item lg={2} md={2} sm={2} xs={2}>
-          <ArrowBack />
+        <Grid item lg={2} md={2}>
+          <ArrowBack sx={{ display: { xs: "none", md: "block", marginLeft: "auto" } }} />
         </Grid>
-        <Grid item lg={8} md={8} sm={8} xs={8}>
+        <Grid item lg={8} md={8} sm={12} xs={12}>
           <AddProduct />
         </Grid>
       </Grid>

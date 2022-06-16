@@ -14,3 +14,21 @@ export const validateRegister = (values, err) => {
   temp.password = values.password.length < 6 ? 'Password must be at least 6 characters' : ''
   err({ ...temp })
 }
+
+export const validateProduct = (values, err) => {
+  let temp = {}
+  temp.nama = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/.test(values.nama) ? '' : 'Name can only be a letter of at least three characters'
+  temp.harga = /^[1-9]\d*$/.test(values.harga) ? '' : 'Can only be filled with numbers'
+  temp.kategori = values.kategori ? '' : 'Category is required'
+  temp.deskripsi = values.deskripsi ? '' : 'Description is required'
+  err({ ...temp })
+}
+
+export const validateProfile = (values, err) => {
+  let temp = {}
+  temp.nama = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/.test(values.nama) ? '' : 'Name can only be a letter of at least three characters'
+  temp.kota = values.kota ? '' : 'City is required'
+  temp.alamat = values.alamat ? '' : 'Address is required'
+  temp.nomor = /^[\+?\d*]{10,}$/.test(values.nomor) ? '' : 'Can only be filled with a minimum number of 10 characters'
+  err({ ...temp })
+}
