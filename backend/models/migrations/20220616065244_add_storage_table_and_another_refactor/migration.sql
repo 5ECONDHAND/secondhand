@@ -10,8 +10,8 @@ CREATE TABLE "TransactionsOnUsers" (
     "description" TEXT,
     "accepted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" BIGINT NOT NULL,
-    "transactionId" BIGINT NOT NULL,
+    "userId" INT NOT NULL,
+    "transactionId" INT NOT NULL,
 
     CONSTRAINT "TransactionsOnUsers_pkey" PRIMARY KEY ("userId","transactionId")
 );
@@ -19,8 +19,8 @@ CREATE TABLE "TransactionsOnUsers" (
 -- CreateTable
 CREATE TABLE "CategoriesOnProducts" (
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "categoryId" BIGINT NOT NULL,
-    "productId" BIGINT NOT NULL,
+    "categoryId" INT NOT NULL,
+    "productId" INT NOT NULL,
 
     CONSTRAINT "CategoriesOnProducts_pkey" PRIMARY KEY ("categoryId","productId")
 );
@@ -28,8 +28,8 @@ CREATE TABLE "CategoriesOnProducts" (
 -- CreateTable
 CREATE TABLE "ProductsOnStorages" (
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "productId" BIGINT NOT NULL,
-    "storageId" BIGINT NOT NULL,
+    "productId" INT NOT NULL,
+    "storageId" INT NOT NULL,
 
     CONSTRAINT "ProductsOnStorages_pkey" PRIMARY KEY ("storageId","productId")
 );
@@ -37,8 +37,8 @@ CREATE TABLE "ProductsOnStorages" (
 -- CreateTable
 CREATE TABLE "StoragesOnUsers" (
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "storageId" BIGINT NOT NULL,
-    "userId" BIGINT NOT NULL,
+    "storageId" INT NOT NULL,
+    "userId" INT NOT NULL,
 
     CONSTRAINT "StoragesOnUsers_pkey" PRIMARY KEY ("storageId","userId")
 );

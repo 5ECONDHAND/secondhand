@@ -61,7 +61,7 @@ ALTER TABLE "Transaction" DROP COLUMN "finalPrice",
 DROP COLUMN "productID",
 DROP COLUMN "transactionDate",
 DROP COLUMN "userId",
-ADD COLUMN     "productId" BIGINT NOT NULL,
+ADD COLUMN     "productId" INT NOT NULL,
 ADD COLUMN     "status" "TransactionStatus" NOT NULL DEFAULT E'DECIDING';
 
 -- AlterTable
@@ -75,9 +75,9 @@ ALTER COLUMN "phoneNo" SET DATA TYPE VARCHAR(30);
 
 -- CreateTable
 CREATE TABLE "Storage" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "filename" VARCHAR(128) NOT NULL,
-    "size" BIGINT NOT NULL,
+    "size" INT NOT NULL,
     "mimetype" TEXT NOT NULL,
 
     CONSTRAINT "Storage_pkey" PRIMARY KEY ("id")
