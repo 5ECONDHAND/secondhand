@@ -2,7 +2,7 @@ import { Container, Box, Button, FormControl, Typography, OutlinedInput, InputAd
 import React, { useState } from 'react'
 import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser } from 'react-icons/fi'
 import casio1 from '../../../assets/images/casio1.png'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 const SearchField = () => {
   return (
     <FormControl
@@ -139,21 +139,23 @@ const UserButton = () => {
 
 const Navbar = () => {
   const [show, setShow] = useState(false)
-  const user = true
+  const user = false
+  const { pathname } = useLocation()
+  console.log(pathname);
   return (
     <>
       <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }} >
         <Container maxWidth='xl' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: `${pathname === '/edit' ? 'space-between' : 'none'}`, width: '50vw' }}>
             <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979' }} />
-            <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
+            {pathname === '/add' ? '' : pathname === '/edit' ? <Typography variant='subtitle2'>Lengkapi Info Akun</Typography> : <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
               <SearchField />
-            </Box>
+            </Box>}
           </Box>
-          <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
+          {pathname === '/add' || pathname === '/edit' ? '' : <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
             {user ? <UserButton /> : <LoginButton />}
-          </Box>
-          <Box display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
+          </Box>}
+          {pathname === '/add' || pathname === '/edit' ? '' : <Box display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
             <FiMenu style={{ cursor: 'pointer' }} size='30px' onClick={() => setShow(!show)} />
             {show &&
               <>
@@ -164,7 +166,7 @@ const Navbar = () => {
                   </Box>
                 </Box>
               </>}
-          </Box>
+          </Box>}
         </Container>
       </Box>
     </>
