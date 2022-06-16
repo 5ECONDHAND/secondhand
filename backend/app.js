@@ -30,6 +30,11 @@ app.use('/api', cors(), apiRouter);
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile)); // register swagger
 app.use('/', webRouter);
 
+if (!module.parent) {
+  app.listen(3000);
+  console.log('Express started on port 3000');
+}
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
