@@ -1,6 +1,11 @@
+import { useState } from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
+import NegotiateModal from './NegotiateModal'
 
-const ProductItem = () => {
+const ProductItem = ({ type }) => {
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   return (
     <>
       <Paper
@@ -21,41 +26,66 @@ const ProductItem = () => {
             <Typography variant="body1" sx={{ my: '1rem' }}>
               {'Rp 250.000'}
             </Typography>
-            <Button
-              fullWidth
-              variant="contained"
-              size="large"
-              disableElevation
-              sx={{
-                borderRadius: '1rem',
-                textTransform: 'none',
-                background: '#7126B5',
-                border: '1px solid #7126B5',
-                py: '10px',
-                mb: '10px',
-              }}
-            >
-              Terbitkan
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              size="large"
-              disableElevation
-              sx={{
-                borderRadius: '1rem',
-                textTransform: 'none',
-                background: '#ffffff',
-                color: '#000000',
-                border: '1px solid #7126B5',
-                py: '10px',
-                '&:hover': { color: '#ffffff' },
-              }}
-            >
-              Edit
-            </Button>
+            {type === 'seller' ? (
+              <>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                  sx={{
+                    borderRadius: '1rem',
+                    textTransform: 'none',
+                    background: '#7126B5',
+                    border: '1px solid #7126B5',
+                    py: '10px',
+                    mb: '10px',
+                  }}
+                >
+                  Terbitkan
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                  sx={{
+                    borderRadius: '1rem',
+                    textTransform: 'none',
+                    background: '#ffffff',
+                    color: '#000000',
+                    border: '1px solid #7126B5',
+                    py: '10px',
+                    '&:hover': { color: '#ffffff' },
+                  }}
+                >
+                  Edit
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={handleOpen}
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                  sx={{
+                    borderRadius: '1rem',
+                    textTransform: 'none',
+                    background: '#7126B5',
+                    border: '1px solid #7126B5',
+                    py: '10px',
+                    mb: '10px',
+                  }}
+                >
+                  Saya tertarik dan ingin nego
+                </Button>
+              </>
+            )}
           </Stack>
         </Stack>
+        <NegotiateModal open={open} handleClose={handleClose} />
       </Paper>
     </>
   )

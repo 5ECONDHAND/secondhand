@@ -14,3 +14,12 @@ export const validateRegister = (values, err) => {
   temp.password = values.password.length < 6 ? 'Password must be at least 6 characters' : ''
   err({ ...temp })
 }
+
+export const validateNegotiateAmout = (values, err) => {
+  let temp = {}
+  /**
+   * @desc This is a temporary solution, amount should be higher than current price
+   */
+  temp.amount = values.amount <= 0 ? 'Amount is too little' : ''
+  err({ ...temp })
+}

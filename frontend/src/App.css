@@ -59,7 +59,10 @@ span.swiper-pagination-bullet.swiper-pagination-bullet-active {
 
 /* target all bullets */
 .swiper-pagination-bullet {
-  background-color: #c4c4c4 !important;
+  border-radius: 50% !important;
+  background: #c4c4c4 !important;
+  border: 1px solid #7126b5 !important;
+  opacity: 1 !important;
 }
 
 /* target navigation arrows */

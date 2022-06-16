@@ -17,7 +17,7 @@ const Product = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={3.6}>
             <Grid item xs={12} sx={{ mb: '1rem' }}>
-              <ProductItem />
+              <ProductItem type="buyer" />
             </Grid>
             <Grid item xs={12}>
               <ProfileCard />

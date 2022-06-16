@@ -41,7 +41,9 @@ const ProductSlider = () => {
         <Swiper
           // centeredSlides={true}
           navigation={true}
-          pagination={true}
+          pagination={{
+            clickable: true,
+          }}
           spaceBetween={10}
           modules={[Navigation, Pagination]}
           className="mySwiper"
