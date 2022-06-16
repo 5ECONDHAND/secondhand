@@ -1,7 +1,8 @@
-import { Container, Box, Button, FormControl, FormHelperText, OutlinedInput, InputAdornment, IconButton } from '@mui/material'
+import { Container, Box, Button, FormControl, Typography, OutlinedInput, InputAdornment, IconButton, Grid } from '@mui/material'
 import React, { useState } from 'react'
-import { FiLogIn, FiSearch, FiMenu } from 'react-icons/fi'
-
+import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser } from 'react-icons/fi'
+import casio1 from '../../../assets/images/casio1.png'
+import { useNavigate } from 'react-router-dom'
 const SearchField = () => {
   return (
     <FormControl
@@ -26,6 +27,7 @@ const SearchField = () => {
 }
 
 const LoginButton = () => {
+  const navigate = useNavigate()
   return (
     <Button sx={{
       borderRadius: '12px',
@@ -36,12 +38,108 @@ const LoginButton = () => {
         bgcolor: '#631fa1',
         color: 'white'
       },
-    }} startIcon={<FiLogIn />}>Masuk</Button>
+    }} startIcon={<FiLogIn />}
+      onClick={() => navigate('/login')}
+    >Masuk</Button>
+  )
+}
+
+const UserButton = () => {
+  const type = ['Menu', 'Notification', 'Account']
+  const [active, setActive] = useState('')
+  const [popup, setPopup] = useState(false)
+  const [notif, setNotif] = useState(true)
+  const navigate = useNavigate()
+  const handleActive = (name) => {
+    console.log(name);
+    setActive(name)
+    switch (name) {
+      case 'Menu':
+        return navigate('/login')
+      case 'Notification':
+        if (window.innerWidth < 900) return navigate('/login')
+        return setPopup(!popup), setNotif(!notif)
+      default:
+        break
+    }
+  }
+  return (
+    <>
+      <Box sx={{ display: 'flex', gap: '20px', flexDirection: { xs: 'column', md: 'row' } }}>
+        {type.map(item => (
+          <Box key={item} style={{ cursor: 'pointer' }} onClick={() => handleActive(item)}>
+            <Box display={{ xs: 'none', md: 'block' }}>
+              {item === 'Menu' ?
+                <FiList size='24px' style={{ color: `${active === item ? '#7126B5' : ''}` }} /> :
+                item === 'Notification' ?
+                  <Box sx={{ position: 'relative' }}>
+                    <FiBell size='24px' style={{ color: `${active === item ? '#7126B5' : ''}` }} />
+                    {notif && <Box sx={{ width: '10px', height: '10px', backgroundColor: 'red', borderRadius: '50px', position: 'absolute', right: 0, top: 0, border: '2px solid white' }} />}
+                    {popup && <Box sx={{ position: 'absolute', top: 30, right: 10, width: '450px', zIndex: '10' }}>
+                      {/* {notif ? 'ada konten' : 'tidak ada konten'} */}
+                      <Box p={2} sx={{ display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: 'white', height: '100%', borderRadius: '12px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }}>
+                        <Grid container sx={{ gap: '10px', ':hover': { backgroundColor: '#f7f7f7' }, padding: '10px', borderRadius: '12px' }} onClick={() => navigate('/login')}>
+                          <Grid><img src={casio1} alt='jam' width='80px' height='80px' /></Grid>
+                          <Grid>
+                            <Typography variant='body2'>Penawaran Produk</Typography>
+                            <Typography variant='subtitle1'>Jam Tangan Casio</Typography>
+                            <Typography variant='subtitle1'>Rp. 250.000</Typography>
+                            <Typography variant='subtitle1'>Ditawar Rp. 200.000</Typography>
+                          </Grid>
+                          <Grid sx={{ marginLeft: 'auto' }}>
+                            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                              <Typography variant='body2'>20 Apr, 14:04</Typography>
+                              <Box sx={{ width: '10px', height: '10px', backgroundColor: 'red', borderRadius: '50px' }} />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Grid container sx={{ gap: '10px', ':hover': { backgroundColor: '#f7f7f7' }, padding: '10px', borderRadius: '12px' }} onClick={() => navigate('/login')}>
+                          <Grid><img src={casio1} alt='jam' width='80px' height='80px' /></Grid>
+                          <Grid>
+                            <Typography variant='body2'>Penawaran Produk</Typography>
+                            <Typography variant='subtitle1'>Jam Tangan Casio</Typography>
+                            <Typography variant='subtitle1'>Rp. 250.000</Typography>
+                            <Typography variant='subtitle1'>Ditawar Rp. 200.000</Typography>
+                          </Grid>
+                          <Grid sx={{ marginLeft: 'auto' }}>
+                            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                              <Typography variant='body2'>20 Apr, 14:04</Typography>
+                              <Box sx={{ width: '10px', height: '10px', backgroundColor: 'red', borderRadius: '50px' }} />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Grid container sx={{ gap: '10px', ':hover': { backgroundColor: '#f7f7f7' }, padding: '10px', borderRadius: '12px' }} onClick={() => navigate('/login')}>
+                          <Grid><img src={casio1} alt='jam' width='80px' height='80px' /></Grid>
+                          <Grid>
+                            <Typography variant='body2'>Penawaran Produk</Typography>
+                            <Typography variant='subtitle1'>Jam Tangan Casio</Typography>
+                            <Typography variant='subtitle1'>Rp. 250.000</Typography>
+                            <Typography variant='subtitle1'>Ditawar Rp. 200.000</Typography>
+                          </Grid>
+                          <Grid sx={{ marginLeft: 'auto' }}>
+                            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                              <Typography variant='body2'>20 Apr, 14:04</Typography>
+                              <Box sx={{ width: '10px', height: '10px', backgroundColor: 'red', borderRadius: '50px' }} />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Box>}
+                  </Box> :
+                  <FiUser size='24px' style={{ color: `${active === item ? '#7126B5' : ''}` }} />}
+            </Box>
+            <Typography display={{ xs: 'block', md: 'none' }} sx={{ textAlign: 'center', py: '5px', transition: '0.2s', borderRadius: '12px', ':hover': { backgroundColor: '#7126B5', color: 'white' }, backgroundColor: `${active === item ? '#7126B5' : ''}`, color: `${active === item ? 'white' : ''}` }}>{item}</Typography>
+          </Box>
+        ))
+        }
+      </Box >
+    </>
   )
 }
 
 const Navbar = () => {
   const [show, setShow] = useState(false)
+  const user = true
   return (
     <>
       <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }} >
@@ -53,7 +151,7 @@ const Navbar = () => {
             </Box>
           </Box>
           <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
-            <LoginButton />
+            {user ? <UserButton /> : <LoginButton />}
           </Box>
           <Box display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
             <FiMenu style={{ cursor: 'pointer' }} size='30px' onClick={() => setShow(!show)} />
@@ -62,7 +160,7 @@ const Navbar = () => {
                 <Box sx={{ position: 'absolute', top: '77px', left: 0, right: 0, margin: 'auto', backgroundColor: '#f7f7f7', height: '40vh', width: '100vw', display: 'flex', justifyContent: 'center', paddingTop: '30px' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                     <SearchField />
-                    <LoginButton />
+                    {user ? <UserButton /> : <LoginButton />}
                   </Box>
                 </Box>
               </>}
