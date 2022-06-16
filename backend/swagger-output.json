@@ -7,7 +7,6 @@
   },
   "host": "localhost:3000",
   "basePath": "/api",
-  "tags": [],
   "schemes": [
     "http",
     "https"
@@ -28,6 +27,5 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
-  "definitions": {}
+  "paths": {}
 }
