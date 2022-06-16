@@ -77,6 +77,7 @@ model Transaction {
 model Notification {
   id        Int   @id @default(autoincrement())
   data      String   @db.Text
+  read Boolean @default(false)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
@@ -89,6 +90,8 @@ model Storage {
   filename String @db.VarChar(128)
   size     Int @default(0)
   mimetype String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
   Products ProductsOnStorages[]
   Users    StoragesOnUsers[]
