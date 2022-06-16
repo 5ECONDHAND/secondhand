@@ -23,7 +23,7 @@ enum TransactionStatus {
 // MAIN TABLE
 
 model User {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   email     String   @unique @db.VarChar(255)
   fullname  String   @db.VarChar(255)
   password  String   @db.VarChar(128)
@@ -40,7 +40,7 @@ model User {
 }
 
 model Product {
-  id          Int   @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   price       Decimal  @default(0) @db.Decimal(12, 2)
   description String   @db.Text
@@ -55,7 +55,7 @@ model Product {
 }
 
 model Category {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String   @unique @db.VarChar(255)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -64,31 +64,34 @@ model Category {
 }
 
 model Transaction {
-  id        Int            @id @default(autoincrement())
+  id        Int               @id @default(autoincrement())
   status    TransactionStatus @default(DECIDING)
   createdAt DateTime          @default(now()) @db.Timestamptz(6)
   updatedAt DateTime          @default(now()) @db.Timestamptz(6)
 
   Product   Product               @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId Int                @unique
+  productId Int                   @unique
   Users     TransactionsOnUsers[]
 }
 
 model Notification {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   data      String   @db.Text
+  read      Boolean  @default(false)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
 model Storage {
-  id       Int @id @default(autoincrement())
-  filename String @db.VarChar(128)
-  size     Int @default(0)
-  mimetype String
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(128)
+  size      Int      @default(0)
+  mimetype  String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
   Products ProductsOnStorages[]
   Users    StoragesOnUsers[]
