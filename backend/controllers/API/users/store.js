@@ -25,16 +25,12 @@ async function controller(req, res, next) {
   ? crypto.createHash('sha512').update(req.body.password).digest('hex')
   : null;
 
-  var dataPayload = {
-    email: req.body.email,
-    fullname: req.body.fullname,
-    password: hash
-  };
-  //remove key with null value
-  dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
-
   const data = await prisma.user.create({
-    data: dataPayload
+    data: {
+      email: req.body.email,
+      fullname: req.body.fullname,
+      password: hash
+    }
   }).catch(err => {
     return {
       error: true,
