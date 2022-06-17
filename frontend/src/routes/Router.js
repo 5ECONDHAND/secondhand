@@ -11,6 +11,9 @@ const router = () => {
           <Route path="*" element={<div>404</div>} />
           <Route path="/login" element={<Auth />} />
           <Route path="/register" element={<Auth />} />
+          <Route path="/add" element={<Home />} />
+          <Route path="/edit" element={<Home />} />
+
           <Route path="/" element={<Home />}>
             {/* <Route index element={<Home />} />
             <Route path="teams" element={<Teams />}>
