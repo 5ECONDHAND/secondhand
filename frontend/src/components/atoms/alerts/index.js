@@ -1,1 +1,1 @@
-export { default as AlertSuccess } from './AlertSuccess'
+export { default as CustomAlert } from './CustomAlert'

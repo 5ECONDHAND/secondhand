@@ -80,3 +80,8 @@ span.swiper-pagination-bullet.swiper-pagination-bullet-active {
 .swiper-button-prev::after {
   display: none;
 }
+
+/* Notistack Styles */
+.SnackbarItem-variantSuccess {
+  background-color: #73ca5c !important;
+}

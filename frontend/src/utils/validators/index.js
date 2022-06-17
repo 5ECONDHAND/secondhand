@@ -15,7 +15,7 @@ export const validateRegister = (values, err) => {
   err({ ...temp })
 }
 
-export const validateNegotiateAmout = (values, err) => {
+export const validateNegotiateAmount = (values, err) => {
   let temp = {}
   /**
    * @desc This is a temporary solution, amount should be higher than current price

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Avatar,
   Box,
@@ -12,7 +12,8 @@ import {
   Typography,
 } from '@mui/material'
 import { FiX } from 'react-icons/fi'
-import { validateNegotiateAmout } from '../../../utils/validators'
+import { validateNegotiateAmount } from '../../../utils/validators'
+import { useSnackbar } from 'notistack'
 
 const ModalStyle = {
   position: 'absolute',
@@ -64,25 +65,42 @@ const ProductMiniCard = (props) => {
 const NegotiateInput = (props) => {
   const [error, setError] = useState({})
   const [values, setValues] = useState({
-    amount: '',
+    amount: 0,
   })
+
+  const { handleClose } = props
+  const { enqueueSnackbar } = useSnackbar()
+
+  const fireAlert = (msg = 'Success', variant) => {
+    enqueueSnackbar(msg, { variant })
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    validateNegotiateAmout(values, setError)
-    console.log('FORM VALUES', values)
-    console.log('ERROR STATE', error)
+    validateNegotiateAmount(values, setError)
+
+    // console.log('FORM VALUES', values)
+    // console.log('ERROR STATE', error)
   }
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
   }
+
+  useEffect(() => {
+    if (error?.amount === '' && values.amount > 0) {
+      handleClose()
+      fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
+
   return (
     <>
       <Box
         component="form"
         autoComplete="off"
-        onSubmit={handleSubmit}
+        onSubmit={(event) => handleSubmit(event)}
         sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}
       >
         <FormControl sx={{ maxWidth: 'auto' }}>
@@ -90,14 +108,14 @@ const NegotiateInput = (props) => {
             Harga Tawar
           </FormHelperText>
           <OutlinedInput
-            error={error.amount ? true : false}
+            error={error?.amount ? true : false}
             placeholder="Rp 0,00"
             type="number"
-            value={values.amount}
+            value={values.amount === 0 ? '' : values.amount}
             onChange={handleChange('amount')}
             sx={{ borderRadius: '1rem' }}
           />
-          <FormHelperText sx={{ m: 0 }}>{error.amount}</FormHelperText>
+          <FormHelperText sx={{ m: 0 }}>{error?.amount}</FormHelperText>
         </FormControl>
         <Button
           type="submit"
@@ -125,12 +143,7 @@ const NegotiateModal = (props) => {
   const { open, handleClose } = props
   return (
     <>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={open} onClose={handleClose}>
         <Box sx={ModalStyle}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <FiX size={24} onClick={handleClose} />
@@ -143,7 +156,7 @@ const NegotiateModal = (props) => {
             penjual.
           </Typography>
           <ProductMiniCard />
-          <NegotiateInput />
+          <NegotiateInput handleClose={handleClose} />
         </Box>
       </Modal>
     </>
