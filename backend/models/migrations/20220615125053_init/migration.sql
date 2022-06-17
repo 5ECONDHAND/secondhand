@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "fullname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -12,20 +12,20 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Product" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "itemName" TEXT NOT NULL,
     "offeredPrice" DECIMAL(65,30) NOT NULL,
     "itemDescription" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" BIGINT NOT NULL,
-    "categoryId" BIGINT NOT NULL,
+    "userId" INT NOT NULL,
+    "categoryId" INT NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Category" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "categoryName" TEXT NOT NULL,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
@@ -33,20 +33,20 @@ CREATE TABLE "Category" (
 
 -- CreateTable
 CREATE TABLE "Notification" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "data" TEXT NOT NULL,
-    "userId" BIGINT NOT NULL,
+    "userId" INT NOT NULL,
 
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Transaction" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "transactionDate" TIMESTAMP(3) NOT NULL,
     "finalPrice" DECIMAL(65,30) NOT NULL,
-    "productID" BIGINT NOT NULL,
-    "userId" BIGINT NOT NULL,
+    "productID" INT NOT NULL,
+    "userId" INT NOT NULL,
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
 );

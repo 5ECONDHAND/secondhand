@@ -17,7 +17,8 @@ Backend App for SecondHand
     - `npx prisma generate --schema=./models/schema.prisma`
     - Installation will take a while, so please be patient.
     - Make sure Installation is successful or done properly.
-3. Then you can run with run.bat (double click it like executable), OR you can just do `npm start`
+3. Make sure to edit .env file with yours (environment). See .env.example for example
+4. Then you can run with run.bat (double click it like executable), OR you can just do `npm start`
 
 # Instruction before doing unit test
 1. Install all required things, follow the instruction above
