@@ -13,7 +13,7 @@ async function controller(req, res, next) {
   if(isNaN(id)) {
     return res.json({
       error: true,
-      message: 'Invalid user id',
+      message: 'Invalid id',
       data: [],
     })
   }
