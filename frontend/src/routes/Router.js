@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from '../pages/home/Home'
 import Auth from '../pages/auth/Auth'
 import Product from '../pages/product/Product'
+import Add from '../pages/addProduct/Add'
+import Edit from '../pages/edit/Edit'
 
 const router = () => {
   return (
@@ -13,13 +15,9 @@ const router = () => {
           <Route path="/login" element={<Auth />} />
           <Route path="/register" element={<Auth />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/" element={<Home />}>
-            {/* <Route index element={<Home />} />
-            <Route path="teams" element={<Teams />}>
-              <Route path=":teamId" element={<Team />} />
-              <Route path="new" element={<NewTeamForm />} />
-              <Route index element={<LeagueStandings />} />
-            </Route> */}
+          <Route path="/add" element={<Add />} />
+          <Route path="/edit" element={<Edit />} />
+          <Route path="/" element={<Home />}> 
           </Route>
         </Routes>
       </BrowserRouter>
