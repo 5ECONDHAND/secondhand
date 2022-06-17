@@ -50,3 +50,38 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+/* Swiper Styles */
+/* target the active bullet */
+span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #7126b5 !important;
+}
+
+/* target all bullets */
+.swiper-pagination-bullet {
+  border-radius: 50% !important;
+  background: #c4c4c4 !important;
+  border: 1px solid #7126b5 !important;
+  opacity: 1 !important;
+}
+
+/* target navigation arrows */
+.swiper-button-prev {
+  width: calc(var(--swiper-navigation-size) / 44 * 44) !important;
+  background: url('./assets/svg/carouselButtonLeft.svg') no-repeat center !important;
+}
+
+.swiper-button-next {
+  width: calc(var(--swiper-navigation-size) / 44 * 44) !important;
+  background: url('./assets/svg/carouselButtonRight.svg') no-repeat center !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  display: none;
+}
+
+/* Notistack Styles */
+.SnackbarItem-variantSuccess {
+  background-color: #73ca5c !important;
+}
