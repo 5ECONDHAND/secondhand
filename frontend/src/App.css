@@ -85,3 +85,17 @@ span.swiper-pagination-bullet.swiper-pagination-bullet-active {
 .SnackbarItem-variantSuccess {
   background-color: #73ca5c !important;
 }
+
+/* Custom Scrollbar Styles */
+body::-webkit-scrollbar-track {
+  background-color: #999999;
+}
+
+body::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background-color: #505050;
+}
