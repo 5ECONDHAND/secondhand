@@ -18,7 +18,6 @@ const BoxImg = ({ image, alt }) => {
         src={image}
         alt={alt}
         sx={{
-          borderRadius: '1rem',
           width: '100%',
           height: 'auto',
         }}
@@ -36,17 +35,17 @@ const ProductSlider = () => {
           maxWidth: 600,
           maxHeight: 436,
           objectFit: 'cover',
+          borderRadius: '1rem',
+          overflow: 'hidden',
         }}
       >
         <Swiper
-          // centeredSlides={true}
           navigation={true}
           pagination={{
             clickable: true,
           }}
           spaceBetween={10}
           modules={[Navigation, Pagination]}
-          className="mySwiper"
         >
           <SwiperSlide>
             <BoxImg image={dummy} />

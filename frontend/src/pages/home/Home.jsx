@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Container, Grid, Typography } from '@mui/material'
-import { Banner, Buttons, CardItem } from '../../components/molecules/home'
+import { Banner, Buttons, ProductCard } from '../../components/molecules/home'
 import { FiPlus } from 'react-icons/fi'
 import { Navbar } from '../../components/molecules'
 
@@ -16,53 +16,64 @@ const Home = () => {
         <Buttons />
         <Grid
           container
-          columns={{ xs: 1, sm: 2, md: 4, lg: 6 }}
+          columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
           mt={{ xs: '20px', md: '30px' }}
           spacing={2}
         >
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
           </Grid>
           <Grid item xs={1}>
-            <CardItem />
+            <ProductCard />
+          </Grid>
+          <Grid item xs={1}>
+            <ProductCard />
+          </Grid>
+          <Grid item xs={1}>
+            <ProductCard />
+          </Grid>
+          <Grid item xs={1}>
+            <ProductCard />
+          </Grid>
+          <Grid item xs={1}>
+            <ProductCard />
           </Grid>
         </Grid>
         <Button
           variant="contained"
           size="large"
+          startIcon={<FiPlus />}
           sx={{
             position: 'fixed',
-            bottom: '50px',
-            left: '0',
-            right: '0',
-            zIndex: '10',
-            margin: 'auto',
-            width: '100px',
+            bottom: '3rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
             borderRadius: '0.75rem',
             textTransform: 'none',
+            boxShadow: '0 0.25rem 1rem rgba(105, 2, 198, 0.63) !important',
             background: '#7126B5',
-            py: '10px',
-            '&:hover': { bgcolor: '#631fa1' },
+            '&:hover': {
+              background: '#631fa1',
+            },
           }}
-          startIcon={<FiPlus />}
         >
           Jual
         </Button>

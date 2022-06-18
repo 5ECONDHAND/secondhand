@@ -16,20 +16,13 @@ const SnackbarWrapper = ({ children }) => {
   return (
     <>
       <SnackbarProvider
-        // sx={{
-        //   '& .SnackbarContent-root': {
-        //     color: '#ffffff',
-        //     bgcolor: '#73CA5C',
-        //     borderRadius: '12px',
-        //   },
-        // }}
         maxSnack={3}
         hideIconVariant
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',
         }}
-        autoHideDuration={3000}
+        autoHideDuration={5000}
         action={(snackbarKey) => <SnackbarCloseButton snackbarKey={snackbarKey} />}
       >
         {children}
