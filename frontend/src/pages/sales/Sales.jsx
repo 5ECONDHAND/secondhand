@@ -1,14 +1,11 @@
 import { Box, Container, Grid, Typography } from '@mui/material'
 import { FiPlus } from 'react-icons/fi'
-import { Navbar } from '../../components/molecules'
-import { ProfileCard } from '../../components/molecules/global'
-import { ProductCard } from '../../components/molecules/home'
+import { ProductCard, ProfileCard } from '../../components/molecules/global'
 import { CategoryMenu } from '../../components/molecules/sales'
 
 const Sales = () => {
   return (
     <>
-      <Navbar />
       <Container maxWidth="lg" sx={{ pt: '2rem', pb: '1rem' }}>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Daftar Jual Saya

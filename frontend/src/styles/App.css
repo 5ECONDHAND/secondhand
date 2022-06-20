@@ -68,12 +68,12 @@ span.swiper-pagination-bullet.swiper-pagination-bullet-active {
 /* target navigation arrows */
 .swiper-button-prev {
   width: calc(var(--swiper-navigation-size) / 44 * 44) !important;
-  background: url('./assets/svg/carouselButtonLeft.svg') no-repeat center !important;
+  background: url('../assets/svg/carouselButtonLeft.svg') no-repeat center !important;
 }
 
 .swiper-button-next {
   width: calc(var(--swiper-navigation-size) / 44 * 44) !important;
-  background: url('./assets/svg/carouselButtonRight.svg') no-repeat center !important;
+  background: url('../assets/svg/carouselButtonRight.svg') no-repeat center !important;
 }
 
 .swiper-button-next::after,

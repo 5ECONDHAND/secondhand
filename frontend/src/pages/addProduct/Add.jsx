@@ -1,12 +1,10 @@
 import { Box, Grid } from '@mui/material'
-import React from 'react'
 import { AddProduct } from '../../components/molecules/add'
 import ArrowBack from '@mui/icons-material/ArrowBack'
-import { Navbar } from '../../components/molecules'
+
 const Add = () => {
   return (
     <>
-      <Navbar />
       <Box mt="3rem" sx={{ textAlign: 'center' }}>
         <Grid container>
           <Grid item lg={2} md={2}>

@@ -1,7 +1,7 @@
 import { Button, Container, Grid, Typography } from '@mui/material'
-import { Banner, Buttons, ProductCard } from '../../components/molecules/home'
+import { Banner, Buttons } from '../../components/molecules/home'
+import { ProductCard } from '../../components/molecules/global'
 import { FiPlus } from 'react-icons/fi'
-import { Navbar } from '../../components/molecules'
 
 const SellButton = () => {
   return (
@@ -31,7 +31,6 @@ const SellButton = () => {
 const Home = () => {
   return (
     <>
-      <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, position: 'relative' }}>
         <Typography variant="h6" sx={{ fontSize: '16px' }}>

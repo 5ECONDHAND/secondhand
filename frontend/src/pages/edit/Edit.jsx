@@ -1,12 +1,10 @@
 import { Box, Grid } from '@mui/material'
-import React from 'react'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import { EditProfile } from '../../components/molecules/edit'
-import { Navbar } from '../../components/molecules'
+
 const Edit = () => {
   return (
     <>
-      <Navbar />
       <Box mt="3rem" sx={{ textAlign: 'center' }}>
         <Grid container>
           <Grid item lg={2} md={2}>
