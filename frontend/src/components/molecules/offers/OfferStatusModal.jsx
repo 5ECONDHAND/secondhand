@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
 import {
   Avatar,
-  Box,
   Button,
   FormControl,
   FormHelperText,
@@ -11,10 +9,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { FiX } from 'react-icons/fi'
-import { validateNegotiateAmount } from '../../../utils/validators'
+import { Box } from '@mui/system'
 import { useSnackbar } from 'notistack'
+import { useEffect, useState } from 'react'
+import { FiX } from 'react-icons/fi'
 import { toRupiah } from '../../../utils/functions'
+import { validateNegotiateAmount } from '../../../utils/validators'
 
 const ModalStyle = {
   position: 'absolute',
@@ -131,9 +131,6 @@ const NegotiateInput = (props) => {
             border: '1px solid #7126B5',
             py: '14px',
             mt: 2,
-            '&:hover': {
-              background: '#631fa1',
-            },
           }}
         >
           Kirim
@@ -143,7 +140,7 @@ const NegotiateInput = (props) => {
   )
 }
 
-const NegotiateModal = (props) => {
+const OfferStatusModal = (props) => {
   const { open, handleClose } = props
   return (
     <>
@@ -167,4 +164,4 @@ const NegotiateModal = (props) => {
   )
 }
 
-export default NegotiateModal
+export default OfferStatusModal
