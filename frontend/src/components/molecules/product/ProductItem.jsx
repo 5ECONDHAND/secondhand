@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
+import { toRupiah } from '../../../utils/functions'
 
 const ProductItem = ({ type }) => {
   const [open, setOpen] = useState(false)
@@ -25,7 +26,7 @@ const ProductItem = ({ type }) => {
               {'Aksesoris'}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
-              {'Rp 250.000'}
+              {toRupiah(250000)}
             </Typography>
             {type === 'seller' ? (
               <>

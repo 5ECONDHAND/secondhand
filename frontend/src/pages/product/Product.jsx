@@ -1,11 +1,7 @@
 import { Container, Grid } from '@mui/material'
 import { Navbar } from '../../components/molecules'
-import {
-  ProductDesc,
-  ProductItem,
-  ProductSlider,
-  ProfileCard,
-} from '../../components/molecules/product'
+import { ProfileCard } from '../../components/molecules/global'
+import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 
 const Product = () => {
   return (

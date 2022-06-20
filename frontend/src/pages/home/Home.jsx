@@ -1,8 +1,32 @@
-import React from 'react'
 import { Button, Container, Grid, Typography } from '@mui/material'
 import { Banner, Buttons, ProductCard } from '../../components/molecules/home'
 import { FiPlus } from 'react-icons/fi'
 import { Navbar } from '../../components/molecules'
+
+const SellButton = () => {
+  return (
+    <Button
+      variant="contained"
+      size="large"
+      startIcon={<FiPlus />}
+      sx={{
+        position: 'fixed',
+        bottom: '3rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        borderRadius: '0.75rem',
+        textTransform: 'none',
+        boxShadow: '0 0.25rem 1rem rgba(105, 2, 198, 0.63) !important',
+        background: '#7126B5',
+        '&:hover': {
+          background: '#631fa1',
+        },
+      }}
+    >
+      Jual
+    </Button>
+  )
+}
 
 const Home = () => {
   return (
@@ -18,65 +42,15 @@ const Home = () => {
           container
           columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
           mt={{ xs: '20px', md: '30px' }}
-          spacing={2}
+          spacing={3}
         >
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
-          <Grid item xs={1}>
-            <ProductCard />
-          </Grid>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+            <Grid item xs={1} key={index}>
+              <ProductCard />
+            </Grid>
+          ))}
         </Grid>
-        <Button
-          variant="contained"
-          size="large"
-          startIcon={<FiPlus />}
-          sx={{
-            position: 'fixed',
-            bottom: '3rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            borderRadius: '0.75rem',
-            textTransform: 'none',
-            boxShadow: '0 0.25rem 1rem rgba(105, 2, 198, 0.63) !important',
-            background: '#7126B5',
-            '&:hover': {
-              background: '#631fa1',
-            },
-          }}
-        >
-          Jual
-        </Button>
+        <SellButton />
       </Container>
     </>
   )

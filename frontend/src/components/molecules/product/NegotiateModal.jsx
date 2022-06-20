@@ -14,6 +14,7 @@ import {
 import { FiX } from 'react-icons/fi'
 import { validateNegotiateAmount } from '../../../utils/validators'
 import { useSnackbar } from 'notistack'
+import { toRupiah } from '../../../utils/functions'
 
 const ModalStyle = {
   position: 'absolute',
@@ -54,7 +55,7 @@ const ProductMiniCard = (props) => {
             <Typography variant="body1" sx={{ fontWeight: '500' }}>
               {'Nama produk'}
             </Typography>
-            <Typography variant="body2">{'Rp 250.000'}</Typography>
+            <Typography variant="body2">{toRupiah(250000)}</Typography>
           </Stack>
         </Stack>
       </Paper>

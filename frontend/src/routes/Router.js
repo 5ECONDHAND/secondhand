@@ -5,6 +5,7 @@ import Auth from '../pages/auth/Auth'
 import Product from '../pages/product/Product'
 import Add from '../pages/addProduct/Add'
 import Edit from '../pages/edit/Edit'
+import Sales from '../pages/sales/Sales'
 
 const router = () => {
   return (
@@ -17,8 +18,8 @@ const router = () => {
           <Route path="/product" element={<Product />} />
           <Route path="/add" element={<Add />} />
           <Route path="/edit" element={<Edit />} />
-          <Route path="/" element={<Home />}> 
-          </Route>
+          <Route path="/sales" element={<Sales />} />
+          <Route path="/" element={<Home />}></Route>
         </Routes>
       </BrowserRouter>
     </>

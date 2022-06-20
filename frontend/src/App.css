@@ -99,3 +99,42 @@ body::-webkit-scrollbar-thumb {
   border-radius: 1rem;
   background-color: #505050;
 }
+
+/* Custom Dropzone Box Styles */
+.dropzone-border {
+  background-image: repeating-linear-gradient(
+      180deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    ),
+    repeating-linear-gradient(
+      270deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    );
+  background-size: 1px 100%, 100% 1px, 1px 100%, 100% 1px;
+  background-position: 0 0, 0 0, 100% 0, 0 100%;
+  background-repeat: no-repeat;
+}
