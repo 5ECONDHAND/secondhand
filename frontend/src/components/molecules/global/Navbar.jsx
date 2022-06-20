@@ -251,75 +251,39 @@ const UserButton = () => {
 
 const Navbar = () => {
   const [show, setShow] = useState(false)
-  const user = false
+  const user = true
   const { pathname } = useLocation()
   console.log(pathname)
   return (
     <>
-      <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }}>
-        <Container
-          maxWidth="xl"
-          sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              gap: '16px',
-              alignItems: 'center',
-              justifyContent: `${pathname === '/edit' ? 'space-between' : 'none'}`,
-              width: '50vw',
-            }}
-          >
+      <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }} >
+        <Container maxWidth='xl' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center', width: '100%', position: 'relative' }}>
             <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979' }} />
-            {pathname === '/add' ? (
-              ''
-            ) : pathname === '/edit' ? (
-              <Typography variant="subtitle2">Lengkapi Info Akun</Typography>
-            ) : (
+            {pathname === '/add' ? '' : pathname === '/edit' ?
+              <Box sx={{ textAlign: 'center', position: 'absolute', left: 0, right: 0, margin: 'auto' }}><Typography variant='subtitle2'>Lengkapi Info Akun</Typography>
+              </Box> :
               <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
                 <SearchField />
-              </Box>
-            )}
+              </Box>}
           </Box>
-          {pathname === '/add' || pathname === '/edit' ? (
-            ''
-          ) : (
+          {pathname === '/add' || pathname === '/edit' ? '' :
             <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
               {user ? <UserButton /> : <LoginButton />}
-            </Box>
-          )}
-          {pathname === '/add' || pathname === '/edit' ? (
-            ''
-          ) : (
+            </Box>}
+          {pathname === '/add' || pathname === '/edit' ? '' :
             <Box display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
-              <FiMenu style={{ cursor: 'pointer' }} size="30px" onClick={() => setShow(!show)} />
-              {show && (
+              <FiMenu style={{ cursor: 'pointer' }} size='30px' onClick={() => setShow(!show)} />
+              {show &&
                 <>
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: '77px',
-                      left: 0,
-                      right: 0,
-                      margin: 'auto',
-                      backgroundColor: '#f7f7f7',
-                      height: '40vh',
-                      width: '100vw',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: '30px',
-                      zIndex: 10,
-                    }}
-                  >
+                  <Box sx={{ position: 'absolute', top: '77px', left: 0, right: 0, margin: 'auto', backgroundColor: '#f7f7f7', height: '40vh', width: '100vw', display: 'flex', justifyContent: 'center', paddingTop: '30px', zIndex: 10 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                       <SearchField />
                       {user ? <UserButton /> : <LoginButton />}
                     </Box>
                   </Box>
-                </>
-              )}
-            </Box>
-          )}
+                </>}
+            </Box>}
         </Container>
       </Box>
     </>

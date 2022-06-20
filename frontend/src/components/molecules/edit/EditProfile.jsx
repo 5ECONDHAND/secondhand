@@ -122,18 +122,13 @@ const EditProfile = () => {
               <FormHelperText sx={{ fontSize: "1rem", color: "black", m: 0 }}>
                 Kota*
               </FormHelperText>
-              <Select
+              <OutlinedInput
                 error={error.kota ? true : false}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                placeholder="Isi Kota"
                 value={values.kota}
                 onChange={handleChange("kota")}
                 sx={{ borderRadius: "1rem" }}
-              >
-                <MenuItem value="">None</MenuItem>
-                <MenuItem value={"Coba"}>Coba</MenuItem>
-                <MenuItem value={"Cek"}>Cek</MenuItem>
-              </Select>
+              />
               <FormHelperText sx={{ m: 0, mb: "1rem" }}>
                 {error.kota}
               </FormHelperText>
