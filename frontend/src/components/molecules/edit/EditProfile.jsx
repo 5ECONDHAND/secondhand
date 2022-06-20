@@ -45,7 +45,7 @@ const EditProfile = () => {
   return (
     <div>
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
-        <Grid container spacing={3} direction="column">
+        <Grid container direction="column">
           <Grid item>
             <div>
               {!preview && (

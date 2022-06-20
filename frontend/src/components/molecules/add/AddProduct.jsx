@@ -52,7 +52,7 @@ const AddProduct = (props) => {
   const [values, setValues] = useState({
     nama: "",
     harga: "",
-    kategori: "",
+    kategori: "Pilih Kategori",
     deskripsi: "",
   });
 
@@ -121,7 +121,7 @@ const AddProduct = (props) => {
   return (
     <div className="Form">
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
-        <Grid container spacing={3} direction="column">
+        <Grid container direction="column">
           <Grid item xs={12}>
             <FormControl
               sx={{ minWidth: { xs: "30ch", md: "40ch", lg: "50ch" } }}
@@ -175,7 +175,7 @@ const AddProduct = (props) => {
                 onChange={handleChange("kategori")}
                 sx={{ borderRadius: "1rem" }}
               >
-                <MenuItem value="">None</MenuItem>
+                <MenuItem value={"Pilih Kategori"}>Pilih Kategori</MenuItem>
                 <MenuItem value={"Coba"}>Coba</MenuItem>
                 <MenuItem value={"Cek"}>Cek</MenuItem>
               </Select>
