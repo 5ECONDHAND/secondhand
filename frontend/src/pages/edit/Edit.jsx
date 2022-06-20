@@ -1,5 +1,4 @@
 import { Box, Container, Grid } from '@mui/material'
-import ArrowBack from '@mui/icons-material/ArrowBack'
 import { EditProfile } from '../../components/molecules/edit'
 import { BackButton } from '../../components/molecules/global'
 

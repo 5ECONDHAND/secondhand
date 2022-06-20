@@ -1,6 +1,5 @@
 import { Box, Container, Grid } from "@mui/material";
 import { AddProduct } from "../../components/molecules/add";
-import ArrowBack from "@mui/icons-material/ArrowBack";
 import { BackButton } from "../../components/molecules/global";
 
 const Add = () => {
