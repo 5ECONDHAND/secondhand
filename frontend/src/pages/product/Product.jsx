@@ -1,16 +1,10 @@
 import { Container, Grid } from '@mui/material'
-import React from 'react'
-import {
-  ProductDesc,
-  ProductItem,
-  ProductSlider,
-  ProfileCard,
-} from '../../components/molecules/product'
-import { Navbar } from '../../components/molecules/';
+import { ProfileCard } from '../../components/molecules/global'
+import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
+
 const Product = () => {
   return (
     <>
-      <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
           <Grid item xs={12} sm={6} md={6.4}>

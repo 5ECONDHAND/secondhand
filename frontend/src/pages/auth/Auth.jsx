@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import splash from '../../assets/images/login-splash.png'
-import Box from '@mui/material/Box'
-import { Link, Typography } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { LoginForm, RegisterForm } from '../../components/molecules/auth'
 import { useLocation } from 'react-router-dom'
+import splash from '../../assets/images/login-splash.png'
 
 const FormChange = ({ text, status }) => {
   return (

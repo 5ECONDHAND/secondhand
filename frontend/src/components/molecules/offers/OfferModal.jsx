@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
   Avatar,
-  Box,
   Button,
   FormControl,
   FormHelperText,
@@ -11,10 +10,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { FiX } from 'react-icons/fi'
-import { validateNegotiateAmount } from '../../../utils/validators'
+import { Box } from '@mui/system'
 import { useSnackbar } from 'notistack'
+import { FiX } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import { toRupiah } from '../../../utils/functions'
+import dummy from '../../../assets/images/dummy-image.jpg'
 
 const ModalStyle = {
   position: 'absolute',
@@ -39,23 +40,43 @@ const ProductMiniCard = (props) => {
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
         }}
       >
+        <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: '500', p: 2, pb: 0 }}>
+          Product Match
+        </Typography>
         <Stack
           direction="row"
           justifyContent="flex-start"
-          alignItems="center"
+          alignItems="flex-start"
+          spacing={2}
+          padding={2}
+          pb={0}
+        >
+          <Avatar alt="" src={''} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+          <Stack direction="column">
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              {'Nama Pembeli'}
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
+              {'kota'}
+            </Typography>
+          </Stack>
+        </Stack>
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="flex-start"
           spacing={2}
           padding={2}
         >
-          <Avatar
-            alt="A"
-            src={'gambar produk'}
-            sx={{ width: 56, height: 56, borderRadius: '12px' }}
-          />
+          <Avatar alt="" src={dummy} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
           <Stack direction="column">
-            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+            <Typography variant="body1" sx={{ fontWeight: '500', mb: 0.5 }}>
               {'Nama produk'}
             </Typography>
-            <Typography variant="body2">{toRupiah(250000)}</Typography>
+            <Typography variant="body2" sx={{ textDecoration: 'line-through', mb: 0.5 }}>
+              {toRupiah(250000)}
+            </Typography>
+            <Typography variant="body2">Ditawar {toRupiah(200000)}</Typography>
           </Stack>
         </Stack>
       </Paper>
@@ -63,38 +84,38 @@ const ProductMiniCard = (props) => {
   )
 }
 
-const NegotiateInput = (props) => {
-  const [error, setError] = useState({})
-  const [values, setValues] = useState({
-    amount: 0,
-  })
+const OfferInput = (props) => {
+  // const [error, setError] = useState({})
+  // const [values, setValues] = useState({
+  //   amount: 0,
+  // })
 
-  const { handleClose } = props
-  const { enqueueSnackbar } = useSnackbar()
+  const { handleClose, handleAccept } = props
+  // const { enqueueSnackbar } = useSnackbar()
 
-  const fireAlert = (msg = 'Success', variant) => {
-    enqueueSnackbar(msg, { variant })
-  }
+  // const fireAlert = (msg = 'Success', variant) => {
+  //   enqueueSnackbar(msg, { variant })
+  // }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    validateNegotiateAmount(values, setError)
-
+    handleAccept()
+    handleClose()
     // console.log('FORM VALUES', values)
     // console.log('ERROR STATE', error)
   }
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+  // const handleChange = (prop) => (event) => {
+  //   setValues({ ...values, [prop]: event.target.value })
+  // }
 
-  useEffect(() => {
-    if (error?.amount === '' && values.amount > 0) {
-      handleClose()
-      fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error])
+  // useEffect(() => {
+  //   if (error?.amount === '' && values.amount > 0) {
+  //     handleClose()
+  //     fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [error])
 
   return (
     <>
@@ -104,7 +125,7 @@ const NegotiateInput = (props) => {
         onSubmit={(event) => handleSubmit(event)}
         sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}
       >
-        <FormControl sx={{ maxWidth: 'auto' }}>
+        {/* <FormControl sx={{ maxWidth: 'auto' }}>
           <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
             Harga Tawar
           </FormHelperText>
@@ -117,34 +138,35 @@ const NegotiateInput = (props) => {
             sx={{ borderRadius: '1rem' }}
           />
           <FormHelperText sx={{ m: 0 }}>{error?.amount}</FormHelperText>
-        </FormControl>
+        </FormControl> */}
         <Button
           type="submit"
           fullWidth
           variant="contained"
           size="large"
           disableElevation
+          endIcon={<FaWhatsapp />}
           sx={{
             borderRadius: '1rem',
             textTransform: 'none',
             background: '#7126B5',
             border: '1px solid #7126B5',
-            py: '14px',
-            mt: 2,
             '&:hover': {
               background: '#631fa1',
             },
+            py: '14px',
+            mt: 2,
           }}
         >
-          Kirim
+          Hubungi Via Whatsapp
         </Button>
       </Box>
     </>
   )
 }
 
-const NegotiateModal = (props) => {
-  const { open, handleClose } = props
+const OfferModal = (props) => {
+  const { open, handleClose, handleAccept } = props
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -153,18 +175,17 @@ const NegotiateModal = (props) => {
             <FiX size={24} onClick={handleClose} />
           </Box>
           <Typography variant="body1" sx={{ fontWeight: '500', mb: 2 }}>
-            Masukkan Harga Tawarmu
+            Yeay kamu berhasil mendapat harga yang sesuai
           </Typography>
           <Typography variant="body2" sx={{ color: '#8A8A8A', mb: 2 }}>
-            Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi
-            penjual.
+            Segera hubungi pembeli melalui whatsapp untuk transaksi selanjutnya
           </Typography>
           <ProductMiniCard />
-          <NegotiateInput handleClose={handleClose} />
+          <OfferInput handleClose={handleClose} handleAccept={handleAccept} />
         </Box>
       </Modal>
     </>
   )
 }
 
-export default NegotiateModal
+export default OfferModal

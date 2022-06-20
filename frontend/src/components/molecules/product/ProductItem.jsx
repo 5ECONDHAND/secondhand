@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
+import { toRupiah } from '../../../utils/functions'
 
 const ProductItem = ({ type }) => {
   const [open, setOpen] = useState(false)
@@ -25,7 +26,7 @@ const ProductItem = ({ type }) => {
               {'Aksesoris'}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
-              {'Rp 250.000'}
+              {toRupiah(250000)}
             </Typography>
             {type === 'seller' ? (
               <>
@@ -41,6 +42,9 @@ const ProductItem = ({ type }) => {
                     border: '1px solid #7126B5',
                     py: '10px',
                     mb: '10px',
+                    '&:hover': {
+                      background: '#631fa1',
+                    },
                   }}
                 >
                   Terbitkan
@@ -57,7 +61,7 @@ const ProductItem = ({ type }) => {
                     color: '#000000',
                     border: '1px solid #7126B5',
                     py: '10px',
-                    '&:hover': { color: '#ffffff' },
+                    '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
                 >
                   Edit
@@ -78,6 +82,9 @@ const ProductItem = ({ type }) => {
                     border: '1px solid #7126B5',
                     py: '10px',
                     mb: '10px',
+                    '&:hover': {
+                      background: '#631fa1',
+                    },
                   }}
                 >
                   Saya tertarik dan ingin nego

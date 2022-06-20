@@ -1,17 +1,11 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
-import React from 'react'
-import casio1 from '../../../../assets/images/casio1.png'
+import { Card, CardContent, CardMedia, Typography } from '@mui/material'
+import casio1 from '../../../assets/images/casio1.png'
 
 const CardItem = () => {
   return (
     <>
       <Card sx={{ maxWidth: 345, marginX: 'auto' }}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={casio1}
-          alt="jam tangan"
-        />
+        <CardMedia component="img" height="140" image={casio1} alt="jam tangan" />
         <CardContent>
           <Typography gutterBottom variant="h6" component="div">
             Jam Tangan Casio

@@ -1,68 +1,56 @@
-import React from 'react'
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import { Banner, Buttons, CardItem } from '../../components/atoms/home';
-import { FiPlus } from 'react-icons/fi';
-import { Navbar } from '../../components/molecules';
+import { Button, Container, Grid, Typography } from '@mui/material'
+import { Banner, Buttons } from '../../components/molecules/home'
+import { ProductCard } from '../../components/molecules/global'
+import { FiPlus } from 'react-icons/fi'
 
+const SellButton = () => {
+  return (
+    <Button
+      variant="contained"
+      size="large"
+      startIcon={<FiPlus />}
+      sx={{
+        position: 'fixed',
+        bottom: '3rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        borderRadius: '0.75rem',
+        textTransform: 'none',
+        boxShadow: '0 0.25rem 1rem rgba(105, 2, 198, 0.63) !important',
+        background: '#7126B5',
+        '&:hover': {
+          background: '#631fa1',
+        },
+      }}
+    >
+      Jual
+    </Button>
+  )
+}
 
 const Home = () => {
   return (
     <>
-      <Navbar />
       <Banner />
-      <Container maxWidth='xl' sx={{ marginY: '40px', position: 'relative' }}>
-        <Typography variant='h6' sx={{ fontSize: '16px' }}>
+      <Container maxWidth="xl" sx={{ my: 0, position: 'relative' }}>
+        <Typography variant="h6" sx={{ fontSize: '16px' }}>
           Telusuri Kategori
         </Typography>
         <Buttons />
-        <Grid container columns={{ xs: 1, sm: 2, md: 4, lg: 6 }} mt={{ xs: '20px', md: '30px' }} spacing={2}>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-          <Grid item xs={1}>
-            <CardItem />
-          </Grid>
-        </Grid>
-        <Button sx={{
-          backgroundColor: '#7126B5',
-          color: 'white',
-          position: 'fixed',
-          bottom: '50px',
-          left: '0',
-          right: '0',
-          margin: 'auto',
-          zIndex: '10',
-          borderRadius: '12px',
-          padding: '8px 15px',
-          ':hover': {
-            bgcolor: '#631fa1',
-            color: 'white'
-          },
-        }}
-          startIcon={<FiPlus />}
+        <Grid
+          container
+          columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
+          mt={{ xs: '20px', md: '30px' }}
+          spacing={3}
         >
-          Jual
-        </Button>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+            <Grid item xs={1} key={index}>
+              <ProductCard />
+            </Grid>
+          ))}
+        </Grid>
+        <SellButton />
       </Container>
-
     </>
   )
 }
