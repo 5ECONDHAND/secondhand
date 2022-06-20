@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
   FormControl,
-  MenuItem,
-  Select,
   FormHelperText,
   OutlinedInput,
   Button,
@@ -47,8 +45,8 @@ const EditProfile = () => {
   return (
     <div>
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
-        <Grid container spacing={3} direction="column" alignItems="center">
-          <div>
+        <Grid container spacing={3} direction="column">
+          <Grid item>
             <div>
               {!preview && (
                 <Button
@@ -67,35 +65,35 @@ const EditProfile = () => {
                 </Button>
               )}
             </div>
-          </div>
-          {preview ? (
-            <>
-              <Button
-                variant="contained"
-                component="label"
-                onChange={handleImage}
-                disableElevation
-                sx={{
-                  background: "transparent",
-                  border: "none",
-                  ":hover": { background: "transparent" },
-                }}
-              >
-                <img
-                  src={preview}
-                  alt=""
-                  style={{
-                    width: "96px",
-                    height: "96px",
-                    marginBottom: "1rem",
+            {preview ? (
+              <>
+                <Button
+                  variant="contained"
+                  component="label"
+                  onChange={handleImage}
+                  disableElevation
+                  sx={{
+                    background: "transparent",
+                    border: "none",
+                    ":hover": { background: "transparent" },
                   }}
-                />
-                <input type="file" hidden />
-              </Button>
-            </>
-          ) : (
-            ""
-          )}
+                >
+                  <img
+                    src={preview}
+                    alt=""
+                    style={{
+                      width: "96px",
+                      height: "96px",
+                      marginBottom: "1rem",
+                    }}
+                  />
+                  <input type="file" hidden />
+                </Button>
+              </>
+            ) : (
+              ""
+            )}
+          </Grid>
           <Grid item>
             <FormControl
               sx={{ minWidth: { xs: "30ch", md: "40ch", lg: "50ch" } }}

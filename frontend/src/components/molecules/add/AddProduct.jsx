@@ -12,7 +12,6 @@ import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
 import gambar from "../../../assets/images/add.png";
 import { validateProduct } from "../../../utils/validators";
-import AddIcon from "@mui/icons-material/Add";
 
 const styles = {
   "&.MuiButton-root": {
@@ -22,12 +21,6 @@ const styles = {
     py: "15px",
     color: "black",
   },
-};
-const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
 };
 
 const thumb = {
@@ -217,28 +210,33 @@ const AddProduct = (props) => {
             >
               <FormHelperText sx={{ fontSize: "1rem", color: "black", m: 0 }}>
                 Foto Produk
-                <Box
-                  {...getRootProps({ className: "dropzone" })}
-                  sx={{ marginBottom: "1rem" }}
-                >
-                  <input {...getInputProps()} />
-                  {files.length !== 0 ? (
-                    <Box
-                      sx={{
-                        border: "1px dashed #D0D0D0",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                      }}
-                    >
-                      {thumbs}
-                      {fileRejectionItems}
-                    </Box>
-                  ) : (
-                    <img src={gambar} alt="" />
-                  )}
-                </Box>
               </FormHelperText>
+              <Box
+                {...getRootProps()}
+                sx={{
+                  marginBottom: "1rem",
+                  maxWidth: { xs: "9ch", md: "9ch", lg: "9ch" },
+                  cursor: "pointer",
+                }}
+              >
+                <input {...getInputProps()} />
+                {files.length !== 0 ? (
+                  <Box
+                    sx={{
+                      border: "1px dashed #D0D0D0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      minWidth: { xs: "30ch", md: "40ch", lg: "50ch" },
+                    }}
+                  >
+                    {thumbs}
+                    {fileRejectionItems}
+                  </Box>
+                ) : (
+                  <img src={gambar} alt="" />
+                )}
+              </Box>
             </FormControl>
           </Grid>
         </Grid>
