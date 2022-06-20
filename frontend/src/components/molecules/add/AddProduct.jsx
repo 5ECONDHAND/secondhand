@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
 import gambar from "../../../assets/images/add.png";
 import { validateProduct } from "../../../utils/validators";
+import AddIcon from "@mui/icons-material/Add";
 
 const styles = {
   "&.MuiButton-root": {
@@ -33,10 +34,10 @@ const thumb = {
   display: "inline-flex",
   borderRadius: 2,
   border: "1px solid #eaeaea",
-  marginBottom: 8,
-  marginRight: 8,
-  width: 100,
-  height: 100,
+  marginBottom: 10,
+  marginTop: 10,
+  width: 96,
+  height: 96,
   padding: 4,
   boxSizing: "border-box",
 };
@@ -74,25 +75,24 @@ const AddProduct = (props) => {
   };
 
   const [files, setFiles] = useState([]);
-  const { fileRejections, getRootProps, getInputProps } =
-    useDropzone({
-      maxFiles: 4,
-      accept: {
-        "image/*": [],
-      },
-      minSize: 0,
-      maxSize: 1048576,
-      onDrop: (acceptedFiles) => {
-        setFiles(
-          acceptedFiles.map((file) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-            })
-          )
-        );
-        console.log(acceptedFiles);
-      },
-    });
+  const { fileRejections, getRootProps, getInputProps } = useDropzone({
+    maxFiles: 4,
+    accept: {
+      "image/*": [],
+    },
+    minSize: 0,
+    maxSize: 1048576,
+    onDrop: (acceptedFiles) => {
+      setFiles(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+      console.log(acceptedFiles);
+    },
+  });
 
   const fileRejectionItems = fileRejections.map(({ errors }) => {
     return (
@@ -129,7 +129,7 @@ const AddProduct = (props) => {
     <div className="Form">
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
         <Grid container spacing={3} direction="column">
-          <Grid item>
+          <Grid item xs={12}>
             <FormControl
               sx={{ minWidth: { xs: "30ch", md: "40ch", lg: "50ch" } }}
             >
@@ -217,23 +217,27 @@ const AddProduct = (props) => {
             >
               <FormHelperText sx={{ fontSize: "1rem", color: "black", m: 0 }}>
                 Foto Produk
-                <section className="container">
-                  <div
-                    {...getRootProps({ className: "dropzone" })}
-                    style={{ display: "flex", marginBottom: "1rem" }}
-                  >
-                    <div>
-                      <input {...getInputProps()} />
-                      <img src={gambar} alt="" style={thumbsContainer} />
-                    </div>
-                    <div>
-                      <aside style={thumbsContainer}>
-                        {thumbs}
-                        {fileRejectionItems}
-                      </aside>
-                    </div>
-                  </div>
-                </section>
+                <Box
+                  {...getRootProps({ className: "dropzone" })}
+                  sx={{ marginBottom: "1rem" }}
+                >
+                  <input {...getInputProps()} />
+                  {files.length !== 0 ? (
+                    <Box
+                      sx={{
+                        border: "1px dashed #D0D0D0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      {thumbs}
+                      {fileRejectionItems}
+                    </Box>
+                  ) : (
+                    <img src={gambar} alt="" />
+                  )}
+                </Box>
               </FormHelperText>
             </FormControl>
           </Grid>
