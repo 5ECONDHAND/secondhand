@@ -7,6 +7,7 @@
   },
   "host": "localhost:3000",
   "basePath": "/api",
+  "tags": [],
   "schemes": [
     "http",
     "https"
@@ -44,11 +45,13 @@
     },
     "/users": {
       "get": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -56,21 +59,25 @@
     },
     "/users/{id}": {
       "get": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "put": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "patch": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "delete": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -78,11 +85,13 @@
     },
     "/notifications": {
       "get": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -90,25 +99,30 @@
     },
     "/notifications/{id}": {
       "get": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "put": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "patch": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "delete": {
+        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       }
     }
-  }
+  },
+  "definitions": {}
 }

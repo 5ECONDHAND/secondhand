@@ -1,0 +1,140 @@
+/* Use a more-intuitive box-sizing model. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* Remove default margin */
+* {
+  margin: 0;
+}
+/* Allow percentage-based heights in the application */
+html,
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100%;
+}
+/* Typographic tweaks! Add accessible line-height & Improve text rendering */
+body {
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+/* Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/* Remove built-in form typography styles */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/* Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/* Create a root stacking context */
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* Swiper Styles */
+/* target the active bullet */
+span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #7126b5 !important;
+}
+
+/* target all bullets */
+.swiper-pagination-bullet {
+  border-radius: 50% !important;
+  background: #c4c4c4 !important;
+  border: 1px solid #7126b5 !important;
+  opacity: 1 !important;
+}
+
+/* target navigation arrows */
+.swiper-button-prev {
+  width: calc(var(--swiper-navigation-size) / 44 * 44) !important;
+  background: url('../assets/svg/carouselButtonLeft.svg') no-repeat center !important;
+}
+
+.swiper-button-next {
+  width: calc(var(--swiper-navigation-size) / 44 * 44) !important;
+  background: url('../assets/svg/carouselButtonRight.svg') no-repeat center !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  display: none;
+}
+
+/* Notistack Styles */
+.SnackbarItem-variantSuccess {
+  background-color: #73ca5c !important;
+}
+
+/* Custom Scrollbar Styles */
+body::-webkit-scrollbar-track {
+  background-color: #999999;
+}
+
+body::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background-color: #505050;
+}
+
+/* Custom Dropzone Box Styles */
+.dropzone-border {
+  background-image: repeating-linear-gradient(
+      180deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    ),
+    repeating-linear-gradient(
+      270deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #d0d0d0,
+      #d0d0d0 10px,
+      transparent 10px,
+      transparent 18px,
+      #d0d0d0 18px
+    );
+  background-size: 1px 100%, 100% 1px, 1px 100%, 100% 1px;
+  background-position: 0 0, 0 0, 100% 0, 0 100%;
+  background-repeat: no-repeat;
+}
