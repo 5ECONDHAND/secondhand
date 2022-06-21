@@ -2,16 +2,18 @@ import { useState } from 'react'
 import { Box, Button, Divider, Paper, Typography } from '@mui/material'
 import { FiBox, FiDollarSign, FiHeart, FiChevronRight } from 'react-icons/fi'
 
-const CategoryMenu = () => {
+const CategoryMenu = ({ setDataCategory }) => {
   const [active, setActive] = useState('Semua Produk')
   const type = ['Semua Produk', 'Diminati', 'Terjual']
   const icons = [<FiBox />, <FiHeart />, <FiDollarSign />]
   const handleActive = (name) => {
     setActive(name)
+    setDataCategory(name)
   }
 
   return (
     <>
+      {/* mobile */}
       <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: '10px', flexWrap: 'wrap' }}>
         {type.map((item, index) => (
           <Button
@@ -36,6 +38,7 @@ const CategoryMenu = () => {
           </Button>
         ))}
       </Box>
+      {/* desktop */}
       <Paper
         sx={{
           display: { xs: 'none', md: 'block' },
