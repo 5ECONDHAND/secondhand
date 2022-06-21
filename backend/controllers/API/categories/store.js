@@ -19,17 +19,6 @@ async function controller(req, res, next){
         })
     }
 
-    try{
-        var parsed = JSON.parse(req.body.name);
-        var stringify = JSON.stringify(parsed);
-    }catch(e){
-        return res.json({
-            error: true,
-            message: e.toString(),
-            data: [],
-        })
-    }
-
     const data = await prisma.category.create({
         data:{
             name: req.body.name,
