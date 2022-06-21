@@ -9,6 +9,7 @@ var rootController = path.join(process.env.ROOT_PATH, '/controllers/API');
 var nfHandler = require(path.join(rootController, '/nf'));
 var userCRUD = require(path.join(rootController, 'users'));
 var notificationCRUD = require(path.join(rootController, 'notifications'));
+var categoryCRUD = require(path.join(rootController, 'categories'));
 
 router.get('/users', userCRUD.all);
 router.get('/users/:id', userCRUD.view);
@@ -23,6 +24,13 @@ router.post('/notifications', notificationCRUD.store);
 router.put('/notifications/:id', notificationCRUD.update);
 router.patch('/notifications/:id', notificationCRUD.update);
 router.delete('/notifications/:id', notificationCRUD.destroy);
+
+router.get('/categories', categoryCRUD.all);
+router.get('/categories/:id', categoryCRUD.view);
+router.post('/categories/:id', categoryCRUD.store);
+router.put('/categories/', categoryCRUD.update);
+router.patch('/categories/', categoryCRUD.update);
+router.delete('/categories/:id', categoryCRUD.destroy);
 
 // catch 404 and respond json
 router.all('/*', nfHandler);
