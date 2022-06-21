@@ -32,9 +32,9 @@ router.delete('/notifications/:id', notificationCRUD.destroy);
 
 router.get('/categories', categoryCRUD.all);
 router.get('/categories/:id', categoryCRUD.view);
-router.post('/categories/:id', categoryCRUD.store);
-router.put('/categories/', categoryCRUD.update);
-router.patch('/categories/', categoryCRUD.update);
+router.post('/categories', categoryCRUD.store);
+router.put('/categories/:id', categoryCRUD.update);
+router.patch('/categories/:id', categoryCRUD.update);
 router.delete('/categories/:id', categoryCRUD.destroy);
 
 // catch 404 and respond json
