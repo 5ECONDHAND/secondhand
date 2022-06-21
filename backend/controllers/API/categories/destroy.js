@@ -40,3 +40,5 @@ async function controller(req, res, next){
         data: [],
     })
 }
+
+module.exports = controller;
