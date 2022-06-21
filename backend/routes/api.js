@@ -11,6 +11,11 @@ var userCRUD = require(path.join(rootController, 'users'));
 var notificationCRUD = require(path.join(rootController, 'notifications'));
 var categoryCRUD = require(path.join(rootController, 'categories'));
 
+var auth = require(path.join(rootController, 'auth'));
+
+router.post('/login', auth.login);
+router.post('/register', auth.register);
+
 router.get('/users', userCRUD.all);
 router.get('/users/:id', userCRUD.view);
 router.post('/users', userCRUD.store);

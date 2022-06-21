@@ -29,6 +29,20 @@
     "application/json"
   ],
   "paths": {
+    "/login": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/register": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/users": {
       "get": {
         "tags": [],
