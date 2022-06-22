@@ -18,6 +18,17 @@ async function controller(req, res, next) {
     })
   }
 
+  if(
+    req.userId != id
+    && !req.isAdmin
+  ) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
   const data = await prisma.user.findFirst({
     where: {
       id

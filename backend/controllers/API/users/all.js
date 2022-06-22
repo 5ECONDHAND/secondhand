@@ -8,7 +8,16 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  * @param {import('express').NextFunction} next
  */
 async function controller(req, res, next) {
+  const wherePayload = req.isAdmin
+  ? {}
+  : {
+    where: {
+      id: req.userId
+    }
+  };
+
   const data = await prisma.user.findMany({
+    ...wherePayload,
     include: {
       Transactions: true,
       Photos: true,

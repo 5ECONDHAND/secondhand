@@ -21,6 +21,16 @@ async function controller(req, res, next) {
     })
   }
 
+  if(
+    !req.isAdmin
+  ) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
   const hash = req.body.password
   ? crypto.createHash('sha512').update(req.body.password).digest('hex')
   : null;
