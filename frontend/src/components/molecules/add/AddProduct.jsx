@@ -7,6 +7,7 @@ import {
   FormHelperText,
   OutlinedInput,
   Button,
+  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
@@ -87,14 +88,8 @@ const AddProduct = (props) => {
     },
   });
 
-  const fileRejectionItems = fileRejections.map(({ errors }) => {
-    return (
-      <ul>
-        {errors.map((e) => (
-          <li key={e.code}>{e.message}</li>
-        ))}
-      </ul>
-    );
+  const fileRejectionItems = fileRejections.map(() => {
+    return <div></div>;
   });
 
   const thumbs = files.map((file) => (
@@ -214,7 +209,7 @@ const AddProduct = (props) => {
               <Box
                 {...getRootProps()}
                 sx={{
-                  marginBottom: "1rem",
+                  mb: "1rem",
                   maxWidth: { xs: "9ch", md: "9ch", lg: "9ch" },
                   cursor: "pointer",
                 }}
@@ -231,12 +226,17 @@ const AddProduct = (props) => {
                     }}
                   >
                     {thumbs}
-                    {fileRejectionItems}
                   </Box>
                 ) : (
                   <img src={gambar} alt="" />
                 )}
               </Box>
+              {fileRejectionItems[0] && (
+                <Box sx={{ mb: "1rem" }}
+                >
+                  <Alert severity="error">Maksimal 4 Gambar</Alert>
+                </Box>
+              )}
             </FormControl>
           </Grid>
         </Grid>

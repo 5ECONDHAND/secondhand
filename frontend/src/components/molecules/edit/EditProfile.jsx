@@ -55,9 +55,12 @@ const EditProfile = () => {
                   onChange={handleImage}
                   disableElevation
                   sx={{
-                    background: "transparent",
+                    background: "#E2D4F0",
                     border: "none",
-                    ":hover": { background: "transparent" },
+                    borderRadius: "12px",
+                    ":hover": { background: "#E2D4F0" },
+                    width: "96px",
+                    height: "96px"
                   }}
                 >
                   <img src={gambar} alt="" />
@@ -75,7 +78,7 @@ const EditProfile = () => {
                   sx={{
                     background: "transparent",
                     border: "none",
-                    ":hover": { background: "transparent" },
+                    ":hover": { background: "#ebebeb" },
                   }}
                 >
                   <img
@@ -84,7 +87,6 @@ const EditProfile = () => {
                     style={{
                       width: "96px",
                       height: "96px",
-                      marginBottom: "1rem",
                     }}
                   />
                   <input type="file" hidden />
