@@ -3,6 +3,7 @@ import { Avatar, Button, Grid, Stack, Typography, useMediaQuery, useTheme } from
 import { toRupiah } from '../../../utils/functions'
 import { FaWhatsapp } from 'react-icons/fa'
 import OfferModal from './OfferModal'
+import OfferStatusModal from './OfferStatusModal'
 import dummy from '../../../assets/images/dummy-image.jpg'
 
 const OfferCard = (props) => {
@@ -48,6 +49,7 @@ const OfferCard = (props) => {
         <Grid item xs={12} sm={12} md={12}>
           <Stack direction="row" spacing={2} justifyContent={mobile ? 'center' : 'flex-end'}>
             <Button
+              onClick={accept ? handleOpen : handleAccept}
               fullWidth={mobile ? true : false}
               variant="contained"
               size="large"
@@ -66,7 +68,7 @@ const OfferCard = (props) => {
               {accept ? 'Status' : 'Tolak'}
             </Button>
             <Button
-              onClick={handleOpen}
+              onClick={accept ? null : handleOpen}
               fullWidth={mobile ? true : false}
               variant="contained"
               size="large"
@@ -89,7 +91,11 @@ const OfferCard = (props) => {
           </Stack>
         </Grid>
       </Grid>
-      <OfferModal open={open} handleClose={handleClose} handleAccept={handleAccept} />
+      {accept ? (
+        <OfferStatusModal open={open} handleClose={handleClose} />
+      ) : (
+        <OfferModal open={open} handleClose={handleClose} handleAccept={handleAccept} />
+      )}
     </>
   )
 }

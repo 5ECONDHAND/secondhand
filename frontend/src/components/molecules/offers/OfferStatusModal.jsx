@@ -1,20 +1,18 @@
+import styled from '@emotion/styled'
 import {
-  Avatar,
   Button,
   FormControl,
-  FormHelperText,
+  FormControlLabel,
+  FormLabel,
   Modal,
-  OutlinedInput,
-  Paper,
-  Stack,
+  Radio,
+  RadioGroup,
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { FiX } from 'react-icons/fi'
-import { toRupiah } from '../../../utils/functions'
-import { validateNegotiateAmount } from '../../../utils/validators'
 
 const ModalStyle = {
   position: 'absolute',
@@ -28,46 +26,9 @@ const ModalStyle = {
   p: 4,
 }
 
-const ProductMiniCard = (props) => {
-  return (
-    <>
-      <Paper
-        sx={{
-          minWidth: { lg: 336, md: 'auto', xs: '100%' },
-          borderRadius: '1rem',
-          background: '#EEEEEE',
-          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          spacing={2}
-          padding={2}
-        >
-          <Avatar
-            alt="A"
-            src={'gambar produk'}
-            sx={{ width: 56, height: 56, borderRadius: '12px' }}
-          />
-          <Stack direction="column">
-            <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {'Nama produk'}
-            </Typography>
-            <Typography variant="body2">{toRupiah(250000)}</Typography>
-          </Stack>
-        </Stack>
-      </Paper>
-    </>
-  )
-}
-
-const NegotiateInput = (props) => {
-  const [error, setError] = useState({})
-  const [values, setValues] = useState({
-    amount: 0,
-  })
+const OfferStatusInput = (props) => {
+  // const [error, setError] = useState({})
+  const [values, setValues] = useState('sold')
 
   const { handleClose } = props
   const { enqueueSnackbar } = useSnackbar()
@@ -78,45 +39,54 @@ const NegotiateInput = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    validateNegotiateAmount(values, setError)
+    handleClose()
+    fireAlert('Status produk berhasil diperbarui', 'success')
 
-    // console.log('FORM VALUES', values)
-    // console.log('ERROR STATE', error)
+    console.log('FORM VALUES', values)
   }
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
+  const handleChange = (event) => {
+    setValues(event.target.value)
   }
 
-  useEffect(() => {
-    if (error?.amount === '' && values.amount > 0) {
-      handleClose()
-      fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error])
+  // useEffect(() => {
+  //   if (error?.amount === '' && values.amount > 0) {
+  //     handleClose()
+  //     fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [error])
 
   return (
     <>
       <Box
         component="form"
-        autoComplete="off"
         onSubmit={(event) => handleSubmit(event)}
         sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}
       >
-        <FormControl sx={{ maxWidth: 'auto' }}>
-          <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
-            Harga Tawar
-          </FormHelperText>
-          <OutlinedInput
-            error={error?.amount ? true : false}
-            placeholder="Rp 0,00"
-            type="number"
-            value={values.amount === 0 ? '' : values.amount}
-            onChange={handleChange('amount')}
-            sx={{ borderRadius: '1rem' }}
-          />
-          <FormHelperText sx={{ m: 0 }}>{error?.amount}</FormHelperText>
+        <FormControl>
+          <RadioGroup value={values} onChange={handleChange}>
+            <FormControlLabel
+              control={<Radio sx={{ '&.Mui-checked': { color: '#7126B5' } }} />}
+              label="Berhasil Terjual"
+              value="sold"
+            />
+            <FormLabel>
+              <Typography variant="body2" sx={{ color: '#8A8A8A', ml: 4, mb: 2 }}>
+                Kamu telah sepakat menjual produk ini kepada pembeli
+              </Typography>
+            </FormLabel>
+            <FormControlLabel
+              control={<Radio sx={{ '&.Mui-checked': { color: '#7126B5' } }} />}
+              label="Batalkan Transaksi"
+              value="cancelled"
+            />
+            <FormLabel>
+              <Typography variant="body2" sx={{ color: '#8A8A8A', ml: 4, mb: 2 }}>
+                Kamu membatalkan transaksi produk ini dengan pembeli
+              </Typography>
+            </FormLabel>
+          </RadioGroup>
         </FormControl>
         <Button
           type="submit"
@@ -150,14 +120,9 @@ const OfferStatusModal = (props) => {
             <FiX size={24} onClick={handleClose} />
           </Box>
           <Typography variant="body1" sx={{ fontWeight: '500', mb: 2 }}>
-            Masukkan Harga Tawarmu
+            Perbarui status penjualan produkmu
           </Typography>
-          <Typography variant="body2" sx={{ color: '#8A8A8A', mb: 2 }}>
-            Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi
-            penjual.
-          </Typography>
-          <ProductMiniCard />
-          <NegotiateInput handleClose={handleClose} />
+          <OfferStatusInput handleClose={handleClose} />
         </Box>
       </Modal>
     </>
