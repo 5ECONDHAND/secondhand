@@ -1,19 +1,24 @@
-import { Box, Grid } from '@mui/material'
-import ArrowBack from '@mui/icons-material/ArrowBack'
+import { Box, Container, Grid } from '@mui/material'
 import { EditProfile } from '../../components/molecules/edit'
+import { useNavigate } from 'react-router-dom'
+import { BackButton } from '../../components/molecules/global'
 
 const Edit = () => {
+  const navigate = useNavigate()
   return (
     <>
-      <Box mt="3rem" sx={{ textAlign: 'center' }}>
-        <Grid container>
-          <Grid item lg={2} md={2}>
-            <ArrowBack sx={{ display: { xs: 'none', md: 'block', marginLeft: 'auto' } }} />
-          </Grid>
+      <Box sx={{ textAlign: "center" }}>
+        <Container
+          maxWidth="lg"
+          sx={{ pt: { xs: "1rem", md: "2rem" }, pb: "1rem"}}
+        >
+        <BackButton />
+        <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
           <Grid item lg={8} md={8} sm={12} xs={12}>
             <EditProfile />
           </Grid>
         </Grid>
+        </Container>
       </Box>
     </>
   )
