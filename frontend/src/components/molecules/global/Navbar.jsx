@@ -9,10 +9,11 @@ import {
   IconButton,
   Grid,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser } from 'react-icons/fi'
 import casio1 from '../../../assets/images/casio1.png'
 import { useNavigate, useLocation } from 'react-router-dom'
+
 const SearchField = () => {
   return (
     <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
@@ -60,14 +61,21 @@ const UserButton = () => {
   const [popup, setPopup] = useState(false)
   const [notif, setNotif] = useState(true)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    if (pathname === '/') setActive('')
+  }, [pathname])
+
   const handleActive = (name) => {
     console.log(name)
     setActive(name)
     switch (name) {
       case 'Menu':
-        return navigate('/login')
+        return navigate('/sales')
       case 'Notification':
-        if (window.innerWidth < 900) return navigate('/login')
+        // no notification route so direct to /sales if width < 900 (md to sm && xs)
+        if (window.innerWidth < 900) return navigate('/sales')
         return setPopup(!popup), setNotif(!notif)
       default:
         break
@@ -253,13 +261,14 @@ const Navbar = () => {
   const [show, setShow] = useState(false)
   const user = true
   const { pathname } = useLocation()
-  console.log(pathname)
+  const navigate = useNavigate()
+
   return (
     <>
       <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }} >
         <Container maxWidth='xl' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center', width: '100%', position: 'relative' }}>
-            <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979' }} />
+            <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979', cursor: 'pointer' }} onClick={() => navigate('/')} />
             {pathname === '/add' ? '' : pathname === '/edit' ?
               <Box sx={{ textAlign: 'center', position: 'absolute', left: 0, right: 0, margin: 'auto' }}><Typography variant='subtitle2'>Lengkapi Info Akun</Typography>
               </Box> :
@@ -276,7 +285,7 @@ const Navbar = () => {
               <FiMenu style={{ cursor: 'pointer' }} size='30px' onClick={() => setShow(!show)} />
               {show &&
                 <>
-                  <Box sx={{ position: 'absolute', top: '77px', left: 0, right: 0, margin: 'auto', backgroundColor: '#f7f7f7', height: '40vh', width: '100vw', display: 'flex', justifyContent: 'center', paddingTop: '30px', zIndex: 10 }}>
+                  <Box sx={{ position: 'absolute', top: '73px', left: 0, right: 0, margin: 'auto', backgroundColor: '#f7f7f7', height: '40vh', width: '100vw', display: 'flex', justifyContent: 'center', paddingTop: '30px', zIndex: 10 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                       <SearchField />
                       {user ? <UserButton /> : <LoginButton />}

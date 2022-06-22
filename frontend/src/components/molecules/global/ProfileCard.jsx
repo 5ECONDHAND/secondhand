@@ -1,8 +1,9 @@
 import { Avatar, Button, Paper, Stack, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileCard = (props) => {
   const { display } = props
-
+  const navigate = useNavigate()
   return (
     <>
       <Paper
@@ -45,6 +46,7 @@ const ProfileCard = (props) => {
                     color: '#ffffff',
                   },
                 }}
+                onClick={() => navigate('/edit')}
               >
                 Edit
               </Button>

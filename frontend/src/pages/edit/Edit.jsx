@@ -1,8 +1,10 @@
 import { Box, Container, Grid } from '@mui/material'
 import { EditProfile } from '../../components/molecules/edit'
+import { useNavigate } from 'react-router-dom'
 import { BackButton } from '../../components/molecules/global'
 
 const Edit = () => {
+  const navigate = useNavigate()
   return (
     <>
       <Box sx={{ textAlign: "center" }}>
