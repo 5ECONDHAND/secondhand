@@ -9,6 +9,7 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  */
 async function controller(req, res, next) {
   var id = parseInt(req.params.id);
+
   if(isNaN(id)){
     return res.json({
       error: true,
@@ -17,13 +18,21 @@ async function controller(req, res, next) {
     })
   }
 
+  var includePayload = {};
+
+  if (req.isAdmin) {
+    includePayload = {
+      include: {
+        Products: true
+      }
+    };
+  }
+
   const data = await prisma.category.findFirst({
     where: {
       id
     },
-    include: {
-      Products: true
-    }
+    ...includePayload,
   }).catch(err=>{
     return{
       error: true,

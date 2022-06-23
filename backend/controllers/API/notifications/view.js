@@ -18,10 +18,41 @@ async function controller(req, res, next) {
     })
   }
 
+  var wherePayload = null;
+
+  if (req.userId) {
+    wherePayload = {
+      where: {
+        AND: [
+          {
+            id: id
+          },
+          {
+            userId: req.userId
+          }
+        ]
+      }
+    };
+  }
+
+  if (req.isAdmin) {
+    wherePayload = {
+      where: {
+        id: id
+      }
+    };
+  }
+
+  if (wherePayload === null) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    });
+  }
+
   const data = await prisma.notification.findFirst({
-    where: {
-      id
-    },
+    ...wherePayload,
     include: {
       User: true
     }
