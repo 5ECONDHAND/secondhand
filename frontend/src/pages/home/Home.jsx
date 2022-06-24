@@ -2,13 +2,16 @@ import { Button, Container, Grid, Typography } from '@mui/material'
 import { Banner, Buttons } from '../../components/molecules/home'
 import { ProductCard } from '../../components/molecules/global'
 import { FiPlus } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
 
 const SellButton = () => {
+  const navigate = useNavigate()
   return (
     <Button
       variant="contained"
       size="large"
       startIcon={<FiPlus />}
+      onClick={() => navigate('/add')}
       sx={{
         position: 'fixed',
         bottom: '3rem',
