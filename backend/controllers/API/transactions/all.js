@@ -11,7 +11,35 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
 async function controller(req, res, next){
   const data = await prisma.transaction.findMany({
     include: {
-      Product: true
+      Product: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+          Photos: true
+        }
+      },
+      Users: {
+        select: {
+          accepted: true,
+          offeredPrice: true,
+          description: true,
+          User: {
+            select: {
+              id: true,
+              phoneNo: true,
+              fullname: true,
+              email: true,
+              Photos: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          }
+        }
+      }
     }
   }).catch(err =>{
     return{

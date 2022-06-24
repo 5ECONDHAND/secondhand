@@ -39,12 +39,12 @@ router.put('/categories/:id', categoryCRUD.update);
 router.patch('/categories/:id', categoryCRUD.update);
 router.delete('/categories/:id', categoryCRUD.destroy);
 
-router.get('/transaction', transactionCRUD.all);
-router.get('/transaction/:id', transactionCRUD.view);
-router.post('/transaction', transactionCRUD.store);
-router.put('/transaction/:id', transactionCRUD.update);
-router.patch('/transaction/:id', transactionCRUD.update);
-router.delete('/transaction/:id', transactionCRUD.destroy);
+router.get('/transactions', transactionCRUD.all);
+router.get('/transactions/:id', transactionCRUD.view);
+router.post('/transactions', transactionCRUD.store);
+router.put('/transactions/:id', transactionCRUD.update);
+router.patch('/transactions/:id', transactionCRUD.update);
+router.delete('/transactions/:id', transactionCRUD.destroy);
 
 router.get('/products', productCRUD.all);
 router.get('/products/:id', productCRUD.view);
