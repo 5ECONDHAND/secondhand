@@ -7,9 +7,7 @@
   "author": "KEL5",
   "license": "MIT",
   "jest": {
-    "testPathIgnorePatterns": [
-      "API"
-    ]
+    "testPathIgnorePatterns": []
   },
   "prisma": {
     "seed": "node ./models/seeder.js"
