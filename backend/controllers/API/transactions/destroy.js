@@ -1,5 +1,5 @@
 /** @type {import('../../../models/instance')} */
-const prisma = require(process.env.ROOT_PATH + '/models/instance');
+const prisma = require(process.env.ROOT_PATH + "/models/instance");
 
 /**
  *
@@ -10,12 +10,12 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
 async function controller(req, res, next) {
   var id = parseInt(req.params.id);
 
-  if(isNaN(id)) {
+  if (isNaN(id)) {
     return res.json({
       error: true,
-      message: 'Invalid id',
+      message: "Invalid id",
       data: [],
-    })
+    });
   }
 
   var wherePayload = null;
@@ -25,51 +25,53 @@ async function controller(req, res, next) {
       where: {
         AND: [
           {
-            id: id
+            id: id,
           },
           {
-            userId: req.userId
-          }
-        ]
-      }
+            Product: {
+              userId: req.userId,
+            },
+          },
+        ],
+      },
     };
   }
 
   if (req.isAdmin) {
     wherePayload = {
       where: {
-        id: id
-      }
+        id: id,
+      },
     };
   }
 
   if (wherePayload === null) {
     return res.json({
       error: true,
-      message: 'Unauthorized access',
+      message: "Unauthorized access",
       data: [],
     });
   }
 
-  const data = await prisma.notification.deleteMany({
+  const data = await prisma.transaction.deleteMany({
     ...wherePayload,
-  }).catch(err => {
+  }).catch((err) => {
     return {
       error: true,
       message: err.message,
       data: [],
-    }
+    };
   });
 
-  if(data && data.error){
-    return res.json(data)
+  if (data && data.error) {
+    return res.json(data);
   }
 
   res.json({
     error: false,
-    message: 'Notification deleted',
+    message: "Transaction deleted",
     data: [data],
-  })
+  });
 }
 
 module.exports = controller;

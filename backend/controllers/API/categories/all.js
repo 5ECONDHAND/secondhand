@@ -9,10 +9,18 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  */
 
 async function controller(req, res, next){
+  var includePayload = {};
+
+  if (req.isAdmin) {
+    includePayload = {
+      include: {
+        Products: true
+      }
+    };
+  }
+
   const data = await prisma.category.findMany({
-    include: {
-      Products: true
-    }
+    ...includePayload,
   }).catch(err =>{
     return{
       error: true,

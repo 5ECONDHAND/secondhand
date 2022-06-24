@@ -19,24 +19,50 @@ async function controller(req, res, next) {
     })
   }
 
+  var wherePayload = null;
+
+  if (req.userId) {
+    wherePayload = {
+      where: {
+        AND: [
+          {
+            id: id
+          },
+          {
+            userId: req.userId
+          }
+        ]
+      }
+    };
+  }
+
+  if (req.isAdmin) {
+    wherePayload = {
+      where: {
+        id: id
+      }
+    };
+  }
+
+  if (wherePayload === null) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    });
+  }
+
   var dataPayload = {
     data: req.body.data,
     read: (req.body.read === 'true'),
     updatedAt: new Date(),
-    User: {
-      connect: {
-        //id: req.userId we dont have authorization middleware yet
-        id: 1
-      }
-    }
+    userId: req.userId
   };
   //remove key with null value
   dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
 
-  const data = await prisma.notification.update({
-    where: {
-      id
-    },
+  const data = await prisma.notification.updateMany({
+    ...wherePayload,
     data: dataPayload
   }).catch(err => {
     return {

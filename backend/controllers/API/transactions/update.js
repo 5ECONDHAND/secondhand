@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 /** @type {import('../../../models/instance')} */
 const prisma = require(process.env.ROOT_PATH + '/models/instance');
 
@@ -19,18 +18,50 @@ async function controller(req, res, next) {
     })
   }
 
+  var wherePayload = null;
+
+  if (req.userId) {
+    wherePayload = {
+      where: {
+        AND: [
+          {
+            id: id,
+          },
+          {
+            Product: {
+              userId: req.userId,
+            }
+          }
+        ]
+      },
+    };
+  }
+
+  if (req.isAdmin) {
+    wherePayload = {
+      where: {
+        id: id,
+      },
+    };
+  }
+
+  if (wherePayload === null) {
+    return res.json({
+      error: true,
+      message: "Unauthorized access",
+      data: [],
+    });
+  }
+
   var dataPayload = {
-    productId: req.body.productId,
     status: req.body.status,
     updatedAt: new Date(),
   };
   //remove key with null value
   dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
 
-  const data = await prisma.transaction.update({
-    where: {
-      id
-    },
+  const data = await prisma.transaction.updateMany({
+    ...wherePayload,
     data: dataPayload
   }).catch(err => {
     return {

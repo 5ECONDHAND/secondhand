@@ -18,6 +18,14 @@ async function controller(req, res, next){
     })
   }
 
+  if(!req.isAdmin) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
   const data = await prisma.category.create({
     data:{
       name: req.body.name,

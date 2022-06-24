@@ -30,6 +30,11 @@ async function middleware(req, res, next) {
     return next();
   }
 
+  // bypass if already admin
+  if (req.isAdmin) {
+    return next();
+  }
+
   // object has own property
   if(!req.headers) {
     return next();
@@ -51,6 +56,7 @@ async function middleware(req, res, next) {
     if(!err && result.loggedIn) {
       req.loggedIn = true;
       req.userId = result.userId;
+      req.isAdmin = result.isAdmin || false;
     }
 
     next();

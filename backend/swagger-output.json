@@ -144,7 +144,7 @@
         "responses": {}
       }
     },
-    "/transaction": {
+    "/transactions": {
       "get": {
         "description": "",
         "parameters": [],
@@ -156,7 +156,41 @@
         "responses": {}
       }
     },
-    "/transaction/{id}": {
+    "/transactions/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/products": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/products/{id}": {
       "get": {
         "description": "",
         "parameters": [],

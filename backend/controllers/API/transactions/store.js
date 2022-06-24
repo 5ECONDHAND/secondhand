@@ -9,17 +9,25 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  */
 async function controller(req, res, next){
   if(
-    !req.body.productId || !req.body.status
+    !req.body.productId
   ){
     return res.json({
       error: true,
-      message: 'Please fill field',
+      message: 'Please fill productId',
+      data: [],
+    })
+  }
+
+  if(!req.isAdmin) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
       data: [],
     })
   }
 
   const data = await prisma.transaction.create({
-    data:{
+    data: {
       productId: req.body.productId,
     }
   }).catch(err=>{
@@ -36,7 +44,7 @@ async function controller(req, res, next){
 
   res.json({
     error: false,
-    message: 'Transaksi created',
+    message: 'Transaction created',
     data: [data],
   })
 }
