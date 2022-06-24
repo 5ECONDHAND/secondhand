@@ -10,10 +10,11 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
 async function controller(req, res, next) {
   if(
     !req.body.data
+    || !req.body.userId
   ) {
     return res.json({
       error: true,
-      message: 'Please fill data',
+      message: 'Please fill data and userId',
       data: [],
     })
   }
@@ -43,7 +44,7 @@ async function controller(req, res, next) {
       User: {
         connect: {
           //id: req.userId we dont have authorization middleware yet
-          id: 1
+          id: req.body.userId
         }
       }
     }
