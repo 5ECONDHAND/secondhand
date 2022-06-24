@@ -1,1 +1,3 @@
-npx prisma db seed
+@echo off
+call npx prisma db seed
+pause
