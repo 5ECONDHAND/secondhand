@@ -9,16 +9,24 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    // setCredentials: (state, action) => {
+    //   localStorage.setItem(
+    //     'user',
+    //     JSON.stringify({
+    //       user: action.payload.user,
+    //       token: action.payload.token,
+    //     })
+    //   )
+    //   state.user = action.payload.user
+    //   state.token = action.payload.token
+    // },
     setCredentials: (state, action) => {
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          user: action.payload.user,
-          token: action.payload.token,
-        })
-      )
       state.user = action.payload.user
       state.token = action.payload.token
+    },
+    clearCredentials: (state) => {
+      state.user = null
+      state.token = null
     },
   },
   extraReducers: {},

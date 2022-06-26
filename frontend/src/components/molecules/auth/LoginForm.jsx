@@ -13,6 +13,7 @@ import { validateLogin } from '../../../utils/validators'
 import { useLoginUserMutation } from '../../../redux/services/authApi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { authActions } from '../../../redux/slices/authSlice'
 
 const LoginForm = () => {
   const navigate = useNavigate()
@@ -55,7 +56,9 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isLoginSuccess) {
+      dispatch(authActions.setCredentials({ user: loginData.result.name, token: loginData.token }))
       console.log('LOGIN SUCCESS')
+      console.log(loginData)
       navigate('/')
     } else if (isLoginError) {
       console.log('LOGIN ERROR')

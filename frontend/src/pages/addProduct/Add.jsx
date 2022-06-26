@@ -5,9 +5,11 @@ import { BackButton } from '../../components/molecules/global'
 const Add = () => {
   return (
     <>
-      <Container maxWidth="lg" sx={{ py: '2rem', textAlign: 'center' }}>
+      <Container maxWidth="lg" sx={{ py: '2rem' }}>
         <BackButton />
-        <AddProduct />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <AddProduct />
+        </div>
       </Container>
     </>
   )

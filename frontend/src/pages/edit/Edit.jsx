@@ -5,9 +5,11 @@ import { BackButton } from '../../components/molecules/global'
 const Edit = () => {
   return (
     <>
-      <Container maxWidth="lg" sx={{ py: '2rem', textAlign: 'center' }}>
+      <Container maxWidth="lg" sx={{ py: '2rem' }}>
         <BackButton />
-        <EditProfile />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <EditProfile />
+        </div>
       </Container>
     </>
   )

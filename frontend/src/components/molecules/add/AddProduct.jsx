@@ -10,6 +10,7 @@ import {
   Alert,
   Box,
   Grid,
+  Stack,
 } from '@mui/material'
 import gambar from '../../../assets/images/add.png'
 import { validateProduct } from '../../../utils/validators'
@@ -53,7 +54,7 @@ const AddProduct = (props) => {
   const [values, setValues] = useState({
     nama: '',
     harga: '',
-    kategori: 'Pilih Kategori',
+    kategori: '',
     deskripsi: '',
   })
 
@@ -118,7 +119,7 @@ const AddProduct = (props) => {
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
         <Grid container direction="column">
           <Grid item xs={12}>
-            <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
                 Nama Produk
               </FormHelperText>
@@ -133,7 +134,7 @@ const AddProduct = (props) => {
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
                 Harga Produk
               </FormHelperText>
@@ -148,43 +149,44 @@ const AddProduct = (props) => {
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
                 Pilih Kategori
               </FormHelperText>
               <Select
                 error={error.kategori ? true : false}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 value={values.kategori}
+                placeholder="Pilih Kategori"
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
-                <MenuItem value={'Pilih Kategori'}>Pilih Kategori</MenuItem>
-                <MenuItem value={'Coba'}>Coba</MenuItem>
-                <MenuItem value={'Cek'}>Cek</MenuItem>
+                <MenuItem value={'Hobi'}>Hobi</MenuItem>
+                <MenuItem value={'Kendaraan'}>Kendaraan</MenuItem>
+                <MenuItem value={'Baju'}>Baju</MenuItem>
+                <MenuItem value={'Elektronik'}>Elektronik</MenuItem>
+                <MenuItem value={'Kesehatan'}>Kesehatan</MenuItem>
               </Select>
               <FormHelperText sx={{ m: 0, mb: '1rem' }}>{error.kategori}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
                 Deskripsi
               </FormHelperText>
               <OutlinedInput
+                multiline
                 error={error.deskripsi ? true : false}
                 placeholder="Contoh: Jalan Ikan Hiu 33"
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
-                multiline
                 rows={4}
               />
               <FormHelperText sx={{ m: 0, mb: '1rem' }}>{error.deskripsi}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
                 Foto Produk
               </FormHelperText>
@@ -221,34 +223,27 @@ const AddProduct = (props) => {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container spacing={3} justifyContent="center" alignItems="center">
-          <Grid item>
-            <FormControl sx={{ minWidth: { xs: '15ch', md: '20ch', lg: '25ch' } }}>
-              <Button fullWidth variant="outlined" size="large" disableElevation sx={styles}>
-                Preview
-              </Button>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <FormControl sx={{ minWidth: { xs: '15ch', md: '20ch', lg: '25ch' } }}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                size="large"
-                disableElevation
-                sx={{
-                  borderRadius: '1rem',
-                  textTransform: 'none',
-                  background: '#7126B5',
-                  py: '15px',
-                }}
-              >
-                Terbitkan
-              </Button>
-            </FormControl>
-          </Grid>
-        </Grid>
+
+        <Stack direction="row" spacing={2} justifyContent={'center'}>
+          <Button fullWidth variant="outlined" size="large" disableElevation sx={styles}>
+            Preview
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            disableElevation
+            sx={{
+              borderRadius: '1rem',
+              textTransform: 'none',
+              background: '#7126B5',
+              py: '15px',
+            }}
+          >
+            Terbitkan
+          </Button>
+        </Stack>
       </Box>
     </div>
   )
