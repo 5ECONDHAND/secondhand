@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -10,18 +10,34 @@ import {
 } from '@mui/material'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { validateLogin } from '../../../utils/validators'
+import { useLoginUserMutation } from '../../../redux/services/authApi'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { authActions } from '../../../redux/slices/authSlice'
 
 const LoginForm = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState({})
   const [values, setValues] = useState({
     email: '',
     password: '',
   })
+  const [
+    loginUser,
+    {
+      data: loginData,
+      isLoading: isLoginLoading,
+      isSuccess: isLoginSuccess,
+      isError: isLoginError,
+    },
+  ] = useLoginUserMutation()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     validateLogin(values, setError)
+    await loginUser({ email: values.email, password: values.password })
     console.log('FORM VALUES', values)
     console.log('ERROR STATE', error)
   }
@@ -37,6 +53,17 @@ const LoginForm = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault()
   }
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      dispatch(authActions.setCredentials({ user: loginData.result.name, token: loginData.token }))
+      console.log('LOGIN SUCCESS')
+      console.log(loginData)
+      navigate('/')
+    } else if (isLoginError) {
+      console.log('LOGIN ERROR')
+    }
+  }, [isLoginSuccess, isLoginError])
 
   return (
     <>

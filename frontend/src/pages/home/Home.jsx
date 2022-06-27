@@ -2,13 +2,19 @@ import { Button, Container, Grid, Typography } from '@mui/material'
 import { Banner, Buttons } from '../../components/molecules/home'
 import { ProductCard } from '../../components/molecules/global'
 import { FiPlus } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { authActions } from '../../redux/slices/authSlice'
+import { useEffect, useState } from 'react'
 
 const SellButton = () => {
+  const navigate = useNavigate()
   return (
     <Button
       variant="contained"
       size="large"
       startIcon={<FiPlus />}
+      onClick={() => navigate('/add')}
       sx={{
         position: 'fixed',
         bottom: '3rem',
@@ -29,6 +35,23 @@ const SellButton = () => {
 }
 
 const Home = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const userData = useSelector((state) => state.auth.user)
+  const [out, setOut] = useState(false)
+  // const userData = localStorage.getItem('user')
+
+  const logout = () => {
+    dispatch(authActions.clearCredentials())
+    setOut(true)
+  }
+
+  useEffect(() => {
+    if (out) {
+      navigate('/login')
+    }
+  }, [out])
+
   return (
     <>
       <Banner />
@@ -37,6 +60,10 @@ const Home = () => {
           Telusuri Kategori
         </Typography>
         <Buttons />
+        {/* <Button variant="contained" onClick={logout}>
+          Logout
+        </Button>
+        {userData ? <h1>{userData}</h1> : null} */}
         <Grid
           container
           columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
