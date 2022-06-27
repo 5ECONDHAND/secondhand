@@ -95,6 +95,7 @@ const EditProfile = () => {
               <OutlinedInput
                 error={error.nama ? true : false}
                 placeholder="Nama"
+                type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
                 sx={{ borderRadius: '1rem' }}
@@ -108,6 +109,7 @@ const EditProfile = () => {
               <OutlinedInput
                 error={error.kota ? true : false}
                 placeholder="Isi Kota"
+                type="text"
                 value={values.kota}
                 onChange={handleChange('kota')}
                 sx={{ borderRadius: '1rem' }}
@@ -122,6 +124,7 @@ const EditProfile = () => {
               </FormHelperText>
               <OutlinedInput
                 error={error.alamat ? true : false}
+                type="text"
                 placeholder="Contoh: Jalan Ikan Hiu 33"
                 onChange={handleChange('alamat')}
                 sx={{ borderRadius: '1rem' }}
@@ -138,6 +141,7 @@ const EditProfile = () => {
               </FormHelperText>
               <OutlinedInput
                 error={error.nomor ? true : false}
+                type="number"
                 placeholder="contoh: +628123456789"
                 value={values.nomor}
                 onChange={handleChange('nomor')}

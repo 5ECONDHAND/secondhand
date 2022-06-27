@@ -126,6 +126,7 @@ const AddProduct = (props) => {
               <OutlinedInput
                 error={error.nama ? true : false}
                 placeholder="Nama Produk"
+                type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
                 sx={{ borderRadius: '1rem' }}
@@ -141,6 +142,7 @@ const AddProduct = (props) => {
               <OutlinedInput
                 error={error.harga ? true : false}
                 placeholder="Rp 0,00"
+                type="number"
                 value={values.harga}
                 onChange={handleChange('harga')}
                 sx={{ borderRadius: '1rem' }}
@@ -177,6 +179,7 @@ const AddProduct = (props) => {
               <OutlinedInput
                 multiline
                 error={error.deskripsi ? true : false}
+                type="text"
                 placeholder="Contoh: Jalan Ikan Hiu 33"
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
