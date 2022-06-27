@@ -10,7 +10,8 @@ Instruction before running / start this project:
 2e) `npx prisma generate --schema=./models/schema.prisma`
 2f) Installation will take a while, so please be patient.
 2g) Make sure Installation is successful or done properly.
-3) Then you can run with run.bat (double click it like executable), OR you can just do `npm start`
+3) Make sure to edit .env file with yours (environment). See .env.example for example
+4) Then you can run with run.bat (double click it like executable), OR you can just do `npm start`
 
 Instruction before doing unit test:
 1) Install all required things, follow the instruction above
@@ -44,7 +45,7 @@ Instruction before using github CI/CD:
 2g) AUTH_METHOD=db
 3) Done, you can now push your code to gitlab and CI/CD runner will run without any problem
 
-Demo App: https://aabbbccccc.herokuapp.com/
+Demo App: NOT YET DEPLOYED
 
 Design Pattern: MVC with Router and auto-generated Models
 Folder Structure:

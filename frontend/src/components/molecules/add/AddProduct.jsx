@@ -7,12 +7,12 @@ import {
   FormHelperText,
   OutlinedInput,
   Button,
+  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
 import gambar from "../../../assets/images/add.png";
 import { validateProduct } from "../../../utils/validators";
-import AddIcon from "@mui/icons-material/Add";
 
 const styles = {
   "&.MuiButton-root": {
@@ -22,12 +22,6 @@ const styles = {
     py: "15px",
     color: "black",
   },
-};
-const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
 };
 
 const thumb = {
@@ -59,7 +53,7 @@ const AddProduct = (props) => {
   const [values, setValues] = useState({
     nama: "",
     harga: "",
-    kategori: "",
+    kategori: "Pilih Kategori",
     deskripsi: "",
   });
 
@@ -94,14 +88,8 @@ const AddProduct = (props) => {
     },
   });
 
-  const fileRejectionItems = fileRejections.map(({ errors }) => {
-    return (
-      <ul>
-        {errors.map((e) => (
-          <li key={e.code}>{e.message}</li>
-        ))}
-      </ul>
-    );
+  const fileRejectionItems = fileRejections.map(() => {
+    return <div></div>;
   });
 
   const thumbs = files.map((file) => (
@@ -128,7 +116,7 @@ const AddProduct = (props) => {
   return (
     <div className="Form">
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
-        <Grid container spacing={3} direction="column">
+        <Grid container direction="column">
           <Grid item xs={12}>
             <FormControl
               sx={{ minWidth: { xs: "30ch", md: "40ch", lg: "50ch" } }}
@@ -182,7 +170,7 @@ const AddProduct = (props) => {
                 onChange={handleChange("kategori")}
                 sx={{ borderRadius: "1rem" }}
               >
-                <MenuItem value="">None</MenuItem>
+                <MenuItem value={"Pilih Kategori"}>Pilih Kategori</MenuItem>
                 <MenuItem value={"Coba"}>Coba</MenuItem>
                 <MenuItem value={"Cek"}>Cek</MenuItem>
               </Select>
@@ -217,28 +205,38 @@ const AddProduct = (props) => {
             >
               <FormHelperText sx={{ fontSize: "1rem", color: "black", m: 0 }}>
                 Foto Produk
-                <Box
-                  {...getRootProps({ className: "dropzone" })}
-                  sx={{ marginBottom: "1rem" }}
-                >
-                  <input {...getInputProps()} />
-                  {files.length !== 0 ? (
-                    <Box
-                      sx={{
-                        border: "1px dashed #D0D0D0",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                      }}
-                    >
-                      {thumbs}
-                      {fileRejectionItems}
-                    </Box>
-                  ) : (
-                    <img src={gambar} alt="" />
-                  )}
-                </Box>
               </FormHelperText>
+              <Box
+                {...getRootProps()}
+                sx={{
+                  mb: "1rem",
+                  maxWidth: { xs: "9ch", md: "9ch", lg: "9ch" },
+                  cursor: "pointer",
+                }}
+              >
+                <input {...getInputProps()} />
+                {files.length !== 0 ? (
+                  <Box
+                    sx={{
+                      border: "1px dashed #D0D0D0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      minWidth: { xs: "30ch", md: "40ch", lg: "50ch" },
+                    }}
+                  >
+                    {thumbs}
+                  </Box>
+                ) : (
+                  <img src={gambar} alt="" />
+                )}
+              </Box>
+              {fileRejectionItems[0] && (
+                <Box sx={{ mb: "1rem" }}
+                >
+                  <Alert severity="error">Maksimal 4 Gambar</Alert>
+                </Box>
+              )}
             </FormControl>
           </Grid>
         </Grid>

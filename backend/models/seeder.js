@@ -4,11 +4,29 @@ const { PrismaClient } = require('./pgclient')
 const prisma = new PrismaClient()
 
 async function main() {
-  //admin user seed
-
-
-  //admin biodata seed
-
+  //category seed
+  await prisma.category.createMany({
+    skipDuplicates: true,
+    data: [
+      {
+        name: 'Hobi'
+      },
+      {
+        name: 'Kendaraan'
+      },
+      {
+        name: 'Baju'
+      },
+      {
+        name: 'Elektronik'
+      },
+      {
+        name: 'Kesehatan'
+      }
+    ]
+  }).catch(err => {
+    console.log(err)
+  });
 }
 
 main()
