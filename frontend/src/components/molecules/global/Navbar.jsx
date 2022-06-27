@@ -137,7 +137,7 @@ const UserButton = () => {
                             padding: '10px',
                             borderRadius: '12px',
                           }}
-                          onClick={() => navigate('/login')}
+                          onClick={() => navigate('/product')}
                         >
                           <Grid>
                             <img src={casio1} alt="jam" width="80px" height="80px" />
@@ -170,7 +170,7 @@ const UserButton = () => {
                             padding: '10px',
                             borderRadius: '12px',
                           }}
-                          onClick={() => navigate('/login')}
+                          onClick={() => navigate('/product')}
                         >
                           <Grid>
                             <img src={casio1} alt="jam" width="80px" height="80px" />
@@ -203,7 +203,7 @@ const UserButton = () => {
                             padding: '10px',
                             borderRadius: '12px',
                           }}
-                          onClick={() => navigate('/login')}
+                          onClick={() => navigate('/product')}
                         >
                           <Grid>
                             <img src={casio1} alt="jam" width="80px" height="80px" />
@@ -268,7 +268,7 @@ const Navbar = () => {
       <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }} >
         <Container maxWidth='xl' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center', width: '100%', position: 'relative' }}>
-            <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979', cursor: 'pointer' }} onClick={() => navigate('/')} />
+            <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979', cursor: 'pointer', zIndex: 10 }} onClick={() => navigate('/')} />
             {pathname === '/add' ? '' : pathname === '/edit' ?
               <Box sx={{ textAlign: 'center', position: 'absolute', left: 0, right: 0, margin: 'auto' }}><Typography variant='subtitle2'>Lengkapi Info Akun</Typography>
               </Box> :
