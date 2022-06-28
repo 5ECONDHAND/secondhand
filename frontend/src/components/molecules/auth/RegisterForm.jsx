@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -10,8 +11,13 @@ import {
 } from '@mui/material'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { validateRegister } from '../../../utils/validators'
+import { useRegisterUserMutation } from '../../../redux/services/authApi'
+import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 const RegisterForm = () => {
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState({})
   const [values, setValues] = useState({
@@ -19,12 +25,21 @@ const RegisterForm = () => {
     email: '',
     password: '',
   })
+  const [
+    registerUser,
+    {
+      data: registerData,
+      isLoading: isRegisterLoading,
+      isSuccess: isRegisterSuccess,
+      isError: isRegisterError,
+    },
+  ] = useRegisterUserMutation()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    validateRegister(values, setError)
-    console.log('FORM VALUES', values)
-    console.log('ERROR STATE', error)
+    if (validateRegister(values, setError)) {
+      await registerUser({ ...values })
+    }
   }
 
   const handleChange = (prop) => (event) => {
@@ -38,6 +53,23 @@ const RegisterForm = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault()
   }
+
+  useEffect(() => {
+    if (isRegisterSuccess && registerData.data.length !== 0) {
+      console.log('Data', registerData)
+      enqueueSnackbar('Registration success', { variant: 'success', autoHideDuration: 1000 })
+      setTimeout(() => {
+        navigate('/login')
+      }, 1000)
+    } else if (isRegisterError || registerData?.error) {
+      enqueueSnackbar(`${registerData.message}`, {
+        variant: 'warning',
+        autoHideDuration: 3000,
+        preventDuplicate: true,
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerData, isRegisterSuccess, isRegisterLoading, isRegisterError])
   return (
     <>
       <Box
@@ -94,21 +126,27 @@ const RegisterForm = () => {
           />
           <FormHelperText sx={{ m: 0 }}>{error.password}</FormHelperText>
         </FormControl>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          size="large"
-          disableElevation
-          sx={{
-            borderRadius: '1rem',
-            textTransform: 'none',
-            background: '#7126B5',
-            py: '15px',
-          }}
-        >
-          Daftar
-        </Button>
+        {isRegisterLoading ? (
+          <Box sx={{ mx: 'auto' }}>
+            <CircularProgress color="secondary" />
+          </Box>
+        ) : (
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            disableElevation
+            sx={{
+              borderRadius: '1rem',
+              textTransform: 'none',
+              background: '#7126B5',
+              py: '15px',
+            }}
+          >
+            Daftar
+          </Button>
+        )}
       </Box>
     </>
   )

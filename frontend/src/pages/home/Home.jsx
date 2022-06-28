@@ -37,9 +37,9 @@ const SellButton = () => {
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const userData = useSelector((state) => state.auth.user)
+  // const userData = useSelector((state) => state.auth.user)
   const [out, setOut] = useState(false)
-  // const userData = localStorage.getItem('user')
+  const userData = localStorage.getItem('user')
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
