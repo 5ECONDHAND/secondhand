@@ -14,6 +14,8 @@ import {
 } from '@mui/material'
 import gambar from '../../../assets/images/add.png'
 import { validateProduct } from '../../../utils/validators'
+import { usePostProductMutation, usePutProductMutation } from '../../../redux/services/productApi'
+import { useParams } from 'react-router-dom'
 
 const styles = {
   '&.MuiButton-root': {
@@ -57,10 +59,34 @@ const AddProduct = (props) => {
     kategori: '',
     deskripsi: '',
   })
+  const jwtToken = JSON.parse(localStorage.getItem('user')).token
+  const { productId } = useParams()
+  console.log(productId);
+
+  const [postProduct] = usePostProductMutation()
+  const [putProduct] = usePutProductMutation()
 
   const handleSubmit = (event) => {
+    if (productId) {
+      handleUpdate(event)
+    } else {
+      handleAdd(event)
+    }
+  }
+  const handleAdd = async (event) => {
+    console.log('submit ok');
     event.preventDefault()
     validateProduct(values, setError)
+    await postProduct({ name: values.nama, price: values.harga, description: values.deskripsi, token: jwtToken })
+    console.log(values)
+    console.log(error)
+  }
+
+  const handleUpdate = async (event) => {
+    console.log('update ok');
+    event.preventDefault()
+    validateProduct(values, setError)
+    await putProduct({ id: productId, name: values.nama, price: values.harga, description: values.deskripsi, token: jwtToken })
     console.log(values)
     console.log(error)
   }
@@ -75,8 +101,6 @@ const AddProduct = (props) => {
     accept: {
       'image/*': [],
     },
-    minSize: 0,
-    maxSize: 1048576,
     onDrop: (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
@@ -113,6 +137,8 @@ const AddProduct = (props) => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
+
+
 
   return (
     <div className="Form">
@@ -244,7 +270,7 @@ const AddProduct = (props) => {
               py: '15px',
             }}
           >
-            Terbitkan
+            {productId ? 'Update' : 'Terbitkan'}
           </Button>
         </Stack>
       </Box>

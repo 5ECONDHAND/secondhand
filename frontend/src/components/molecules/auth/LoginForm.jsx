@@ -56,9 +56,9 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isLoginSuccess) {
-      dispatch(authActions.setCredentials({ user: loginData.result.name, token: loginData.token }))
+      dispatch(authActions.setCredentials({ user: loginData.data[0].fullname, token: loginData.data[0].accessToken }))
       console.log('LOGIN SUCCESS')
-      console.log(loginData)
+      console.log(loginData.data[0].fullname)
       navigate('/')
     } else if (isLoginError) {
       console.log('LOGIN ERROR')
