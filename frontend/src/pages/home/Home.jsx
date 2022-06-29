@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
 import { useEffect, useState } from 'react'
 import { productActions } from '../../redux/slices/productSlice'
-import { useGetProductDataQuery } from '../../redux/services/productApi'
+import { useGetDataQuery } from '../../redux/services/productApi'
 
 const SellButton = () => {
   const navigate = useNavigate()
@@ -42,7 +42,7 @@ const Home = () => {
   const [out, setOut] = useState(false)
   const userData = localStorage.getItem('user')
   const products = useSelector((state) => state.product.products)
-  const { data: productData, isSuccess: isProductSuccess } = useGetProductDataQuery()
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
@@ -66,10 +66,10 @@ const Home = () => {
           Telusuri Kategori
         </Typography>
         <Buttons />
-        {/* <Button variant="contained" onClick={logout}>
+        <Button variant="contained" onClick={logout}>
           Logout
         </Button>
-        {userData ? <h1>{userData}</h1> : null} */}
+        {userData ? <h3>{userData}</h3> : null}
 
         <Grid
           container
@@ -80,11 +80,13 @@ const Home = () => {
           {isProductSuccess ? (
             productData.data?.map((item, index) => (
               <Grid item xs={1} key={index}>
-                <ProductCard
-                  productName={item.name}
-                  productCategory={item.Categories[0]}
-                  productPrice={item.price}
-                />
+                <Box onClick={() => navigate(`/product/${item.id}`)}>
+                  <ProductCard
+                    productName={item.name}
+                    productCategory={item.Categories[0]}
+                    productPrice={item.price}
+                  />
+                </Box>
               </Grid>
             ))
           ) : (

@@ -10,7 +10,7 @@ export const productSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(productApi.endpoints.getProductData.matchFulfilled, (state, { payload }) => {
+    builder.addMatcher(productApi.endpoints.getData.matchFulfilled, (state, { payload }) => {
       state.products = payload.products
     })
   },

@@ -57,7 +57,7 @@ const LoginForm = () => {
   }
 
   useEffect(() => {
-    if (isLoginSuccess && loginData.data.length !== 0) {
+    if (isLoginSuccess && !loginData?.error) {
       dispatch(
         authActions.setCredentials({
           user: loginData.data[0].fullname,
