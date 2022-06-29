@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormControl, FormHelperText, OutlinedInput, Button, Box, Grid } from '@mui/material'
 import gambar from '../../../assets/images/Profile.png'
 import { validateProfile } from '../../../utils/validators'
 
+import { useEditUserMutation } from '../../../redux/services/editApi'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 const EditProfile = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [preview, setPreview] = useState(null)
   const [error, setError] = useState({})
   const [values, setValues] = useState({
@@ -12,10 +17,12 @@ const EditProfile = () => {
     alamat: '',
     nomor: '',
   })
+  const [editUser] = useEditUserMutation()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     validateProfile(values, setError)
+    await editUser({ fullname : values.nama, city: values.kota, address: values.alamat, phoneNo: values.nomor })
     console.log(values)
     console.log(error)
   }
@@ -35,6 +42,7 @@ const EditProfile = () => {
       reader.readAsDataURL(selected)
     }
   }
+
   return (
     <div>
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
