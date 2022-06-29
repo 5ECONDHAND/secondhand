@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import gambar from '../../../assets/images/add.png'
 import { validateProduct } from '../../../utils/validators'
-import { usePostProductMutation, usePutProductMutation } from '../../../redux/services/productApi'
+import { usePostProductMutation, usePutProductMutation, useGetProductByIdQuery } from '../../../redux/services/productApi'
 import { useParams } from 'react-router-dom'
 
 const styles = {
@@ -61,10 +61,10 @@ const AddProduct = (props) => {
   })
   const jwtToken = JSON.parse(localStorage.getItem('user')).token
   const { productId } = useParams()
-  console.log(productId);
 
   const [postProduct] = usePostProductMutation()
   const [putProduct] = usePutProductMutation()
+  const { data: productData, isSuccess: isProductSuccess } = useGetProductByIdQuery(productId)
 
   const handleSubmit = (event) => {
     if (productId) {
@@ -133,12 +133,14 @@ const AddProduct = (props) => {
     </div>
   ))
 
+
+
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
 
-
+  // console.log(productData)
 
   return (
     <div className="Form">
@@ -151,7 +153,7 @@ const AddProduct = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.nama ? true : false}
-                placeholder="Nama Produk"
+                placeholder={isProductSuccess && productId ? productData.data[0].name : "Nama Produk"}
                 type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
@@ -167,7 +169,7 @@ const AddProduct = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.harga ? true : false}
-                placeholder="Rp 0,00"
+                placeholder={isProductSuccess && productId ? productData.data[0].price : "Rp 0,00"}
                 type="number"
                 value={values.harga}
                 onChange={handleChange('harga')}
@@ -206,7 +208,7 @@ const AddProduct = (props) => {
                 multiline
                 error={error.deskripsi ? true : false}
                 type="text"
-                placeholder="Contoh: Jalan Ikan Hiu 33"
+                placeholder={isProductSuccess && productId ? productData.data[0].description : "Contoh: Jalan Ikan Hiu 33"}
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
                 rows={4}
