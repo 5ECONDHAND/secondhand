@@ -40,15 +40,12 @@ const ProductCard = (props) => {
             }}
           >
             {productName}
-            Jam Tangan Casio
           </Typography>
           <Typography sx={{ fontSize: '0.8rem', color: '#8A8A8A', mt: '0.25rem', mb: '0.5rem' }}>
-            {productCategory}
-            Aksesoris
+            {productCategory || '-'}
           </Typography>
           <Typography noWrap sx={{ fontSize: '0.875rem', fontWeight: '500' }}>
-            {productPrice}
-            {toRupiah(250000)}
+            {toRupiah(productPrice)}
           </Typography>
         </Stack>
       </Box>

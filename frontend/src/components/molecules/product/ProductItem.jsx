@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
+import { useNavigate } from 'react-router-dom'
 
 const ProductItem = ({ type }) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+  const navigate = useNavigate()
 
   return (
     <>
@@ -63,6 +65,7 @@ const ProductItem = ({ type }) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
+                  onClick={() => navigate('/add/2')}
                 >
                   Edit
                 </Button>
