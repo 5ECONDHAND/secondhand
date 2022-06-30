@@ -1,7 +1,12 @@
 .vscode
 .git-credentials
+
+# file upload ignore
 storage/*
+storage/tmp/*
 !storage/.ignoreme
+!storage/tmp
+!storage/tmp/.ignoreme
 
 # prisma generated model
 models/pgclient
