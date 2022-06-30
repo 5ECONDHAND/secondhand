@@ -6,6 +6,7 @@ import { productApi } from './services/productApi'
 import authReducer from './slices/authSlice'
 import productsReducer from './slices/productSlice'
 import { editApi } from './services/editApi'
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
