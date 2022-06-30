@@ -5,19 +5,18 @@ import { authApi } from './services/authApi'
 import { productApi } from './services/productApi'
 import authReducer from './slices/authSlice'
 import productReducer from './slices/productSlice'
+import { editApi } from './services/editApi'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,
-    product: productReducer,
+    products: productReducer,
     [productApi.reducerPath]: productApi.reducer,
+    [editApi.reducerPath]: editApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(authApi.middleware)
-      .concat(authMiddleware)
-      .concat(productApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware).concat(productApi.middleware).concat(editApi.middleware).concat(authMiddleware),
 })
 
 setupListeners(store.dispatch)

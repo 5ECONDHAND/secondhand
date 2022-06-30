@@ -8,7 +8,7 @@ const router = () => {
   const displayNavbar = ['/', '/product', '/add', '/edit', '/sales', '/offers'].includes(
     window.location.pathname
   )
-
+  console.log(window.location.pathname);
   return (
     <>
       <BrowserRouter>
@@ -21,7 +21,8 @@ const router = () => {
           <Route path="/" element={<Home />}></Route>
           <Route path="/product/:id" element={<Product />} />
           <Route path="/add" element={<Add />} />
-          <Route path="/edit" element={<Edit />} />
+          <Route path="/add/:productId" element={<Add />} />
+          <Route path="/edit/:userId" element={<Edit />} />
           <Route path="/sales" element={<Sales />} />
           <Route path="/offers" element={<Offers />} />
         </Routes>

@@ -2,7 +2,8 @@ import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
 import { toRupiah } from '../../../utils/functions'
 import dummy from '../../../assets/images/dummy-image.jpg'
 
-const OfferCardMini = () => {
+const OfferCardMini = (props) => {
+  const { productName, productCategory, productPrice } = props
   return (
     <>
       <Box
@@ -28,10 +29,10 @@ const OfferCardMini = () => {
                     Penawaran Produk
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500', mb: 0.5 }}>
-                    {'Nama Produk'}
+                    {productName}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500', mb: 0.5 }}>
-                    {toRupiah(250000)}
+                    {toRupiah(productPrice)}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500' }}>
                     Ditawar {toRupiah(200000)}
