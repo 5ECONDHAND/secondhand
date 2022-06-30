@@ -6,6 +6,11 @@ export const productApi = createApi({
     baseUrl: 'http://127.0.0.1:3000/api',
   }),
   endpoints: (builder) => ({
+    getData: builder.query({
+      query: () => '/products',
+    }),
+    getDataById: builder.query({
+      query: (id) => `/products/${id}`,
     // patch product
     putProduct: builder.mutation({
       query: ({ id, name, description, price, token }) => ({
@@ -41,10 +46,4 @@ export const productApi = createApi({
   }),
 })
 
-export const { usePostProductMutation } = productApi
-
-export const { usePutProductMutation } = productApi
-
-export const { useGetProductByIdQuery } = productApi
-
-export const { useGetProductDataQuery } = productApi
+export const { useGetDataQuery, useGetDataByIdQuery, usePostProductMutation, usePutProductMutation, useGetProductByIdQuery, useGetProductDataQuery   } = productApi

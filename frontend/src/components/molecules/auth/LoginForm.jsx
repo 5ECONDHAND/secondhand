@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -14,8 +15,10 @@ import { useLoginUserMutation } from '../../../redux/services/authApi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { authActions } from '../../../redux/slices/authSlice'
+import { useSnackbar } from 'notistack'
 
 const LoginForm = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
@@ -36,10 +39,9 @@ const LoginForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    validateLogin(values, setError)
-    await loginUser({ email: values.email, password: values.password })
-    console.log('FORM VALUES', values)
-    console.log('ERROR STATE', error)
+    if (validateLogin(values, setError)) {
+      await loginUser({ ...values })
+    }
   }
 
   const handleChange = (prop) => (event) => {
@@ -55,15 +57,26 @@ const LoginForm = () => {
   }
 
   useEffect(() => {
-    if (isLoginSuccess) {
-      dispatch(authActions.setCredentials({ user: loginData.data[0].fullname, token: loginData.data[0].accessToken }))
-      console.log('LOGIN SUCCESS')
-      console.log(loginData.data[0].fullname)
-      navigate('/')
-    } else if (isLoginError) {
-      console.log('LOGIN ERROR')
+    if (isLoginSuccess && !loginData?.error) {
+      dispatch(
+        authActions.setCredentials({
+          user: loginData.data[0].fullname,
+          token: loginData.data[0].accessToken,
+        })
+      )
+      enqueueSnackbar('Login success', { variant: 'success', autoHideDuration: 1000 })
+      setTimeout(() => {
+        navigate('/')
+      }, 1000)
+    } else if (isLoginError || loginData?.error) {
+      enqueueSnackbar(`${loginData.message}`, {
+        variant: 'error',
+        autoHideDuration: 3000,
+        preventDuplicate: true,
+      })
     }
-  }, [isLoginSuccess, isLoginError])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginData, isLoginLoading, isLoginSuccess, isLoginError])
 
   return (
     <>
@@ -109,21 +122,27 @@ const LoginForm = () => {
           />
           <FormHelperText sx={{ m: 0 }}>{error.password}</FormHelperText>
         </FormControl>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          size="large"
-          disableElevation
-          sx={{
-            borderRadius: '1rem',
-            textTransform: 'none',
-            background: '#7126B5',
-            py: '15px',
-          }}
-        >
-          Masuk
-        </Button>
+        {isLoginLoading ? (
+          <Box sx={{ mx: 'auto' }}>
+            <CircularProgress color="secondary" />
+          </Box>
+        ) : (
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            disableElevation
+            sx={{
+              borderRadius: '1rem',
+              textTransform: 'none',
+              background: '#7126B5',
+              py: '15px',
+            }}
+          >
+            Masuk
+          </Button>
+        )}
       </Box>
     </>
   )

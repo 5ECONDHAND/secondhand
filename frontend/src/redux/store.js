@@ -4,14 +4,14 @@ import { authMiddleware } from './middleware/authMiddleware'
 import { authApi } from './services/authApi'
 import { productApi } from './services/productApi'
 import authReducer from './slices/authSlice'
-import productsReducer from './slices/productSlice'
+import productReducer from './slices/productSlice'
 import { editApi } from './services/editApi'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,
-    products: productsReducer,
+    products: productReducer,
     [productApi.reducerPath]: productApi.reducer,
     [editApi.reducerPath]: editApi.reducer
   },

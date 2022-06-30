@@ -1,16 +1,27 @@
+const isEmpty = (obj) => {
+  if (Object.values(obj).every((x) => x === null || x === '')) return true
+  return false
+}
+
 export const validateLogin = (values, err) => {
   let temp = {}
   temp.email = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(values.email) ? '' : 'Email is not valid'
-  temp.password = values.password.length < 6 ? 'Password must be at least 6 characters' : ''
+  temp.password = /^[\W\w]{6,}$/.test(values.password) ? '' : 'Min 6 characters'
   err({ ...temp })
+
+  if (isEmpty(temp)) return true
+  return false
 }
 
 export const validateRegister = (values, err) => {
   let temp = {}
   temp.fullname = /^[a-zA-Z][a-zA-Z ]+$/.test(values.fullname) ? '' : 'Name is not valid'
   temp.email = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(values.email) ? '' : 'Email is not valid'
-  temp.password = values.password.length < 6 ? 'Password must be at least 6 characters' : ''
+  temp.password = /^[\W\w]{6,}$/.test(values.password) ? '' : 'Min 6 characters'
   err({ ...temp })
+
+  if (isEmpty(temp)) return true
+  return false
 }
 
 export const validateProduct = (values, err) => {
@@ -21,6 +32,9 @@ export const validateProduct = (values, err) => {
   temp.deskripsi = values.deskripsi ? '' : 'Description is required'
   temp.gambar = values.gambar ? '' : 'Image is required'
   err({ ...temp })
+
+  if (isEmpty(temp)) return true
+  return false
 }
 
 export const validateProfile = (values, err) => {
@@ -30,6 +44,9 @@ export const validateProfile = (values, err) => {
   temp.alamat = values.alamat ? '' : 'Address is required'
   temp.nomor = /^(\d!*){10,}$/.test(values.nomor) ? '' : 'Phone number must at least 10 digits'
   err({ ...temp })
+
+  if (isEmpty(temp)) return true
+  return false
 }
 
 export const validateNegotiateAmount = (values, err) => {
@@ -39,4 +56,7 @@ export const validateNegotiateAmount = (values, err) => {
    */
   temp.amount = values.amount <= 0 ? 'Amount cannot be 0 or less' : ''
   err({ ...temp })
+
+  if (isEmpty(temp)) return true
+  return false
 }

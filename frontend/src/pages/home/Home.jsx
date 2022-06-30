@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Typography } from '@mui/material'
+import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { Banner, Buttons } from '../../components/molecules/home'
 import { ProductCard } from '../../components/molecules/global'
 import { FiPlus } from 'react-icons/fi'
@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
 import { useEffect, useState } from 'react'
+import { productActions } from '../../redux/slices/productSlice'
+import { useGetDataQuery } from '../../redux/services/productApi'
 
 const SellButton = () => {
   const navigate = useNavigate()
@@ -37,9 +39,10 @@ const SellButton = () => {
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const userData = useSelector((state) => state.auth.user)
   const [out, setOut] = useState(false)
-  // const userData = localStorage.getItem('user')
+  const userData = localStorage.getItem('user')
+  const products = useSelector((state) => state.product.products)
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
@@ -50,31 +53,55 @@ const Home = () => {
     if (out) {
       navigate('/login')
     }
-  }, [out])
+    // console.log('PRODUCTS', products)
+    // console.log('PRODUCT DATA', productData?.data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [out, productData, products])
 
   return (
     <>
       <Banner />
-      <Container maxWidth="xl" sx={{ my: 0, position: 'relative' }}>
+      <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         <Typography variant="h6" sx={{ fontSize: '16px' }}>
           Telusuri Kategori
         </Typography>
         <Buttons />
-        {/* <Button variant="contained" onClick={logout}>
+        <Button variant="contained" onClick={logout}>
           Logout
         </Button>
-        {userData ? <h1>{userData}</h1> : null} */}
+        {userData ? <h3>{userData}</h3> : null}
+
         <Grid
           container
           columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
           mt={{ xs: '20px', md: '30px' }}
           spacing={3}
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
-            <Grid item xs={1} key={index}>
-              <ProductCard />
-            </Grid>
-          ))}
+          {isProductSuccess ? (
+            productData.data?.map((item, index) => (
+              <Grid item xs={1} key={index}>
+                <Box onClick={() => navigate(`/product/${item.id}`)}>
+                  <ProductCard
+                    productName={item.name}
+                    productCategory={item.Categories[0]}
+                    productPrice={item.price}
+                  />
+                </Box>
+              </Grid>
+            ))
+          ) : (
+            <>
+              {[1, 2, 3, 4, 5, 6].map((item, index) => (
+                <Grid item xs={1} key={index}>
+                  <Skeleton variant="rectangular" width={210} height={140} />
+                  <Box sx={{ pt: 1 }}>
+                    <Skeleton width={210} height={20} />
+                    <Skeleton width="70%" height={20} />
+                  </Box>
+                </Grid>
+              ))}
+            </>
+          )}
         </Grid>
         <SellButton />
       </Container>

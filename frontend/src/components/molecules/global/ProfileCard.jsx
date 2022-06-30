@@ -2,7 +2,7 @@ import { Avatar, Button, Paper, Stack, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 const ProfileCard = (props) => {
-  const { display } = props
+  const { display, sellerName, sellerCity } = props
   const navigate = useNavigate()
   return (
     <>
@@ -24,9 +24,9 @@ const ProfileCard = (props) => {
             <Avatar alt="A" src={''} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
             <Stack direction="column">
               <Typography variant="body1" sx={{ fontWeight: '500' }}>
-                {'Nama Penjual'}
+                {sellerName ? sellerName : 'sellerName'}
               </Typography>
-              <Typography variant="body2">{'Kota'}</Typography>
+              <Typography variant="body2">{sellerCity ? sellerCity : 'sellerCity'}</Typography>
             </Stack>
           </Stack>
           {display === 'sales' ? (
