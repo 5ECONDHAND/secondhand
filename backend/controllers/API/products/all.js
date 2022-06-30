@@ -9,6 +9,10 @@ const prisma = require(process.env.ROOT_PATH + "/models/instance");
  */
 async function controller(req, res, next) {
   const data = await prisma.product.findMany({
+    take: req.query.take,
+    orderBy:{
+        name: req.query.orderBy
+    },
     include: {
       User: {
         select: {
@@ -42,6 +46,7 @@ async function controller(req, res, next) {
     message: "Success",
     data,
   });
+
 }
 
 module.exports = controller;
