@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
-import { Home, Auth, Product, Add, Edit, Sales, Offers } from '../pages'
+import { Home, Auth, Product, AddProduct, Edit, Sales, Offers } from '../pages'
 import { useSelector } from 'react-redux'
 import ScrollToTop from '../components/atoms/global/ScrollToTop'
 
@@ -46,8 +46,8 @@ const Router = () => {
           <Route path="/register" element={<Auth />} />
           <Route path="/product/:id" element={<Product />} />
           <Route element={<ProtectedRoute isAllowed={authenticated} />}>
-            <Route path="/add" element={<Add />} />
-            <Route path="/add/:productId" element={<Add />} />
+            <Route path="/add" element={<AddProduct />} />
+            <Route path="/add/:productId" element={<AddProduct />} />
             <Route path="/edit/:userId" element={<Edit />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/offers" element={<Offers />} />

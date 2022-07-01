@@ -5,6 +5,7 @@ export const productApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://127.0.0.1:3000/api',
   }),
+  tagTypes: ['PutProduct', 'PostProduct', 'DeleteProduct'],
   endpoints: (builder) => ({
     getData: builder.query({
       query: () => '/products',
@@ -23,6 +24,7 @@ export const productApi = createApi({
         },
         body: { name: name, description: description, price: price },
       }),
+      providesTags: ['PutProduct'],
     }),
     // store product
     postProduct: builder.mutation({
@@ -35,6 +37,7 @@ export const productApi = createApi({
         },
         body: { name: name, description: description, price: price },
       }),
+      providesTags: ['PostProduct'],
     }),
   }),
 })

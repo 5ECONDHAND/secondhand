@@ -43,10 +43,6 @@ const EditProfileForm = () => {
       isError: isEditProfileError,
     },
   ] = useEditProfileMutation()
-  // const { data: userData, isSuccess: isUserSuccess } = useGetUserByIdQuery({
-  //   id: user.id,
-  //   token: user.token,
-  // })
 
   const handleSubmit = async (event) => {
     event.preventDefault()

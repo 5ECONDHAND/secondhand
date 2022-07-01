@@ -42,7 +42,10 @@ const Home = () => {
   const [out, setOut] = useState(false)
   const userData = localStorage.getItem('User')
   const products = useSelector(selectProduct)
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  )
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
