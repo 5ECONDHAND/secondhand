@@ -1,25 +1,17 @@
-import { Box, Container, Grid } from '@mui/material'
-import { EditProfile } from '../../components/molecules/edit'
-import { useNavigate } from 'react-router-dom'
-import { BackButton } from '../../components/molecules/global'
+import { Container } from '@mui/material'
+import { EditProfileForm } from '../../components/molecules/edit'
+import { BackButton, Navbar } from '../../components/molecules/global'
 
 const Edit = () => {
-  const navigate = useNavigate()
   return (
     <>
-      <Box sx={{ textAlign: "center" }}>
-        <Container
-          maxWidth="lg"
-          sx={{ pt: { xs: "1rem", md: "2rem" }, pb: "1rem"}}
-        >
+      <Navbar />
+      <Container maxWidth="lg" sx={{ py: '2rem' }}>
         <BackButton />
-        <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
-          <Grid item lg={8} md={8} sm={12} xs={12}>
-            <EditProfile />
-          </Grid>
-        </Grid>
-        </Container>
-      </Box>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <EditProfileForm />
+        </div>
+      </Container>
     </>
   )
 }

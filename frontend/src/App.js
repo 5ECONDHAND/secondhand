@@ -3,8 +3,8 @@ import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/700.css'
 import Router from './routes/Router'
-import { ThemeProvider } from '@mui/material'
 import theme from './styles/theme'
+import { ThemeProvider } from '@mui/material'
 import { SnackbarWrapper } from './components/templates'
 
 function App() {

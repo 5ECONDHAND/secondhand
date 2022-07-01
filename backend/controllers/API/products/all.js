@@ -84,6 +84,7 @@ async function controller(req, res, next) {
     message: "Success",
     data,
   });
+
 }
 
 module.exports = controller;
