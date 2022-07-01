@@ -1,5 +1,5 @@
-if(!process.env.ROOT_PATH) {
-  process.env.ROOT_PATH = __dirname + '/..';
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = require('path').join(__dirname, '..');
 }
 process.env.QUERY_DEBUG = process.env.DEBUG && process.env.DEBUG.split(',').includes('query');
 

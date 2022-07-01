@@ -2,9 +2,12 @@
 
 // load environment variables from .env file
 if (!process.env.LOADED_ENV) {
-  process.env.ROOT_PATH = require('path').join(__dirname, '..');
   require('dotenv').config({ path: process.env.ROOT_PATH + '/.env' });
   process.env.APP_NAME = process.env.APP_NAME ? process.env.APP_NAME : 'Binar Challenge';
+}
+
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = require('path').join(__dirname, '..');
 }
 
 /**
