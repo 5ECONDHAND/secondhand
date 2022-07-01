@@ -19,7 +19,8 @@
     "toolbox": "node ./bin/toolbox"
   },
   "engines": {
-    "node": "16.x"
+    "node": "16.x",
+    "yarn": "1.x"
   },
   "dependencies": {
     "@prisma/client": "3.15.1",
