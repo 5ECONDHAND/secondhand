@@ -9,17 +9,6 @@ export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
-    // setCredentials: (state, action) => {
-    //   localStorage.setItem(
-    //     'user',
-    //     JSON.stringify({
-    //       user: action.payload.user,
-    //       token: action.payload.token,
-    //     })
-    //   )
-    //   state.user = action.payload.user
-    //   state.token = action.payload.token
-    // },
     setProduct: (state, action) => {
       state.products = { ...state, products: action.payload.product }
     },
@@ -31,5 +20,6 @@ export const productSlice = createSlice({
   },
 })
 
+export const selectProduct = (state) => state.persist.products.products
 export const productActions = { ...productSlice.actions }
 export default productSlice.reducer

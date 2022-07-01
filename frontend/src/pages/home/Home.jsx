@@ -1,12 +1,12 @@
 import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { Banner, Buttons } from '../../components/molecules/home'
-import { ProductCard } from '../../components/molecules/global'
+import { Navbar, ProductCard } from '../../components/molecules/global'
 import { FiPlus } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
 import { useEffect, useState } from 'react'
-import { productActions } from '../../redux/slices/productSlice'
+import { productActions, selectProduct } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
 
 const SellButton = () => {
@@ -40,26 +40,27 @@ const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [out, setOut] = useState(false)
-  const userData = localStorage.getItem('user')
-  const products = useSelector((state) => state.product.products)
+  const userData = localStorage.getItem('User')
+  // const products = useSelector((state) => state.products.products)
+  const products = useSelector(selectProduct)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
     setOut(true)
+    navigate('/login')
   }
 
   useEffect(() => {
     if (out) {
       navigate('/login')
     }
-    // console.log('PRODUCTS', products)
-    // console.log('PRODUCT DATA', productData?.data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [out, productData, products])
 
   return (
     <>
+      <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         <Typography variant="h6" sx={{ fontSize: '16px' }}>
@@ -93,10 +94,10 @@ const Home = () => {
             <>
               {[1, 2, 3, 4, 5, 6].map((item, index) => (
                 <Grid item xs={1} key={index}>
-                  <Skeleton variant="rectangular" width={210} height={140} />
+                  <Skeleton animation="wave" variant="rectangular" width={210} height={140} />
                   <Box sx={{ pt: 1 }}>
-                    <Skeleton width={210} height={20} />
-                    <Skeleton width="70%" height={20} />
+                    <Skeleton animation="wave" width={210} height={20} />
+                    <Skeleton animation="wave" width="70%" height={20} />
                   </Box>
                 </Grid>
               ))}

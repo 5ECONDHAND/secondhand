@@ -60,7 +60,9 @@ const LoginForm = () => {
     if (isLoginSuccess && !loginData?.error) {
       dispatch(
         authActions.setCredentials({
-          user: loginData.data[0].fullname,
+          id: loginData.data[0].id,
+          name: loginData.data[0].fullname,
+          city: loginData.data[0].city,
           token: loginData.data[0].accessToken,
         })
       )

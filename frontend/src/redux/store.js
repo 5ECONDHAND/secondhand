@@ -1,22 +1,60 @@
-import { configureStore } from '@reduxjs/toolkit'
+// redux + toolkit + query imports
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
-import { authMiddleware } from './middleware/authMiddleware'
-import { authApi } from './services/authApi'
-import { productApi } from './services/productApi'
+// redux-persist imports
+import storage from 'redux-persist/lib/storage'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+// middleware & slices imports
 import authReducer from './slices/authSlice'
 import productReducer from './slices/productSlice'
-import { editApi } from './services/editApi'
+import userReducer from './slices/userSlice'
+import { authMiddleware } from './middleware'
+import { authApi, productApi, userApi } from './services'
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+}
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  products: productReducer,
+  user: userReducer,
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
+  devTools: process.env.NODE_ENV !== 'production',
   reducer: {
-    auth: authReducer,
+    // PERSIST SLICE REDUCERS
+    persist: persistedReducer,
+    // API REDUCERS
     [authApi.reducerPath]: authApi.reducer,
-    products: productReducer,
     [productApi.reducerPath]: productApi.reducer,
-    [editApi.reducerPath]: editApi.reducer
+    [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware).concat(productApi.middleware).concat(editApi.middleware).concat(authMiddleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    })
+      .concat(authApi.middleware)
+      .concat(productApi.middleware)
+      .concat(userApi.middleware)
+      .concat(authMiddleware),
 })
 
 setupListeners(store.dispatch)
+export const persistor = persistStore(store)
