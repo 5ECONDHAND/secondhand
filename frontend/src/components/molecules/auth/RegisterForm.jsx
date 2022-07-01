@@ -56,7 +56,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (isRegisterSuccess && registerData.data.length !== 0) {
-      console.log('Data', registerData)
+      console.log('Response', registerData)
       enqueueSnackbar('Registration success', { variant: 'success', autoHideDuration: 1000 })
       setTimeout(() => {
         navigate('/login')

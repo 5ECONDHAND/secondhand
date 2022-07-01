@@ -41,7 +41,6 @@ const Home = () => {
   const dispatch = useDispatch()
   const [out, setOut] = useState(false)
   const userData = localStorage.getItem('User')
-  // const products = useSelector((state) => state.products.products)
   const products = useSelector(selectProduct)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
 

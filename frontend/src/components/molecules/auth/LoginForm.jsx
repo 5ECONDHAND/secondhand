@@ -15,6 +15,7 @@ import { useLoginUserMutation } from '../../../redux/services/authApi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { authActions } from '../../../redux/slices/authSlice'
+import { userActions } from '../../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 
 const LoginForm = () => {
@@ -66,6 +67,7 @@ const LoginForm = () => {
           token: loginData.data[0].accessToken,
         })
       )
+      dispatch(userActions.setUserActive(loginData.data[0]))
       enqueueSnackbar('Login success', { variant: 'success', autoHideDuration: 1000 })
       setTimeout(() => {
         navigate('/')

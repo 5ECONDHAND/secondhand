@@ -30,12 +30,6 @@ const Sales = () => {
     if (key === dataCategory) result = displayCategory[key]
   }
 
-  // const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
-  // const { data: userData, isSuccess: isUserSuccess } = useGetUserByIdQuery({
-  //   id: user.id,
-  //   token: user.token,
-  // })
-
   useEffect(() => {
     if (products) {
       setAllProduct(products.filter((item) => item.User.fullname === user.name))
