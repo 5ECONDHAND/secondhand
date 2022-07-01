@@ -4,6 +4,7 @@ var express = require('express');
 var logger = require('morgan');
 var path = require('path');
 var authorization = require(path.join(process.env.ROOT_PATH, '/middlewares/authorization'));
+var uploader = require(path.join(process.env.ROOT_PATH, '/middlewares/uploader'));
 
 /**
  *
@@ -16,4 +17,5 @@ module.exports = function (app) {
   app.use(express.static(path.join(process.env.ROOT_PATH, 'public')));
 
   app.use(authorization);
+  app.use(uploader);
 }
