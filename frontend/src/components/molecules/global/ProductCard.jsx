@@ -2,9 +2,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import { toRupiah } from '../../../utils/functions'
 import dummy from '../../../assets/images/dummy-image.jpg'
 
-const ProductCard = (props) => {
-  const { productName, productCategory, productPrice } = props
-
+const ProductCard = ({ products }) => {
   return (
     <>
       <Box
@@ -39,13 +37,13 @@ const ProductCard = (props) => {
               mt: '0.5rem',
             }}
           >
-            {productName}
+            {products.name ? products.name : 'Product Name'}
           </Typography>
           <Typography sx={{ fontSize: '0.8rem', color: '#8A8A8A', mt: '0.25rem', mb: '0.5rem' }}>
-            {productCategory || '-'}
+            {products.category ? products.category : 'Category'}
           </Typography>
           <Typography noWrap sx={{ fontSize: '0.875rem', fontWeight: '500' }}>
-            {toRupiah(productPrice)}
+            {products.price ? toRupiah(products.price) : 'Rp. 0'}
           </Typography>
         </Stack>
       </Box>

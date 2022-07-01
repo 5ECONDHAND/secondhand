@@ -51,12 +51,17 @@ const Home = () => {
     navigate('/login')
   }
 
+  const fillProducts = () => {
+    dispatch(productActions.setProducts(productData?.data))
+  }
+
   useEffect(() => {
+    fillProducts()
     if (out) {
       navigate('/login')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [out, productData, products])
+  }, [out, productData, isProductSuccess, products])
 
   return (
     <>
@@ -79,14 +84,10 @@ const Home = () => {
           spacing={3}
         >
           {isProductSuccess ? (
-            productData.data?.map((item, index) => (
+            products?.map((item, index) => (
               <Grid item xs={1} key={index}>
                 <Box onClick={() => navigate(`/product/${item.id}`)}>
-                  <ProductCard
-                    productName={item.name}
-                    productCategory={item.Categories[0]}
-                    productPrice={item.price}
-                  />
+                  <ProductCard products={item} />
                 </Box>
               </Grid>
             ))

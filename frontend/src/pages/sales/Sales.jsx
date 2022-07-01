@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { Navbar, ProductCard, ProfileCard } from '../../components/molecules/global'
 import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
-import { useGetDataQuery } from '../../redux/services/productApi'
-// import { useGetUserByIdQuery } from '../../redux/services'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../redux/slices/authSlice'
+import { selectProduct } from '../../redux/slices/productSlice'
+// import { useGetDataQuery } from '../../redux/services/productApi'
+// import { useGetUserByIdQuery } from '../../redux/services'
 
 const Sales = () => {
   const navigate = useNavigate()
@@ -21,36 +22,36 @@ const Sales = () => {
     Diminati: wantedProduct,
     Terjual: soldProduct,
   }
+  const user = useSelector(selectAuth)
+  const products = useSelector(selectProduct)
 
   let result = null
   for (const key in displayCategory) {
     if (key === dataCategory) result = displayCategory[key]
   }
 
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
-
-  const user = useSelector(selectAuth)
+  // const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
   // const { data: userData, isSuccess: isUserSuccess } = useGetUserByIdQuery({
   //   id: user.id,
   //   token: user.token,
   // })
 
   useEffect(() => {
-    if (isProductSuccess) {
-      setAllProduct(productData.data.filter((item) => item.User.fullname === user.name))
+    if (products) {
+      setAllProduct(products.filter((item) => item.User.fullname === user.name))
       setWantedProduct(
-        productData.data.filter(
+        products.filter(
           (item) => item.User.fullname === user.name && item.Transaction.status === 'DECIDING'
         )
       )
       setSoldProduct(
-        productData.data.filter(
+        products.filter(
           (item) => item.User.fullname === user.name && item.Transaction.status === 'ACCEPTED'
         )
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData, isProductSuccess])
+  }, [products])
 
   const ProductAddArea = () => {
     return (
@@ -111,11 +112,7 @@ const Sales = () => {
       if (dataCategory !== 'Diminati') {
         return result.map((item, index) => (
           <Grid item xs={6} sm={4} md={4} key={index}>
-            <ProductCard
-              productName={item.name}
-              productCategory={item.Categories[0]}
-              productPrice={item.price}
-            />
+            <ProductCard products={item} />
           </Grid>
         ))
       }
