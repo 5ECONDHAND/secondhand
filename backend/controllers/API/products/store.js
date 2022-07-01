@@ -22,6 +22,16 @@ async function controller(req, res, next){
       })
     }
 
+    var categoryId = parseInt(req.body.categoryId);
+
+    if (isNaN(categoryId)) {
+      return res.json({
+        error: true,
+        message: "Invalid categoryId",
+        data: [],
+      });
+    }
+
     var dataPayload = null;
 
     if (req.userId) {
@@ -32,7 +42,7 @@ async function controller(req, res, next){
           description: req.body.description,
           Categories: {
             create: {
-              categoryId: req.body.categoryId
+              categoryId
             }
           },
           User: {
@@ -57,7 +67,7 @@ async function controller(req, res, next){
           description: req.body.description,
           Categories: {
             create: {
-              categoryId: req.body.categoryId
+              categoryId
             }
           },
           User: {
