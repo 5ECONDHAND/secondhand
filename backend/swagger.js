@@ -1,8 +1,11 @@
 // load environment variables from .env file
 if (!process.env.LOADED_ENV) {
-  process.env.ROOT_PATH = __dirname;
   require('dotenv').config({ path: process.env.ROOT_PATH + '/.env' });
   process.env.APP_NAME = process.env.APP_NAME ? process.env.APP_NAME : 'SecondHand';
+}
+
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = __dirname;
 }
 
 const swaggerAutogen = require("swagger-autogen")();
