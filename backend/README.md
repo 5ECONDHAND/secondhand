@@ -4,7 +4,7 @@ Backend App for SecondHand
 
 # Demo
 
-[On Heroku](https://github.com/5ECONDHAND/secondhand) (Not yet)
+[On Heroku](https://febesh5-dev.herokuapp.com/) (Not yet)
 
 # Instruction before running / start this project
 

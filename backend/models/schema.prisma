@@ -13,6 +13,11 @@ enum TransactionStatus {
   DECIDING
 }
 
+enum ProductStatus {
+  DRAFT
+  PUBLISH
+}
+
 // Table names are generally spelled in PascalCase. Column names in camelCase.
 // Model names should use the singular form (for example, User instead of user, users or Users)
 // Relation scalar naming conventions
@@ -40,12 +45,13 @@ model User {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  price       Decimal  @default(0) @db.Decimal(12, 2)
-  description String   @db.Text
-  createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(255)
+  price       Decimal       @default(0) @db.Decimal(12, 2)
+  description String        @db.Text
+  status      ProductStatus @default(DRAFT)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime      @default(now()) @db.Timestamptz(6)
 
   User        User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int

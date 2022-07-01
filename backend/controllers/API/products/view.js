@@ -30,13 +30,18 @@ async function controller(req, res, next) {
           phoneNo: true,
           fullname: true,
           email: true,
+          city: true,
           Photos: true,
           createdAt: true,
           updatedAt: true
         }
       },
       Photos: true,
-      Categories: true,
+      Categories: {
+        'include': {
+          'Category': true
+        }
+      },
       Transaction: true,
     }
   }).catch((err) => {
