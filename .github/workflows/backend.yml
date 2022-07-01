@@ -18,5 +18,5 @@ jobs:
           heroku_api_key: ${{secrets.DEV_HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.DEV_HEROKU_APP_NAME}} #Must be unique in Heroku
           heroku_email: ${{secrets.DEV_HEROKU_EMAIL}}
-          branch: develop
+          branch: origin/develop
           appdir: backend
