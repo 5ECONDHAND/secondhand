@@ -38,6 +38,10 @@ async function controller(req, res, next) {
     advanceLogicPayload.orderBy = {
       [req.query.orderBy]: direction
     };
+  } else {
+    advanceLogicPayload.orderBy = {
+      createdAt: 'desc'
+    };
   }
 
   const data = await prisma.product.findMany({

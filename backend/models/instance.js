@@ -5,7 +5,7 @@ process.env.QUERY_DEBUG = process.env.DEBUG && process.env.DEBUG.split(',').incl
 
 const { PrismaClient } = require(process.env.ROOT_PATH + "/models/pgclient");
 
-const opts = process.env.QUERY_DEBUG
+const opts = process.env.QUERY_DEBUG === 'true'
   ? {
     log: [
       {
@@ -19,7 +19,7 @@ const opts = process.env.QUERY_DEBUG
 /** @type {import('./pgclient').PrismaClient} */
 const prisma = new PrismaClient(opts);
 
-if (process.env.QUERY_DEBUG) {
+if (process.env.QUERY_DEBUG === 'true') {
   prisma.$on("query", async (e) => {
     console.log(`${e.query} ${e.params}`)
   });
