@@ -10,7 +10,8 @@
     "testPathIgnorePatterns": []
   },
   "prisma": {
-    "seed": "node ./models/seeder.js"
+    "seed": "node ./models/seeder.js",
+    "schema": "./models/schema.prisma"
   },
   "scripts": {
     "start": "node swagger.js",

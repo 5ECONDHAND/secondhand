@@ -37,7 +37,11 @@ async function controller(req, res, next) {
         }
       },
       Photos: true,
-      Categories: true,
+      Categories: {
+        'include': {
+          'Category': true
+        }
+      },
       Transaction: true,
     }
   }).catch((err) => {
