@@ -112,6 +112,7 @@ const AddProductForm = (props) => {
         name: values.nama,
         price: values.harga,
         description: values.deskripsi,
+        categoryId: values.kategori,
         token: user.token,
       })
     }
@@ -126,6 +127,7 @@ const AddProductForm = (props) => {
         name: values.nama,
         price: values.harga,
         description: values.deskripsi,
+        categoryId: values.kategori,
         token: user.token,
       })
     }
@@ -133,6 +135,7 @@ const AddProductForm = (props) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
+    console.log(values)
   }
 
   const [files, setFiles] = useState([])
@@ -188,6 +191,10 @@ const AddProductForm = (props) => {
           navigate('/sales')
         }, 1000)
       }
+    }
+    if (isPostProductError || isPutProductError) {
+      console.log('Response', isPostProductError)
+      enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPostProductSuccess, isPutProductSuccess])
@@ -247,11 +254,11 @@ const AddProductForm = (props) => {
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
-                <MenuItem value={'Hobi'}>Hobi</MenuItem>
-                <MenuItem value={'Kendaraan'}>Kendaraan</MenuItem>
-                <MenuItem value={'Baju'}>Baju</MenuItem>
-                <MenuItem value={'Elektronik'}>Elektronik</MenuItem>
-                <MenuItem value={'Kesehatan'}>Kesehatan</MenuItem>
+                <MenuItem value={1}>Hobi</MenuItem>
+                <MenuItem value={2}>Kendaraan</MenuItem>
+                <MenuItem value={3}>Baju</MenuItem>
+                <MenuItem value={4}>Elektronik</MenuItem>
+                <MenuItem value={5}>Kesehatan</MenuItem>
               </Select>
               <FormHelperText sx={{ m: 0, mb: '1rem' }}>{error.kategori}</FormHelperText>
             </FormControl>

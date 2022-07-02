@@ -76,10 +76,10 @@ const EditProfileForm = () => {
 
   useEffect(() => {
     setValues({
-      nama: userActive.fullname,
-      kota: userActive.city,
-      alamat: userActive.address,
-      nomor: userActive.phoneNo,
+      nama: userActive.fullname ? userActive.fullname : '',
+      kota: userActive.city ? userActive.city : '',
+      alamat: userActive.address ? userActive.address : '',
+      nomor: userActive.phoneNo ? userActive.phoneNo : '',
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

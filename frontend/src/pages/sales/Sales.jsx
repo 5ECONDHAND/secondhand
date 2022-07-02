@@ -8,6 +8,7 @@ import empty from '../../assets/images/empty.png'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../redux/slices/authSlice'
 import { selectProduct } from '../../redux/slices/productSlice'
+import { selectUser } from '../../redux/slices/userSlice'
 // import { useGetDataQuery } from '../../redux/services/productApi'
 // import { useGetUserByIdQuery } from '../../redux/services'
 
@@ -23,6 +24,7 @@ const Sales = () => {
     Terjual: soldProduct,
   }
   const user = useSelector(selectAuth)
+  const userActive = useSelector(selectUser)
   const products = useSelector(selectProduct)
 
   let result = null
@@ -130,7 +132,11 @@ const Sales = () => {
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Daftar Jual Saya
         </Typography>
-        <ProfileCard display="sales" sellerName={user.name} sellerCity={user.city} />
+        <ProfileCard
+          display="sales"
+          sellerName={userActive.fullname}
+          sellerCity={userActive.city}
+        />
         <Grid
           container
           spacing={2}

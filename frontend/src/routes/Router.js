@@ -21,6 +21,13 @@ const Router = () => {
     return children ? children : <Outlet />
   }
 
+  const AuthRoute = ({ isAllowed, redirectPath = '/', children }) => {
+    if (isAllowed) {
+      return <Navigate to={redirectPath} replace />
+    }
+    return children ? children : <Outlet />
+  }
+
   return (
     <>
       <BrowserRouter>
@@ -42,9 +49,11 @@ const Router = () => {
             }
           />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Auth />} />
-          <Route path="/register" element={<Auth />} />
           <Route path="/product/:id" element={<Product />} />
+          <Route element={<AuthRoute isAllowed={authenticated} />}>
+            <Route path="/login" element={<Auth />} />
+            <Route path="/register" element={<Auth />} />
+          </Route>
           <Route element={<ProtectedRoute isAllowed={authenticated} />}>
             <Route path="/add" element={<AddProduct />} />
             <Route path="/add/:productId" element={<AddProduct />} />

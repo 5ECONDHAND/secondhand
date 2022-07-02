@@ -8,6 +8,7 @@ import { authActions } from '../../redux/slices/authSlice'
 import { useEffect, useState } from 'react'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
+import empty from '../../assets/images/empty-product.png'
 
 const SellButton = () => {
   const navigate = useNavigate()
@@ -70,15 +71,20 @@ const Home = () => {
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
-        <Typography variant="h6" sx={{ fontSize: '16px' }}>
-          Telusuri Kategori
-        </Typography>
-        <Buttons />
         <Button variant="contained" onClick={logout}>
           Logout
         </Button>
-        {userData ? <h3>{userData}</h3> : null}
-
+        {userData ? <h5>{userData}</h5> : null}
+        {isProductSuccess ? (
+          products?.length > 0 ? (
+            <>
+              <Typography variant="h6" sx={{ fontSize: '16px' }}>
+                Telusuri Kategori
+              </Typography>
+              <Buttons />
+            </>
+          ) : null
+        ) : null}
         <Grid
           container
           columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
@@ -86,13 +92,30 @@ const Home = () => {
           spacing={3}
         >
           {isProductSuccess ? (
-            products?.map((item, index) => (
-              <Grid item xs={1} key={index}>
-                <Box onClick={() => navigate(`/product/${item.id}`)}>
-                  <ProductCard products={item} />
-                </Box>
+            products?.length === 0 ? (
+              <Grid item xs={12} sx={{ mx: 'auto', textAlign: 'center' }}>
+                <Box
+                  component={'img'}
+                  src={empty}
+                  alt=""
+                  sx={{ mx: 'auto', mb: '1rem', width: '180px', height: 'auto' }}
+                />
+                <Typography variant="body1" sx={{ fontWeight: '500' }}>
+                  Looks like no one posted any products yet.
+                </Typography>
+                <Typography variant="body2">
+                  Why don't you post one now? Click the button below.
+                </Typography>
               </Grid>
-            ))
+            ) : (
+              products?.map((item, index) => (
+                <Grid item xs={1} key={index}>
+                  <Box onClick={() => navigate(`/product/${item.id}`)}>
+                    <ProductCard products={item} />
+                  </Box>
+                </Grid>
+              ))
+            )
           ) : (
             <>
               {[1, 2, 3, 4, 5, 6].map((item, index) => (

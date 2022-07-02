@@ -62,11 +62,14 @@ const RegisterForm = () => {
         navigate('/login')
       }, 1000)
     } else if (isRegisterError || registerData?.error) {
-      enqueueSnackbar(`${registerData.message}`, {
-        variant: 'warning',
-        autoHideDuration: 3000,
-        preventDuplicate: true,
-      })
+      if (registerData?.error) {
+        enqueueSnackbar(`${registerData.message}`, {
+          variant: 'warning',
+          autoHideDuration: 3000,
+          preventDuplicate: true,
+        })
+      }
+      console.log('Error', isRegisterError)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerData, isRegisterSuccess, isRegisterLoading, isRegisterError])
