@@ -1,21 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Container, Grid } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { Navbar, ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
-import { convertLength } from '@mui/material/styles/cssUtils'
 
 const Product = () => {
   const { id } = useParams()
-  const { product, setProduct } = useState()
-  const { data: productData, isLoading, isSuccess, isError } = useGetDataByIdQuery(id)
+  const { data: productData, isSuccess } = useGetDataByIdQuery(id)
 
   useEffect(() => {
     if (isSuccess) {
-      // console.log('PRODUCT DATA', productData?.data)
-      // setProduct(productData.data)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData])
 
   return (
@@ -33,7 +30,7 @@ const Product = () => {
                   <ProductItem
                     type="buyer"
                     productName={productData?.data[0].name}
-                    productCategory={productData?.data[0].Categories}
+                    productCategory={productData?.data[0].Categories[0].Category.name}
                     productPrice={productData?.data[0].price}
                   />
                 </Grid>

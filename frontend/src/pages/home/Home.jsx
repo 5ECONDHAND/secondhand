@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { Banner, Buttons } from '../../components/molecules/home'
 import { Navbar, ProductCard } from '../../components/molecules/global'
@@ -5,7 +6,6 @@ import { FiPlus } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
-import { useEffect, useState } from 'react'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
@@ -40,7 +40,6 @@ const SellButton = () => {
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [out, setOut] = useState(false)
   const userData = localStorage.getItem('User')
   const products = useSelector(selectProduct)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
@@ -48,9 +47,28 @@ const Home = () => {
     { refetchOnMountOrArgChange: true }
   )
 
+  const displayLogin = () => {
+    if (userData) {
+      return (
+        <Button variant="contained" onClick={logout}>
+          Logout
+        </Button>
+      )
+    } else {
+      return (
+        <Button variant="contained" onClick={login}>
+          Login
+        </Button>
+      )
+    }
+  }
+
+  const login = () => {
+    navigate('/login')
+  }
+
   const logout = () => {
     dispatch(authActions.clearCredentials())
-    setOut(true)
     navigate('/login')
   }
 
@@ -60,20 +78,15 @@ const Home = () => {
 
   useEffect(() => {
     fillProducts()
-    if (out) {
-      navigate('/login')
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [out, productData, isProductSuccess, products])
+  }, [productData, isProductSuccess, products])
 
   return (
     <>
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
-        <Button variant="contained" onClick={logout}>
-          Logout
-        </Button>
+        {displayLogin()}
         {userData ? <h5>{userData}</h5> : null}
         {isProductSuccess ? (
           products?.length > 0 ? (
@@ -111,14 +124,14 @@ const Home = () => {
               products?.map((item, index) => (
                 <Grid item xs={1} key={index}>
                   <Box onClick={() => navigate(`/product/${item.id}`)}>
-                    <ProductCard products={item} />
+                    <ProductCard product={item} />
                   </Box>
                 </Grid>
               ))
             )
           ) : (
             <>
-              {[1, 2, 3, 4, 5, 6].map((item, index) => (
+              {[1, 2, 3].map((item, index) => (
                 <Grid item xs={1} key={index}>
                   <Skeleton animation="wave" variant="rectangular" width={210} height={140} />
                   <Box sx={{ pt: 1 }}>

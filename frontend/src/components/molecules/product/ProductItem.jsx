@@ -27,7 +27,7 @@ const ProductItem = (props) => {
               {productName ? productName : 'productName'}
             </Typography>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-              {productCategory[0] === '' ? productCategory : 'productCategory'}
+              {productCategory ? productCategory : 'productCategory'}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
               {toRupiah(productPrice) || toRupiah(250000)}

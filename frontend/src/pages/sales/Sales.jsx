@@ -5,49 +5,66 @@ import { useNavigate } from 'react-router-dom'
 import { Navbar, ProductCard, ProfileCard } from '../../components/molecules/global'
 import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
-import { useSelector } from 'react-redux'
-import { selectAuth } from '../../redux/slices/authSlice'
-import { selectProduct } from '../../redux/slices/productSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, selectProduct } from '../../redux/slices/productSlice'
+import { useGetDataQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
-// import { useGetDataQuery } from '../../redux/services/productApi'
-// import { useGetUserByIdQuery } from '../../redux/services'
 
 const Sales = () => {
   const navigate = useNavigate()
-  const [allProduct, setAllProduct] = useState()
-  const [wantedProduct, setWantedProduct] = useState()
-  const [soldProduct, setSoldProduct] = useState()
-  const [dataCategory, setDataCategory] = useState('Semua Produk')
-  const displayCategory = {
-    'Semua Produk': allProduct,
-    Diminati: wantedProduct,
-    Terjual: soldProduct,
-  }
-  const user = useSelector(selectAuth)
-  const userActive = useSelector(selectUser)
-  const products = useSelector(selectProduct)
+  const dispatch = useDispatch()
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  )
+  const user = useSelector(selectUser)
 
-  let result = null
-  for (const key in displayCategory) {
-    if (key === dataCategory) result = displayCategory[key]
+  const products = useSelector(selectProduct)
+  const [displayData, setDisplayData] = useState()
+  const [dataCategory, setDataCategory] = useState('Semua Produk')
+
+  const dataSwitch = (dataCategory) => {
+    switch (dataCategory) {
+      case 'Semua Produk':
+        setDisplayData(products?.filter((item) => item.User.fullname === user.fullname))
+        break
+      case 'Diminati':
+        setDisplayData(
+          products?.filter(
+            (item) => item.User.fullname === user.fullname && item.Transaction.status === 'DECIDING'
+          )
+        )
+        break
+      case 'Terjual':
+        setDisplayData(
+          products?.filter(
+            (item) => item.User.fullname === user.fullname && item.Transaction.status === 'ACCEPTED'
+          )
+        )
+        break
+      default:
+        setDisplayData(products?.filter((item) => item.User.fullname === user.name))
+        break
+    }
+  }
+
+  const fillProducts = () => {
+    dispatch(productActions.setProducts(productData?.data))
   }
 
   useEffect(() => {
-    if (products) {
-      setAllProduct(products.filter((item) => item.User.fullname === user.name))
-      setWantedProduct(
-        products.filter(
-          (item) => item.User.fullname === user.name && item.Transaction.status === 'DECIDING'
-        )
-      )
-      setSoldProduct(
-        products.filter(
-          (item) => item.User.fullname === user.name && item.Transaction.status === 'ACCEPTED'
-        )
-      )
+    if (isProductSuccess) {
+      fillProducts()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products])
+
+  useEffect(() => {
+    if (products) {
+      dataSwitch(dataCategory)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataCategory, products])
 
   const ProductAddArea = () => {
     return (
@@ -103,26 +120,25 @@ const Sales = () => {
     )
   }
 
-  const checkRender = (result) => {
-    if (result.length >= 1) {
-      if (dataCategory !== 'Diminati') {
-        return result.map((item, index) => (
+  const checkRender = (displayData) => {
+    if (displayData.length === 0) {
+      return <Empty dataCategory={dataCategory} />
+    }
+    if (displayData.length >= 1) {
+      if (dataCategory === 'Semua Produk' || dataCategory === 'Terjual') {
+        return displayData.map((item, index) => (
           <Grid item xs={6} sm={4} md={4} key={index}>
-            <ProductCard products={item} />
+            <ProductCard product={item} />
+          </Grid>
+        ))
+      } else if (dataCategory === 'Diminati') {
+        return displayData.map((item, index) => (
+          <Grid item xs={12} key={index}>
+            <OfferCardMini product={item} />
           </Grid>
         ))
       }
-      return result.map((item, index) => (
-        <Grid item xs={12} key={index}>
-          <OfferCardMini
-            productName={item.name}
-            productCategory={item.Categories[0]}
-            productPrice={item.price}
-          />
-        </Grid>
-      ))
     }
-    return <Empty dataCategory={dataCategory} />
   }
 
   return (
@@ -132,11 +148,7 @@ const Sales = () => {
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Daftar Jual Saya
         </Typography>
-        <ProfileCard
-          display="sales"
-          sellerName={userActive.fullname}
-          sellerCity={userActive.city}
-        />
+        <ProfileCard display="sales" sellerName={user?.fullname} sellerCity={user?.city} />
         <Grid
           container
           spacing={2}
@@ -151,9 +163,8 @@ const Sales = () => {
               {dataCategory === 'Diminati' || dataCategory === 'Terjual' ? null : (
                 <ProductAddArea />
               )}
-
-              {result ? (
-                checkRender(result)
+              {displayData ? (
+                checkRender(displayData)
               ) : (
                 <Grid item xs={6} sm={4} md={4}>
                   <Skeleton animation="wave" variant="rectangular" width={210} height={140} />

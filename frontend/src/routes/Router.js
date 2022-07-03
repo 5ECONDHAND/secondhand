@@ -4,15 +4,7 @@ import { useSelector } from 'react-redux'
 import ScrollToTop from '../components/atoms/global/ScrollToTop'
 
 const Router = () => {
-  // Globally set Navbar on every page (bugged)
-  // const displayNavbar = ['/', '/product', '/add', '/edit', '/sales', '/offers'].includes(
-  //   window.location.pathname
-  //   window.location.reload() <--- will infinite reload
-  // )
-  // {displayNavbar && <Navbar />}
-
   const authenticated = useSelector((state) => state.persist.auth.user.name)
-  // console.log('AUTH', authenticated)
 
   const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
     if (!isAllowed) {
@@ -50,7 +42,7 @@ const Router = () => {
           />
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route element={<AuthRoute isAllowed={authenticated} />}>
+          <Route element={<AuthRoute isAllowed={!!authenticated} />}>
             <Route path="/login" element={<Auth />} />
             <Route path="/register" element={<Auth />} />
           </Route>

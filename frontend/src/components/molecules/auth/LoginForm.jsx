@@ -71,7 +71,7 @@ const LoginForm = () => {
       enqueueSnackbar('Login success', { variant: 'success', autoHideDuration: 1000 })
       setTimeout(() => {
         navigate('/')
-      }, 1000)
+      }, 2000)
     } else if (isLoginError || loginData?.error) {
       enqueueSnackbar(`${loginData.message}`, {
         variant: 'error',

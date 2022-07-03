@@ -22,9 +22,8 @@ import {
 } from '../../../redux/services/productApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
-import { selectProduct } from '../../../redux/slices/productSlice'
 
 const styles = {
   '&.MuiButton-root': {
@@ -63,7 +62,6 @@ const img = {
 const AddProductForm = (props) => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const [error, setError] = useState({})
   const [values, setValues] = useState({
     nama: '',
@@ -73,8 +71,6 @@ const AddProductForm = (props) => {
   })
   const user = useSelector(selectAuth)
   const { productId } = useParams()
-  // const jwtToken = JSON.parse(localStorage.getItem('User')).token
-  // const products = useSelector(selectProduct)
 
   const [
     postProduct,
@@ -95,7 +91,6 @@ const AddProductForm = (props) => {
     },
   ] = usePutProductMutation()
   const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery(productId)
-
   const handleSubmit = (event) => {
     if (productId) {
       handleUpdate(event)
@@ -115,6 +110,7 @@ const AddProductForm = (props) => {
         categoryId: values.kategori,
         token: user.token,
       })
+      console.log('product updated')
     }
   }
 
@@ -130,6 +126,7 @@ const AddProductForm = (props) => {
         categoryId: values.kategori,
         token: user.token,
       })
+      console.log('product updated')
     }
   }
 
@@ -183,13 +180,13 @@ const AddProductForm = (props) => {
         enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
         setTimeout(() => {
           navigate('/sales')
-        }, 1000)
+        }, 2000)
       } else {
         console.log('Response', postProductData)
         enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
         setTimeout(() => {
           navigate('/sales')
-        }, 1000)
+        }, 2000)
       }
     }
     if (isPostProductError || isPutProductError) {
@@ -254,6 +251,13 @@ const AddProductForm = (props) => {
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
+                <MenuItem disabled value="">
+                  <em>
+                    {isProductSuccess && productId
+                      ? productData?.data[0].Categories[0].Category.name
+                      : 'Pilih Kategori'}
+                  </em>
+                </MenuItem>
                 <MenuItem value={1}>Hobi</MenuItem>
                 <MenuItem value={2}>Kendaraan</MenuItem>
                 <MenuItem value={3}>Baju</MenuItem>
