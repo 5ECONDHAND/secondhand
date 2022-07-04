@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Container, Grid } from '@mui/material'
 import { useParams } from 'react-router-dom'
-import { ProfileCard } from '../../components/molecules/global'
+import { Navbar, ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { convertLength } from '@mui/material/styles/cssUtils'
@@ -20,6 +20,7 @@ const Product = () => {
 
   return (
     <>
+      <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
           {isSuccess ? (

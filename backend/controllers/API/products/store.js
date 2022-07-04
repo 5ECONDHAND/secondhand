@@ -12,13 +12,24 @@ async function controller(req, res, next){
     if(
         !req.body.name
         || !req.body.price
+        || !req.body.categoryId
         || !req.body.description
     ){
       return res.json({
         error: true,
-        message: 'Please fill name, price, and description',
+        message: 'Please fill name, price, categoryId, and description',
         data:[],
       })
+    }
+
+    var categoryId = parseInt(req.body.categoryId);
+
+    if (isNaN(categoryId)) {
+      return res.json({
+        error: true,
+        message: "Invalid categoryId",
+        data: [],
+      });
     }
 
     var dataPayload = null;
@@ -29,6 +40,11 @@ async function controller(req, res, next){
           name: req.body.name,
           price: req.body.price,
           description: req.body.description,
+          Categories: {
+            create: {
+              categoryId
+            }
+          },
           User: {
             connect: {
               id: req.userId
@@ -49,9 +65,14 @@ async function controller(req, res, next){
           name: req.body.name,
           price: req.body.price,
           description: req.body.description,
+          Categories: {
+            create: {
+              categoryId
+            }
+          },
           User: {
             connect: {
-              id: req.body.userId
+              id: req.body.userId //admin can set this
             }
           },
           Transaction: {

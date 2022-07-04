@@ -1,10 +1,11 @@
 import { Container, Grid, Typography } from '@mui/material'
-import { BackButton, ProfileCard } from '../../components/molecules/global'
+import { BackButton, Navbar, ProfileCard } from '../../components/molecules/global'
 import OfferCard from '../../components/molecules/offers/OfferCard'
 
 const Offers = () => {
   return (
     <>
+      <Navbar />
       <Container maxWidth="lg" sx={{ pt: { xs: '1rem', md: '2rem' }, pb: '1rem' }}>
         <BackButton />
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>

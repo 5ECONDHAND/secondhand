@@ -26,7 +26,7 @@ export const validateRegister = (values, err) => {
 
 export const validateProduct = (values, err) => {
   let temp = {}
-  temp.nama = /^[a-zA-Z][a-zA-Z ]+$/.test(values.nama) ? '' : 'Name is not valid'
+  temp.nama = /^[\w\-\s]+$/.test(values.nama) ? '' : 'Name is not valid'
   temp.harga = /^\d+$/.test(values.harga) ? '' : 'Amount is not valid'
   temp.kategori = values.kategori ? '' : 'Category is required'
   temp.deskripsi = values.deskripsi ? '' : 'Description is required'

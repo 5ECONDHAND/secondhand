@@ -1,46 +1,88 @@
-import { Box, Container, Grid, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
+import { Box, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { FiPlus } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
-import { ProductCard, ProfileCard } from '../../components/molecules/global'
+import { Navbar, ProductCard, ProfileCard } from '../../components/molecules/global'
 import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
-import { useGetProductDataQuery } from '../../redux/services/productApi'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../../redux/slices/authSlice'
+import { selectProduct } from '../../redux/slices/productSlice'
+// import { useGetDataQuery } from '../../redux/services/productApi'
+// import { useGetUserByIdQuery } from '../../redux/services'
 
 const Sales = () => {
-
-  const { data: productData, isSuccess: isProductSuccess } = useGetProductDataQuery()
+  const navigate = useNavigate()
   const [allProduct, setAllProduct] = useState()
   const [wantedProduct, setWantedProduct] = useState()
   const [soldProduct, setSoldProduct] = useState()
-
-  // console.log(productData);
-  const userSeller = JSON.parse(localStorage.getItem('user')).user
-  useEffect(() => {
-    if (isProductSuccess) {
-      setAllProduct(productData.data.filter(item => item.User.fullname === userSeller))
-      setWantedProduct(productData.data.filter(item => item.User.fullname === userSeller && item.Transaction.status === 'DECIDING'))
-      setSoldProduct(productData.data.filter(item => item.User.fullname === userSeller && item.Transaction.status === 'ACCEPTED'))
-    }
-  }, [userSeller, productData, isProductSuccess])
-  // console.log(productData.data[0].User.fullname === userSeller);
-
-
-  const salesObj = {
+  const [dataCategory, setDataCategory] = useState('Semua Produk')
+  const displayCategory = {
     'Semua Produk': allProduct,
     Diminati: wantedProduct,
     Terjual: soldProduct,
   }
+  const user = useSelector(selectAuth)
+  const products = useSelector(selectProduct)
 
-  const [dataCategory, setDataCategory] = useState('Semua Produk')
-  const navigate = useNavigate()
-
-  // mengambil key dari object dan storing value ke result
   let result = null
-  for (const key in salesObj) {
-    if (key === dataCategory) result = salesObj[key]
+  for (const key in displayCategory) {
+    if (key === dataCategory) result = displayCategory[key]
   }
-  console.log(result);
+
+  // const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery()
+  // const { data: userData, isSuccess: isUserSuccess } = useGetUserByIdQuery({
+  //   id: user.id,
+  //   token: user.token,
+  // })
+
+  useEffect(() => {
+    if (products) {
+      setAllProduct(products.filter((item) => item.User.fullname === user.name))
+      setWantedProduct(
+        products.filter(
+          (item) => item.User.fullname === user.name && item.Transaction.status === 'DECIDING'
+        )
+      )
+      setSoldProduct(
+        products.filter(
+          (item) => item.User.fullname === user.name && item.Transaction.status === 'ACCEPTED'
+        )
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products])
+
+  const ProductAddArea = () => {
+    return (
+      <>
+        <Grid item xs={6} sm={4} md={4}>
+          <Box
+            className="dropzone-border"
+            sx={{
+              borderRadius: '0.25rem',
+              minWidth: 181,
+              minHeight: 181,
+              width: { xs: 181, sm: '100%' },
+              height: { xs: 198, sm: '100%' },
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#8A8A8A',
+              cursor: 'pointer',
+            }}
+            onClick={() => navigate('/add')}
+          >
+            <FiPlus size={24} />
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Tambah Produk
+            </Typography>
+          </Box>
+        </Grid>
+      </>
+    )
+  }
 
   const Empty = ({ dataCategory }) => {
     const display = dataCategory === 'Semua Produk' ? 'none' : 'flex'
@@ -53,9 +95,9 @@ const Sales = () => {
           alignItems: 'center',
         }}
         mx="auto"
-        mt={{ xs: '30px', sm: '30px', md: '0' }}
+        pt={{ xs: '30px', sm: '30px', md: '' }}
       >
-        <img src={empty} alt="img-empty" width="276px" height="194px" />
+        <img src={empty} alt="img-empty" width="276px" height="auto" />
         <Box sx={{ width: '55%', textAlign: 'center' }}>
           <Typography variant="body1">
             Belum ada produkmu yang diminati nih, sabar ya rejeki nggak kemana kok
@@ -68,41 +110,33 @@ const Sales = () => {
   const checkRender = (result) => {
     if (result.length >= 1) {
       if (dataCategory !== 'Diminati') {
-        return (
-          result.map((item, index) => (
-            <Grid item xs={6} sm={4} md={4} key={index}>
-              <ProductCard
-                productName={item.name}
-                productCategory={item.Categories[0]}
-                productPrice={item.price} />
-            </Grid>
-          ))
-        )
-      }
-      return (
-        result.map((item, index) => (
-          <Grid item xs={12} key={index}>
-            <OfferCardMini
-              productName={item.name}
-              productCategory={item.Categories[0]}
-              productPrice={item.price} />
+        return result.map((item, index) => (
+          <Grid item xs={6} sm={4} md={4} key={index}>
+            <ProductCard products={item} />
           </Grid>
         ))
-      )
+      }
+      return result.map((item, index) => (
+        <Grid item xs={12} key={index}>
+          <OfferCardMini
+            productName={item.name}
+            productCategory={item.Categories[0]}
+            productPrice={item.price}
+          />
+        </Grid>
+      ))
     }
-    return (
-      <Empty dataCategory={dataCategory} />
-    )
-
+    return <Empty dataCategory={dataCategory} />
   }
 
   return (
     <>
+      <Navbar />
       <Container maxWidth="lg" sx={{ pt: '2rem', pb: '1rem' }}>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Daftar Jual Saya
         </Typography>
-        <ProfileCard display="sales" />
+        <ProfileCard display="sales" sellerName={user.name} sellerCity={user.city} />
         <Grid
           container
           spacing={2}
@@ -114,53 +148,21 @@ const Sales = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={9}>
             <Grid container spacing={3}>
-              {/* tambah produck card */}
-              {dataCategory === 'Diminati' || dataCategory === 'Terjual' ? (
-                ''
+              {dataCategory === 'Diminati' || dataCategory === 'Terjual' ? null : (
+                <ProductAddArea />
+              )}
+
+              {result ? (
+                checkRender(result)
               ) : (
                 <Grid item xs={6} sm={4} md={4}>
-                  <Box
-                    className="dropzone-border"
-                    sx={{
-                      borderRadius: '0.25rem',
-                      minWidth: 181,
-                      minHeight: 181,
-                      width: { xs: 181, sm: '100%' },
-                      height: { xs: 198, sm: '100%' },
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#8A8A8A',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => navigate('/add')}
-                  >
-                    <FiPlus size={24} />
-                    <Typography variant="body2" sx={{ mt: 1 }}>
-                      Tambah Produk
-                    </Typography>
+                  <Skeleton animation="wave" variant="rectangular" width={210} height={140} />
+                  <Box sx={{ pt: 1 }}>
+                    <Skeleton animation="wave" width={210} height={20} />
+                    <Skeleton animation="wave" width="70%" height={20} />
                   </Box>
                 </Grid>
               )}
-              {/* images when empty */}
-              {result ? checkRender(result) : <Grid item xs={6} sm={4} md={4}>Loading</Grid>}
-              {/* {result.length < 1 ? (<Empty dataCategory={dataCategory} />) :
-                (
-                  <>
-                    {dataCategory === 'Diminati' ? (
-                      <Grid item xs={12}>
-                        <OfferCardMini />
-                      </Grid>
-                    ) : (
-                      result.map((item, index) => (
-                        <Grid item xs={6} sm={4} md={4} key={index}>
-                          <ProductCard />
-                        </Grid>
-                      ))
-                    )}
-                  </>
-                )} */}
             </Grid>
           </Grid>
         </Grid>

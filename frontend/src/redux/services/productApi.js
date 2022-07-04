@@ -11,6 +11,7 @@ export const productApi = createApi({
     }),
     getDataById: builder.query({
       query: (id) => `/products/${id}`,
+    }),
     // patch product
     putProduct: builder.mutation({
       query: ({ id, name, description, price, token }) => ({
@@ -18,7 +19,7 @@ export const productApi = createApi({
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: { name: name, description: description, price: price },
       }),
@@ -30,20 +31,19 @@ export const productApi = createApi({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: { name: name, description: description, price: price },
       }),
     }),
-    // get product by id
-    getProductById: builder.query({
-      query: (id) => ({ url: `/products/${id}` }),
-    }),
-    // all products
-    getProductData: builder.query({
-      query: () => '/products',
-    }),
   }),
 })
 
-export const { useGetDataQuery, useGetDataByIdQuery, usePostProductMutation, usePutProductMutation, useGetProductByIdQuery, useGetProductDataQuery   } = productApi
+export const {
+  useGetDataQuery,
+  useGetDataByIdQuery,
+  usePostProductMutation,
+  usePutProductMutation,
+  // useGetProductByIdQuery,
+  // useGetProductDataQuery,
+} = productApi

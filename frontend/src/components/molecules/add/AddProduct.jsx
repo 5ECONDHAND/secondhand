@@ -14,7 +14,11 @@ import {
 } from '@mui/material'
 import gambar from '../../../assets/images/add.png'
 import { validateProduct } from '../../../utils/validators'
-import { usePostProductMutation, usePutProductMutation, useGetProductByIdQuery } from '../../../redux/services/productApi'
+import {
+  usePostProductMutation,
+  usePutProductMutation,
+  useGetDataByIdQuery,
+} from '../../../redux/services/productApi'
 import { useParams } from 'react-router-dom'
 
 const styles = {
@@ -59,12 +63,12 @@ const AddProduct = (props) => {
     kategori: '',
     deskripsi: '',
   })
-  const jwtToken = JSON.parse(localStorage.getItem('user')).token
+  const jwtToken = JSON.parse(localStorage.getItem('User')).token
   const { productId } = useParams()
 
   const [postProduct] = usePostProductMutation()
   const [putProduct] = usePutProductMutation()
-  const { data: productData, isSuccess: isProductSuccess } = useGetProductByIdQuery(productId)
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery(productId)
 
   const handleSubmit = (event) => {
     if (productId) {
@@ -74,19 +78,30 @@ const AddProduct = (props) => {
     }
   }
   const handleAdd = async (event) => {
-    console.log('submit ok');
+    console.log('submit ok')
     event.preventDefault()
     validateProduct(values, setError)
-    await postProduct({ name: values.nama, price: values.harga, description: values.deskripsi, token: jwtToken })
+    await postProduct({
+      name: values.nama,
+      price: values.harga,
+      description: values.deskripsi,
+      token: jwtToken,
+    })
     console.log(values)
     console.log(error)
   }
 
   const handleUpdate = async (event) => {
-    console.log('update ok');
+    console.log('update ok')
     event.preventDefault()
     validateProduct(values, setError)
-    await putProduct({ id: productId, name: values.nama, price: values.harga, description: values.deskripsi, token: jwtToken })
+    await putProduct({
+      id: productId,
+      name: values.nama,
+      price: values.harga,
+      description: values.deskripsi,
+      token: jwtToken,
+    })
     console.log(values)
     console.log(error)
   }
@@ -133,8 +148,6 @@ const AddProduct = (props) => {
     </div>
   ))
 
-
-
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
@@ -153,7 +166,9 @@ const AddProduct = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.nama ? true : false}
-                placeholder={isProductSuccess && productId ? productData.data[0].name : "Nama Produk"}
+                placeholder={
+                  isProductSuccess && productId ? productData.data[0].name : 'Nama Produk'
+                }
                 type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
@@ -169,7 +184,7 @@ const AddProduct = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.harga ? true : false}
-                placeholder={isProductSuccess && productId ? productData.data[0].price : "Rp 0,00"}
+                placeholder={isProductSuccess && productId ? productData.data[0].price : 'Rp 0,00'}
                 type="number"
                 value={values.harga}
                 onChange={handleChange('harga')}
@@ -208,7 +223,11 @@ const AddProduct = (props) => {
                 multiline
                 error={error.deskripsi ? true : false}
                 type="text"
-                placeholder={isProductSuccess && productId ? productData.data[0].description : "Contoh: Jalan Ikan Hiu 33"}
+                placeholder={
+                  isProductSuccess && productId
+                    ? productData.data[0].description
+                    : 'Contoh: Jalan Ikan Hiu 33'
+                }
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
                 rows={4}

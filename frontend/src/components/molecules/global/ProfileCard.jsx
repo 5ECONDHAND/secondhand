@@ -1,9 +1,13 @@
 import { Avatar, Button, Paper, Stack, Typography } from '@mui/material'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { selectAuth } from '../../../redux/slices/authSlice'
 
 const ProfileCard = (props) => {
   const { display, sellerName, sellerCity } = props
   const navigate = useNavigate()
+  const user = useSelector(selectAuth)
+
   return (
     <>
       <Paper
@@ -46,7 +50,7 @@ const ProfileCard = (props) => {
                     color: '#ffffff',
                   },
                 }}
-                onClick={() => navigate('/edit')}
+                onClick={() => navigate(`/edit/${user.id}`)}
               >
                 Edit
               </Button>
