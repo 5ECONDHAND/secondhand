@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material'
-import { Banner, Buttons } from '../../components/molecules/home'
+import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
 import { Navbar, ProductCard } from '../../components/molecules/global'
-import { FiPlus } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
@@ -11,46 +10,35 @@ import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
 import { selectUser, userActions } from '../../redux/slices/userSlice'
 
-const SellButton = () => {
-  const navigate = useNavigate()
-  return (
-    <Button
-      variant="contained"
-      size="large"
-      startIcon={<FiPlus />}
-      onClick={() => navigate('/add')}
-      sx={{
-        position: 'fixed',
-        bottom: '3rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        borderRadius: '0.75rem',
-        textTransform: 'none',
-        boxShadow: '0 0.25rem 1rem rgba(105, 2, 198, 0.63) !important',
-        background: '#7126B5',
-        '&:hover': {
-          background: '#631fa1',
-        },
-      }}
-    >
-      Jual
-    </Button>
-  )
-}
-
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  // const userData = localStorage.getItem('User')
-  const user = useSelector(selectUser)
-  const products = useSelector(selectProduct)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
   )
+  const userActive = useSelector(selectUser)
+  const products = useSelector(selectProduct)
+  const [displayData, setDisplayData] = useState(products)
+  const [dataCategory, setDataCategory] = useState('Semua')
+
+  const dataSwitch = (dataCategory) => {
+    switch (dataCategory) {
+      case 'Semua':
+        setDisplayData(products)
+        break
+      case dataCategory:
+        setDisplayData(
+          products?.filter((item) => item.Categories[0].Category.name === dataCategory)
+        )
+        break
+      default:
+        setDisplayData(products)
+    }
+  }
 
   const displayLogin = () => {
-    if (user) {
+    if (userActive) {
       return (
         <Button variant="contained" onClick={logout}>
           Logout
@@ -80,7 +68,16 @@ const Home = () => {
   }
 
   useEffect(() => {
-    fillProducts()
+    if (products) {
+      dataSwitch(dataCategory)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataCategory, products])
+
+  useEffect(() => {
+    if (isProductSuccess) {
+      fillProducts()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData, isProductSuccess, products])
 
@@ -90,24 +87,14 @@ const Home = () => {
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         {displayLogin()}
-        {user ? (
-          <>
-            {
-              <h5>
-                'Name',{user.fullname || 'null'}
-                'City',{user.city || 'null'}
-                'Token',{user.accessToken || 'null'}
-              </h5>
-            }
-          </>
-        ) : null}
+        {userActive ? <>{<h5>'Name',{userActive.fullname || 'null'}</h5>}</> : null}
         {isProductSuccess ? (
           products?.length > 0 ? (
             <>
               <Typography variant="h6" sx={{ fontSize: '16px' }}>
                 Telusuri Kategori
               </Typography>
-              <Buttons />
+              <CategoryFilter setDataCategory={setDataCategory} />
             </>
           ) : null
         ) : null}
@@ -118,7 +105,7 @@ const Home = () => {
           spacing={3}
         >
           {isProductSuccess ? (
-            products?.length === 0 ? (
+            displayData?.length === 0 ? (
               <Grid item xs={12} sx={{ mx: 'auto', textAlign: 'center' }}>
                 <Box
                   component={'img'}
@@ -134,7 +121,7 @@ const Home = () => {
                 </Typography>
               </Grid>
             ) : (
-              products?.map((item, index) => (
+              displayData?.map((item, index) => (
                 <Grid item xs={1} key={index}>
                   <Box onClick={() => navigate(`/product/${item.id}`)}>
                     <ProductCard product={item} />
@@ -156,7 +143,7 @@ const Home = () => {
             </>
           )}
         </Grid>
-        <SellButton />
+        <SellCtaButton />
       </Container>
     </>
   )

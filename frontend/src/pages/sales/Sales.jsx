@@ -18,7 +18,6 @@ const Sales = () => {
     { refetchOnMountOrArgChange: true }
   )
   const user = useSelector(selectUser)
-
   const products = useSelector(selectProduct)
   const [displayData, setDisplayData] = useState()
   const [dataCategory, setDataCategory] = useState('Semua Produk')

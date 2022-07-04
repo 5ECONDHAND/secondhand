@@ -81,6 +81,7 @@ const AddProductForm = (props) => {
       isError: isPostProductError,
     },
   ] = usePostProductMutation()
+
   const [
     putProduct,
     {
@@ -90,7 +91,9 @@ const AddProductForm = (props) => {
       isError: isPutProductError,
     },
   ] = usePutProductMutation()
+
   const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery(productId)
+
   const handleSubmit = (event) => {
     if (productId) {
       handleUpdate(event)
@@ -132,7 +135,7 @@ const AddProductForm = (props) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
-    console.log(values)
+    // console.log(values)
   }
 
   const [files, setFiles] = useState([])
