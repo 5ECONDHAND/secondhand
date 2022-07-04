@@ -73,7 +73,7 @@ const LoginForm = () => {
         navigate('/')
       }, 2000)
     } else if (isLoginError || loginData?.error) {
-      enqueueSnackbar(`${loginData.message}`, {
+      enqueueSnackbar(`${loginData?.message}`, {
         variant: 'error',
         autoHideDuration: 3000,
         preventDuplicate: true,

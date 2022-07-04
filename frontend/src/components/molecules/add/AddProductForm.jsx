@@ -194,7 +194,7 @@ const AddProductForm = (props) => {
       enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPostProductSuccess, isPutProductSuccess])
+  }, [isPostProductSuccess, isPutProductSuccess, isPostProductError, isPutProductError])
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount

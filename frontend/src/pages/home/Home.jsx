@@ -9,6 +9,7 @@ import { authActions } from '../../redux/slices/authSlice'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
+import { selectUser, userActions } from '../../redux/slices/userSlice'
 
 const SellButton = () => {
   const navigate = useNavigate()
@@ -40,7 +41,8 @@ const SellButton = () => {
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const userData = localStorage.getItem('User')
+  // const userData = localStorage.getItem('User')
+  const user = useSelector(selectUser)
   const products = useSelector(selectProduct)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
     {},
@@ -48,7 +50,7 @@ const Home = () => {
   )
 
   const displayLogin = () => {
-    if (userData) {
+    if (user) {
       return (
         <Button variant="contained" onClick={logout}>
           Logout
@@ -69,6 +71,7 @@ const Home = () => {
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
+    dispatch(userActions.clearCredentials())
     navigate('/login')
   }
 
@@ -87,7 +90,17 @@ const Home = () => {
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         {displayLogin()}
-        {userData ? <h5>{userData}</h5> : null}
+        {user ? (
+          <>
+            {
+              <h5>
+                'Name',{user.fullname || 'null'}
+                'City',{user.city || 'null'}
+                'Token',{user.accessToken || 'null'}
+              </h5>
+            }
+          </>
+        ) : null}
         {isProductSuccess ? (
           products?.length > 0 ? (
             <>

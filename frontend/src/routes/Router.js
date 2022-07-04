@@ -1,20 +1,25 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
-import { Home, Auth, Product, AddProduct, Edit, Sales, Offers } from '../pages'
+import { Home, Auth, Product, AddProduct, Edit, Sales, Offers, NotFound } from '../pages'
 import { useSelector } from 'react-redux'
 import ScrollToTop from '../components/atoms/global/ScrollToTop'
+import { selectUser } from '../redux/slices/userSlice'
 
 const Router = () => {
-  const authenticated = useSelector((state) => state.persist.auth.user.name)
+  const authenticated = useSelector(selectUser)
 
-  const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
-    if (!isAllowed) {
+  const isAuthorized = (authenticated = { data: null }) => {
+    return Object.values(authenticated).every((x) => x !== null) ? true : false
+  }
+
+  const AuthRoute = ({ isAllowed, redirectPath = '/', children }) => {
+    if (isAllowed) {
       return <Navigate to={redirectPath} replace />
     }
     return children ? children : <Outlet />
   }
 
-  const AuthRoute = ({ isAllowed, redirectPath = '/', children }) => {
-    if (isAllowed) {
+  const ProtectedRoute = ({ isAllowed, redirectPath, children }) => {
+    if (!isAllowed) {
       return <Navigate to={redirectPath} replace />
     }
     return children ? children : <Outlet />
@@ -25,33 +30,28 @@ const Router = () => {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route
-            path="*"
-            element={
-              <div
-                style={{
-                  height: '100vh',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <h2>404, the page you are looking for does not exist</h2>
-              </div>
-            }
-          />
+          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
           <Route element={<AuthRoute isAllowed={!!authenticated} />}>
             <Route path="/login" element={<Auth />} />
             <Route path="/register" element={<Auth />} />
           </Route>
-          <Route element={<ProtectedRoute isAllowed={authenticated} />}>
-            <Route path="/add" element={<AddProduct />} />
-            <Route path="/add/:productId" element={<AddProduct />} />
+          <Route element={<ProtectedRoute isAllowed={authenticated} redirectPath="/login" />}>
             <Route path="/edit/:userId" element={<Edit />} />
             <Route path="/sales" element={<Sales />} />
-            <Route path="/offers" element={<Offers />} />
+            <Route
+              element={
+                <ProtectedRoute
+                  isAllowed={isAuthorized(authenticated ? authenticated : { data: null })}
+                  redirectPath={`/edit/${authenticated?.id}`}
+                />
+              }
+            >
+              <Route path="/add" element={<AddProduct />} />
+              <Route path="/add/:productId" element={<AddProduct />} />
+              <Route path="/offers" element={<Offers />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

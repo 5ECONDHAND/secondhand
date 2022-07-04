@@ -75,6 +75,13 @@ const EditProfileForm = () => {
   }
 
   useEffect(() => {
+    if (userActive?.city === null) {
+      enqueueSnackbar('You must first complete your profile', {
+        variant: 'warning',
+        autoHideDuration: 3000,
+        preventDuplicate: true,
+      })
+    }
     setValues({
       nama: userActive.fullname ? userActive.fullname : '',
       kota: userActive.city ? userActive.city : '',
@@ -93,7 +100,7 @@ const EditProfileForm = () => {
         navigate('/sales')
       }, 1000)
     } else if (isEditProfileError || editProfileData?.error) {
-      enqueueSnackbar(`${editProfileData.message}`, {
+      enqueueSnackbar(`${editProfileData?.message}`, {
         variant: 'warning',
         autoHideDuration: 3000,
         preventDuplicate: true,

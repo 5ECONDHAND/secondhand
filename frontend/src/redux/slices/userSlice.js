@@ -11,6 +11,7 @@ export const userSlice = createSlice({
     setUserActive: (state, action) => {
       state.userActive = action.payload
     },
+    clearCredentials: () => initialState,
   },
   extraReducers: {},
 })
