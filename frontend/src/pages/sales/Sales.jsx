@@ -75,7 +75,7 @@ const Sales = () => {
               borderRadius: '0.25rem',
               minWidth: 181,
               minHeight: 181,
-              width: { xs: 181, sm: '100%' },
+              width: { xs: '100%' },
               height: { xs: 198, sm: '100%' },
               display: 'flex',
               flexDirection: 'column',

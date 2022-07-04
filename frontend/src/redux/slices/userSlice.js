@@ -9,7 +9,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUserActive: (state, action) => {
-      state.userActive = action.payload
+      state.userActive = { ...state.userActive, ...action.payload }
     },
     clearCredentials: () => initialState,
   },

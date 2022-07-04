@@ -20,7 +20,9 @@ const Router = () => {
 
   const ProtectedRoute = ({ isAllowed, redirectPath, children }) => {
     if (!isAllowed) {
-      return <Navigate to={redirectPath} replace />
+      setTimeout(() => {
+        return <Navigate to={redirectPath} replace />
+      }, 1000)
     }
     return children ? children : <Outlet />
   }
