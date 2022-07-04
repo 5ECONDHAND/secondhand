@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser } from 'react-icons/fi'
-import casio1 from '../../../assets/images/casio1.png'
+import casio1 from '../../../assets/images/dummy-image.jpg'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const SearchField = () => {
@@ -265,34 +265,89 @@ const Navbar = () => {
 
   return (
     <>
-      <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }} >
-        <Container maxWidth='xl' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', gap: '16px', alignItems: 'center', width: '100%', position: 'relative' }}>
-            <Box sx={{ width: '100px', height: '34px', backgroundColor: '#4B1979', cursor: 'pointer', zIndex: 10 }} onClick={() => navigate('/')} />
-            {pathname === '/add' ? '' : pathname === '/edit' ?
-              <Box sx={{ textAlign: 'center', position: 'absolute', left: 0, right: 0, margin: 'auto' }}><Typography variant='subtitle2'>Lengkapi Info Akun</Typography>
-              </Box> :
+      <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }}>
+        <Container
+          maxWidth="xl"
+          sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '16px',
+              alignItems: 'center',
+              width: '100%',
+              position: 'relative',
+            }}
+          >
+            <Box
+              sx={{
+                width: '100px',
+                height: '34px',
+                backgroundColor: '#4B1979',
+                cursor: 'pointer',
+                zIndex: 10,
+              }}
+              onClick={() => navigate('/')}
+            />
+            {pathname === '/add' ? (
+              ''
+            ) : pathname === '/edit' ? (
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  margin: 'auto',
+                }}
+              >
+                <Typography variant="subtitle2">Lengkapi Info Akun</Typography>
+              </Box>
+            ) : (
               <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
                 <SearchField />
-              </Box>}
+              </Box>
+            )}
           </Box>
-          {pathname === '/add' || pathname === '/edit' ? '' :
+          {pathname === '/add' || pathname === '/edit' ? (
+            ''
+          ) : (
             <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
               {user ? <UserButton /> : <LoginButton />}
-            </Box>}
-          {pathname === '/add' || pathname === '/edit' ? '' :
+            </Box>
+          )}
+          {pathname === '/add' || pathname === '/edit' ? (
+            ''
+          ) : (
             <Box display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
-              <FiMenu style={{ cursor: 'pointer' }} size='30px' onClick={() => setShow(!show)} />
-              {show &&
+              <FiMenu style={{ cursor: 'pointer' }} size="30px" onClick={() => setShow(!show)} />
+              {show && (
                 <>
-                  <Box sx={{ position: 'absolute', top: '73px', left: 0, right: 0, margin: 'auto', backgroundColor: '#f7f7f7', height: '40vh', width: '100vw', display: 'flex', justifyContent: 'center', paddingTop: '30px', zIndex: 10 }}>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '73px',
+                      left: 0,
+                      right: 0,
+                      margin: 'auto',
+                      backgroundColor: '#f7f7f7',
+                      height: '40vh',
+                      width: '100vw',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      paddingTop: '30px',
+                      zIndex: 10,
+                    }}
+                  >
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                       <SearchField />
                       {user ? <UserButton /> : <LoginButton />}
                     </Box>
                   </Box>
-                </>}
-            </Box>}
+                </>
+              )}
+            </Box>
+          )}
         </Container>
       </Box>
     </>

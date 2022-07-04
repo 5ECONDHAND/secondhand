@@ -30,7 +30,7 @@ export const validateProduct = (values, err) => {
   temp.harga = /^\d+$/.test(values.harga) ? '' : 'Amount is not valid'
   temp.kategori = values.kategori ? '' : 'Category is required'
   temp.deskripsi = values.deskripsi ? '' : 'Description is required'
-  temp.gambar = values.gambar ? '' : 'Image is required'
+  // temp.gambar = values.gambar ? '' : 'Image is required'
   err({ ...temp })
 
   if (isEmpty(temp)) return true

@@ -56,17 +56,20 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (isRegisterSuccess && registerData.data.length !== 0) {
-      console.log('Data', registerData)
+      console.log('Response', registerData)
       enqueueSnackbar('Registration success', { variant: 'success', autoHideDuration: 1000 })
       setTimeout(() => {
         navigate('/login')
       }, 1000)
     } else if (isRegisterError || registerData?.error) {
-      enqueueSnackbar(`${registerData.message}`, {
-        variant: 'warning',
-        autoHideDuration: 3000,
-        preventDuplicate: true,
-      })
+      if (registerData?.error) {
+        enqueueSnackbar(`${registerData.message}`, {
+          variant: 'warning',
+          autoHideDuration: 3000,
+          preventDuplicate: true,
+        })
+      }
+      console.log('Error', isRegisterError)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerData, isRegisterSuccess, isRegisterLoading, isRegisterError])
