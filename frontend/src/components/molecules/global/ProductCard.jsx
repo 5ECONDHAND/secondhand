@@ -8,8 +8,8 @@ const ProductCard = ({ product }) => {
       <Box
         sx={{
           minWidth: 181,
-          width: { xs: 181, sm: '100%' },
-          height: { xs: 198, sm: '100%' },
+          width: { xs: '100%' },
+          height: { xs: '100%' },
           borderRadius: '0.25rem',
           boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.15)',
           cursor: 'pointer',

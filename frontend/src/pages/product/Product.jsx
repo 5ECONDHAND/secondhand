@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Container, Grid } from '@mui/material'
+import { Container, Grid, Skeleton } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { Navbar, ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
@@ -48,18 +48,46 @@ const Product = () => {
           ) : (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
-                'LOADING'
+                <Skeleton
+                  animation="wave"
+                  variant="rectangular"
+                  width={'100%'}
+                  sx={{ borderRadius: 2 }}
+                >
+                  <ProductSlider />
+                </Skeleton>
               </Grid>
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
-                  'LOADING'
+                  <Skeleton
+                    animation="wave"
+                    variant="rectangular"
+                    width={'100%'}
+                    sx={{ borderRadius: 2 }}
+                  >
+                    <ProductItem />
+                  </Skeleton>
                 </Grid>
                 <Grid item xs={12}>
-                  'LOADING'
+                  <Skeleton
+                    animation="wave"
+                    variant="rectangular"
+                    width={'100%'}
+                    sx={{ borderRadius: 2 }}
+                  >
+                    <ProfileCard />
+                  </Skeleton>
                 </Grid>
               </Grid>
               <Grid item xs={12} sm={12} md={10}>
-                'LOADING'
+                <Skeleton
+                  animation="wave"
+                  variant="rectangular"
+                  width={'100%'}
+                  sx={{ borderRadius: 2 }}
+                >
+                  <ProductDesc />
+                </Skeleton>
               </Grid>
             </>
           )}

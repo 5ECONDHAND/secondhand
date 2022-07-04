@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
 import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
 import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
@@ -86,8 +86,11 @@ const Home = () => {
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
-        {displayLogin()}
-        {userActive ? <>{<h5>'Name',{userActive.fullname || 'null'}</h5>}</> : null}
+        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+          {displayLogin()}
+          {userActive ? <>{<h5>'Name',{userActive.fullname || 'null'}</h5>}</> : null}
+        </div>
+
         {isProductSuccess ? (
           products?.length > 0 ? (
             <>
@@ -97,11 +100,22 @@ const Home = () => {
               <CategoryFilter setDataCategory={setDataCategory} />
             </>
           ) : null
-        ) : null}
+        ) : (
+          <>
+            <Typography variant="h6">
+              <Skeleton width={200} />
+            </Typography>
+            <Stack direction={'row'} spacing={2}>
+              {[...Array(3)].map((_, index) => (
+                <Skeleton key={index} width={100} height={64} />
+              ))}
+            </Stack>
+          </>
+        )}
         <Grid
           container
-          columns={{ xs: 2, sm: 3, md: 4, lg: 6 }}
-          mt={{ xs: '20px', md: '30px' }}
+          columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
+          mt={{ xs: '20px', md: 0 }}
           spacing={3}
         >
           {isProductSuccess ? (
@@ -131,13 +145,17 @@ const Home = () => {
             )
           ) : (
             <>
-              {[1, 2, 3].map((item, index) => (
+              {[...Array(4)].map((_, index) => (
                 <Grid item xs={1} key={index}>
-                  <Skeleton animation="wave" variant="rectangular" width={210} height={140} />
-                  <Box sx={{ pt: 1 }}>
-                    <Skeleton animation="wave" width={210} height={20} />
-                    <Skeleton animation="wave" width="70%" height={20} />
-                  </Box>
+                  <Skeleton
+                    animation="wave"
+                    variant="rectangular"
+                    sx={{
+                      borderRadius: 2,
+                      width: { xs: 181, sm: '100%' },
+                      height: { xs: 198 },
+                    }}
+                  />
                 </Grid>
               ))}
             </>
