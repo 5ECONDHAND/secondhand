@@ -1,3 +1,3 @@
-export { default as Buttons } from './Buttons'
-export { default as CardItem } from './CardItem'
 export { default as Banner } from './Banner'
+export { default as CategoryFilter } from './CategoryFilter'
+export { default as SellCtaButton } from './SellCtaButton'

@@ -11,6 +11,7 @@ import {
   Box,
   Grid,
   Stack,
+  CircularProgress,
 } from '@mui/material'
 import gambar from '../../../assets/images/add.png'
 import { validateProduct } from '../../../utils/validators'
@@ -19,7 +20,10 @@ import {
   usePutProductMutation,
   useGetDataByIdQuery,
 } from '../../../redux/services/productApi'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../../../redux/slices/authSlice'
 
 const styles = {
   '&.MuiButton-root': {
@@ -55,7 +59,9 @@ const img = {
   height: '100%',
 }
 
-const AddProduct = (props) => {
+const AddProductForm = (props) => {
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
   const [error, setError] = useState({})
   const [values, setValues] = useState({
     nama: '',
@@ -63,11 +69,29 @@ const AddProduct = (props) => {
     kategori: '',
     deskripsi: '',
   })
-  const jwtToken = JSON.parse(localStorage.getItem('User')).token
+  const user = useSelector(selectAuth)
   const { productId } = useParams()
 
-  const [postProduct] = usePostProductMutation()
-  const [putProduct] = usePutProductMutation()
+  const [
+    postProduct,
+    {
+      data: postProductData,
+      isLoading: isPostProductLoading,
+      isSuccess: isPostProductSuccess,
+      isError: isPostProductError,
+    },
+  ] = usePostProductMutation()
+
+  const [
+    putProduct,
+    {
+      data: putProductData,
+      isLoading: isPutProductLoading,
+      isSuccess: isPutProductSuccess,
+      isError: isPutProductError,
+    },
+  ] = usePutProductMutation()
+
   const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery(productId)
 
   const handleSubmit = (event) => {
@@ -77,37 +101,41 @@ const AddProduct = (props) => {
       handleAdd(event)
     }
   }
+
   const handleAdd = async (event) => {
-    console.log('submit ok')
+    console.log('adding product...')
     event.preventDefault()
-    validateProduct(values, setError)
-    await postProduct({
-      name: values.nama,
-      price: values.harga,
-      description: values.deskripsi,
-      token: jwtToken,
-    })
-    console.log(values)
-    console.log(error)
+    if (validateProduct(values, setError)) {
+      await postProduct({
+        name: values.nama,
+        price: values.harga,
+        description: values.deskripsi,
+        categoryId: values.kategori,
+        token: user.token,
+      })
+      console.log('product updated')
+    }
   }
 
   const handleUpdate = async (event) => {
-    console.log('update ok')
+    console.log('updating product...')
     event.preventDefault()
-    validateProduct(values, setError)
-    await putProduct({
-      id: productId,
-      name: values.nama,
-      price: values.harga,
-      description: values.deskripsi,
-      token: jwtToken,
-    })
-    console.log(values)
-    console.log(error)
+    if (validateProduct(values, setError)) {
+      await putProduct({
+        id: productId,
+        name: values.nama,
+        price: values.harga,
+        description: values.deskripsi,
+        categoryId: values.kategori,
+        token: user.token,
+      })
+      console.log('product updated')
+    }
   }
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
+    // console.log(values)
   }
 
   const [files, setFiles] = useState([])
@@ -149,11 +177,32 @@ const AddProduct = (props) => {
   ))
 
   useEffect(() => {
+    if (isPostProductSuccess || isPutProductSuccess) {
+      if (productId) {
+        console.log('Response', putProductData)
+        enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
+      } else {
+        console.log('Response', postProductData)
+        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
+      }
+    }
+    if (isPostProductError || isPutProductError) {
+      console.log('Response', isPostProductError)
+      enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPostProductSuccess, isPutProductSuccess, isPostProductError, isPutProductError])
+
+  useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
-
-  // console.log(productData)
 
   return (
     <div className="Form">
@@ -205,11 +254,18 @@ const AddProduct = (props) => {
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
-                <MenuItem value={'Hobi'}>Hobi</MenuItem>
-                <MenuItem value={'Kendaraan'}>Kendaraan</MenuItem>
-                <MenuItem value={'Baju'}>Baju</MenuItem>
-                <MenuItem value={'Elektronik'}>Elektronik</MenuItem>
-                <MenuItem value={'Kesehatan'}>Kesehatan</MenuItem>
+                <MenuItem disabled value="">
+                  <em>
+                    {isProductSuccess && productId
+                      ? productData?.data[0].Categories[0].Category.name
+                      : 'Pilih Kategori'}
+                  </em>
+                </MenuItem>
+                <MenuItem value={1}>Hobi</MenuItem>
+                <MenuItem value={2}>Kendaraan</MenuItem>
+                <MenuItem value={3}>Baju</MenuItem>
+                <MenuItem value={4}>Elektronik</MenuItem>
+                <MenuItem value={5}>Kesehatan</MenuItem>
               </Select>
               <FormHelperText sx={{ m: 0, mb: '1rem' }}>{error.kategori}</FormHelperText>
             </FormControl>
@@ -275,28 +331,36 @@ const AddProduct = (props) => {
         </Grid>
 
         <Stack direction="row" spacing={2} justifyContent={'center'}>
-          <Button fullWidth variant="outlined" size="large" disableElevation sx={styles}>
-            Preview
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            size="large"
-            disableElevation
-            sx={{
-              borderRadius: '1rem',
-              textTransform: 'none',
-              background: '#7126B5',
-              py: '15px',
-            }}
-          >
-            {productId ? 'Update' : 'Terbitkan'}
-          </Button>
+          {isPutProductLoading || isPostProductLoading ? (
+            <Box sx={{ mx: 'auto' }}>
+              <CircularProgress color="secondary" />
+            </Box>
+          ) : (
+            <>
+              <Button fullWidth variant="outlined" size="large" disableElevation sx={styles}>
+                Preview
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                disableElevation
+                sx={{
+                  borderRadius: '1rem',
+                  textTransform: 'none',
+                  background: '#7126B5',
+                  py: '15px',
+                }}
+              >
+                {productId ? 'Update' : 'Terbitkan'}
+              </Button>
+            </>
+          )}
         </Stack>
       </Box>
     </div>
   )
 }
 
-export default AddProduct
+export default AddProductForm
