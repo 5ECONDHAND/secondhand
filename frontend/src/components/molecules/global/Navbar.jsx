@@ -10,14 +10,20 @@ import {
   Grid,
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
-import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser } from 'react-icons/fi'
+import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser, FiLogOut, FiSettings, FiShoppingCart } from 'react-icons/fi'
 import casio1 from '../../../assets/images/dummy-image.jpg'
 import { useNavigate, useLocation } from 'react-router-dom'
+// import { selectUser } from '../../redux/slices/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectUser, userActions } from '../../../redux/slices/userSlice'
+import { authActions } from '../../../redux/slices/authSlice'
 
 const SearchField = () => {
+  const { pathname } = useLocation()
   return (
     <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
       <OutlinedInput
+        disabled={pathname !== '/' ? true : false}
         placeholder="Cari di sini..."
         // onChange={handleChange("nama")}
         sx={{ borderRadius: '16px', height: '48px', backgroundColor: '#EEEEEE', border: 'gray' }}
@@ -55,13 +61,20 @@ const LoginButton = () => {
   )
 }
 
-const UserButton = () => {
+const UserButton = ({ userId }) => {
   const type = ['Menu', 'Notification', 'Account']
   const [active, setActive] = useState('')
   const [popup, setPopup] = useState(false)
   const [notif, setNotif] = useState(true)
+  const [showProfile, setShowProfile] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const dispatch = useDispatch()
+  const logout = () => {
+    dispatch(authActions.clearCredentials())
+    dispatch(userActions.clearCredentials())
+    navigate('/login')
+  }
 
   useEffect(() => {
     if (pathname === '/') setActive('')
@@ -77,6 +90,9 @@ const UserButton = () => {
         // no notification route so direct to /sales if width < 900 (md to sm && xs)
         if (window.innerWidth < 900) return navigate('/sales')
         return setPopup(!popup), setNotif(!notif)
+      case 'Account':
+        if (window.innerWidth < 900) return navigate(`/edit/${userId}`)
+        return setShowProfile(!showProfile)
       default:
         break
     }
@@ -233,7 +249,52 @@ const UserButton = () => {
                   )}
                 </Box>
               ) : (
-                <FiUser size="24px" style={{ color: `${active === item ? '#7126B5' : ''}` }} />
+                <Box sx={{ position: 'relative' }}>
+                  <FiUser size="24px" style={{ color: `${active === item ? '#7126B5' : ''}` }} />
+                  {showProfile && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 30,
+                        right: 0,
+                        padding: '10px',
+                        width: '200px',
+                        background: 'white',
+                        zIndex: '10',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                        borderRadius: '12px',
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)'
+                      }}
+                    >
+                      <Box sx={{
+                        display: 'flex', gap: '10px', alignItems: 'center', ':hover': {
+                          color: '#7126B5',
+                        }
+                      }} onClick={() => navigate(`/edit/${userId}`)}>
+                        <FiSettings />
+                        <Typography>Edit Profile</Typography>
+                      </Box>
+                      <Box sx={{
+                        display: 'flex', gap: '10px', alignItems: 'center', ':hover': {
+                          color: '#7126B5',
+                        }
+                      }}>
+                        <FiShoppingCart />
+                        <Typography>Whishlist</Typography>
+                      </Box>
+                      <Box sx={{
+                        display: 'flex', gap: '10px', alignItems: 'center', ':hover': {
+                          color: '#7126B5',
+                        }
+                      }} onClick={logout}>
+                        <FiLogOut />
+                        <Typography>Logout</Typography>
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
               )}
             </Box>
             <Typography
@@ -252,6 +313,7 @@ const UserButton = () => {
             </Typography>
           </Box>
         ))}
+        <Button sx={{ display: { xs: 'block', md: 'none', backgroundColor: '#7126B5', color: 'white' } }} variant='contained' onClick={logout}>Logout</Button>
       </Box>
     </>
   )
@@ -259,9 +321,15 @@ const UserButton = () => {
 
 const Navbar = () => {
   const [show, setShow] = useState(false)
-  const user = true
+  const user = useSelector(selectUser)
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const [displayMenu, setDisplayMenu] = useState(false)
+  useEffect(() => {
+    if (user) {
+      setDisplayMenu(true)
+    }
+  }, [user])
 
   return (
     <>
@@ -291,7 +359,7 @@ const Navbar = () => {
             />
             {pathname === '/add' ? (
               ''
-            ) : pathname === '/edit' ? (
+            ) : pathname === `/edit/${user?.id}` ? (
               <Box
                 sx={{
                   textAlign: 'center',
@@ -303,20 +371,34 @@ const Navbar = () => {
               >
                 <Typography variant="subtitle2">Lengkapi Info Akun</Typography>
               </Box>
-            ) : (
+            ) : pathname === '/offers' ? (<Box
+              sx={{
+                textAlign: 'center',
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                margin: 'auto',
+              }}
+            >
+              <Typography variant="subtitle2">Info Penawar</Typography>
+            </Box>) : (
               <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
                 <SearchField />
               </Box>
             )}
           </Box>
-          {pathname === '/add' || pathname === '/edit' ? (
+
+          {/* login state */}
+          {pathname === '/add' || pathname === `/edit/${user?.id}` || pathname === '/offers' ? (
             ''
           ) : (
             <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
-              {user ? <UserButton /> : <LoginButton />}
+              {displayMenu ? <UserButton userId={user?.id} /> : <LoginButton />}
             </Box>
           )}
-          {pathname === '/add' || pathname === '/edit' ? (
+
+          {/* under < 900px show box */}
+          {pathname === '/add' || pathname === `/edit/${user?.id}` || pathname === '/offers' ? (
             ''
           ) : (
             <Box display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
@@ -341,7 +423,7 @@ const Navbar = () => {
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                       <SearchField />
-                      {user ? <UserButton /> : <LoginButton />}
+                      {displayMenu ? <UserButton userId={user?.id} /> : <LoginButton />}
                     </Box>
                   </Box>
                 </>
