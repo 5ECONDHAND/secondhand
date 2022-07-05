@@ -36,7 +36,11 @@ async function controller(req, res, next) {
     ...wherePayload,
     include: {
       Transactions: true,
-      Photos: true,
+      Photos: {
+        include: {
+          Storage: true
+        }
+      },
       Notifications: true,
       Products: true
     }

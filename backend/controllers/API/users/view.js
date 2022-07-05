@@ -35,7 +35,11 @@ async function controller(req, res, next) {
     },
     include: {
       Transactions: true,
-      Photos: true,
+      Photos: {
+        include: {
+          Storage: true
+        }
+      },
       Notifications: true,
       Products: true
     }

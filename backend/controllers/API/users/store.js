@@ -35,12 +35,32 @@ async function controller(req, res, next) {
   ? crypto.createHash('sha512').update(req.body.password).digest('hex')
   : null;
 
+  const dataPayload = {
+    email: req.body.email,
+    fullname: req.body.fullname,
+    password: hash
+  }
+
+  if(
+    req.files != null
+    && Array.isArray(req.files)
+    && req.files.length > 0
+  ) {
+    dataPayload.Photos = {
+      create: [{
+        Storage: {
+          create: {
+            filename: req.files[0].filename,
+            mimetype: req.files[0].mimetype,
+            size: req.files[0].size
+          }
+        }
+      }]
+    };
+  }
+
   const data = await prisma.user.create({
-    data: {
-      email: req.body.email,
-      fullname: req.body.fullname,
-      password: hash
-    }
+    data: dataPayload
   }).catch(err => {
     return {
       error: true,
