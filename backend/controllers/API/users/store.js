@@ -39,6 +39,27 @@ async function controller(req, res, next) {
     }
   });
 
+  if(req.files != null
+    && Array.isArray(req.files)
+    && req.files.length > 0
+    && dataPayLoad != null
+    )
+    {
+      dataPayLoad.data.Photos = {
+        create: []
+      }
+    }
+
+  dataPayLoad.data.Photos.create.push({
+    Storage:{
+      create: {
+        filename: req.files.filename,
+        mimetype: req.files.mimetype,
+        size: req.files.size
+      }
+    }
+  })
+
   if(data && data.error){
     return res.json(data)
   }

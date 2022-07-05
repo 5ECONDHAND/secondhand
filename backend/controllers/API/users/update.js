@@ -35,6 +35,29 @@ async function controller(req, res, next) {
   //remove key with null value
   dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
 
+  
+  if(req.files != null
+    && Array.isArray(req.files)
+    && req.files.length > 0
+    && dataPayLoad != null
+    )
+    {
+      dataPayLoad.data.Photos = {
+        deleteMany: {},
+        create: []
+      }
+    }
+
+  dataPayLoad.data.Photos.create.push({
+    Storage:{
+      create: {
+        filename: req.files.filename,
+        mimetype: req.files.mimetype,
+        size: req.files.size
+      }
+    }
+  })
+
   const data = await prisma.user.update({
     where: {
       id
