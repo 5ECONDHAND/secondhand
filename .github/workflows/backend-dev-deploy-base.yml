@@ -1,4 +1,4 @@
-name: Deployment Heroku DEV STAGE
+name: Deployment Heroku DEV STAGE (base)
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
     types: [closed]
 
 jobs:
-  deploy:
+  deploy_base:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

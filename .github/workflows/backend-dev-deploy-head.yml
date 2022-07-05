@@ -1,4 +1,4 @@
-name: Deployment Heroku DEV STAGE
+name: Deployment Heroku DEV STAGE (head)
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  deploy:
+  deploy_head:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
