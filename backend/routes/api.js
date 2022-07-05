@@ -12,6 +12,7 @@ var notificationCRUD = require(path.join(rootController, 'notifications'));
 var categoryCRUD = require(path.join(rootController, 'categories'));
 var transactionCRUD = require(path.join(rootController, 'transactions'));
 var productCRUD = require(path.join(rootController, 'products'));
+var storageCRUD = require(path.join(rootController, 'storages'));
 
 var auth = require(path.join(rootController, 'auth'));
 
@@ -52,6 +53,15 @@ router.post('/products', productCRUD.store);
 router.put('/products/:id', productCRUD.update);
 router.patch('/products/:id', productCRUD.update);
 router.delete('/products/:id', productCRUD.destroy);
+
+router.get('/storages', storageCRUD.all);
+router.get('/storages/:id', storageCRUD.view);
+router.post('/storages', storageCRUD.store);
+router.put('/storages/:id', storageCRUD.update);
+router.patch('/storages/:id', storageCRUD.update);
+router.delete('/storages/:id', storageCRUD.destroy);
+router.get('/storages/:id/preview', storageCRUD.preview);
+
 
 // catch 404 and respond json
 router.all('/*', nfHandler);
