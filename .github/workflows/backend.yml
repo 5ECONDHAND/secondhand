@@ -16,8 +16,7 @@ jobs:
       - name: "deploy from head_ref"
         # if event type synchronize, opened, and reopened
         if:
-          - event.type in [synchronize, opened, reopened]
-          - event.branch == 'develop'
+          - contains(fromJson('["opened", "synchronize", "reopened"]'), github.event.action)
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.DEV_HEROKU_API_KEY}}
@@ -28,8 +27,7 @@ jobs:
       - name: "deploy from base_ref"
         # if event type closed
         if:
-          - event.type == 'closed'
-          - event.branch == 'develop'
+          - contains(fromJson('["closed"]'), github.event.action)
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.DEV_HEROKU_API_KEY}}
