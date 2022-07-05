@@ -32,7 +32,7 @@ async function controller(req, res, next) {
   var dataPayload = {
     updatedAt: new Date(),
     filename: req.body.filename,
-    size: req.body.size,
+    size: parseInt(req.body.size),
     mimetype: req.body.mimetype,
   };
   //remove key with null value
