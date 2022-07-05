@@ -36,10 +36,14 @@ async function controller(req, res, next) {
           updatedAt: true
         }
       },
-      Photos: true,
+      Photos: {
+        include: {
+          Storage: true
+        }
+      },
       Categories: {
-        'include': {
-          'Category': true
+        include: {
+          Category: true
         }
       },
       Transaction: true,
