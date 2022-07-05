@@ -20,23 +20,6 @@ async function controller(req, res, next) {
 
   var wherePayload = null;
 
-  if (req.userId) {
-    wherePayload = {
-      where: {
-        AND: [
-          {
-            id: id,
-          },
-          {
-            Product: {
-              userId: req.userId,
-            },
-          },
-        ],
-      },
-    };
-  }
-
   if (req.isAdmin) {
     wherePayload = {
       where: {
@@ -53,7 +36,7 @@ async function controller(req, res, next) {
     });
   }
 
-  const data = await prisma.storage.deleteMany({
+  const data = await prisma.storage.delete({
     ...wherePayload,
   }).catch((err) => {
     return {

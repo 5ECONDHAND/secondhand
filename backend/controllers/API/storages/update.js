@@ -7,7 +7,6 @@ const prisma = require(process.env.ROOT_PATH + "/models/instance");
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
-
 async function controller(req, res, next) {
   // @section checking id
   var id = parseInt(req.params.id);
@@ -20,30 +19,8 @@ async function controller(req, res, next) {
     });
   }
 
-  // @section checking authorization
-  const existingData = await prisma.storage.findFirst({
-    where: {
-      id: id
-    },
-    select: {
-      id: true
-    }
-  }).catch((err) => {
-    return {
-      error: true,
-      message: err.message,
-      data: [],
-    };
-  });
-
-  if (existingData && existingData.error) {
-    return res.json(existingData);
-  }
-
-  if (
-    req.userId != existingData.userId
-    && !req.isAdmin
-  ) {
+  // @section check authorization
+  if (!req.isAdmin) {
     return res.json({
       error: true,
       message: "Unauthorized access",
@@ -61,11 +38,10 @@ async function controller(req, res, next) {
   //remove key with null value
   dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
 
-
   // @section update storage
   const data = await prisma.storage.update({
     where: {
-      id: id
+      id: id,
     },
     data: dataPayload,
   }).catch((err) => {

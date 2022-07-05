@@ -1,5 +1,8 @@
 /** @type {import('../../../models/instance')} */
 const prisma = require(process.env.ROOT_PATH + "/models/instance");
+const path = require("path");
+const storagePATH = path.join(process.env.ROOT_PATH, "storage");
+const fs = require("fs");
 
 /**
  *
@@ -10,18 +13,18 @@ const prisma = require(process.env.ROOT_PATH + "/models/instance");
 async function controller(req, res, next) {
   var id = parseInt(req.params.id);
 
+  var wherePayload = {
+    id: id,
+  };
+
   if (isNaN(id)) {
-    return res.json({
-      error: true,
-      message: "Invalid id",
-      data: [],
-    });
+    wherePayload = {
+      filename: req.params.id
+    }
   }
 
   const data = await prisma.storage.findFirst({
-    where: {
-      id,
-    }
+    where: wherePayload
   }).catch((err) => {
     return {
       error: true,
@@ -34,11 +37,18 @@ async function controller(req, res, next) {
     return res.json(data);
   }
 
-  res.json({
-    error: false,
-    message: "Success",
-    data: [data],
-  });
+  if (!data) {
+    return res.json({
+      error: true,
+      message: "Storage not found",
+      data: [],
+    });
+  }
+
+  // set contenttype of response
+  res.contentType(data.mimetype || "application/octet-stream");
+  // read file from data.filename, then stream to response
+  fs.createReadStream(path.join(storagePATH, data.filename)).pipe(res);
 }
 
 module.exports = controller;

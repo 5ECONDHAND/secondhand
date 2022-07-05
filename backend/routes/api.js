@@ -60,6 +60,7 @@ router.post('/storages', storageCRUD.store);
 router.put('/storages/:id', storageCRUD.update);
 router.patch('/storages/:id', storageCRUD.update);
 router.delete('/storages/:id', storageCRUD.destroy);
+router.get('/storages/:id/preview', storageCRUD.preview);
 
 
 // catch 404 and respond json

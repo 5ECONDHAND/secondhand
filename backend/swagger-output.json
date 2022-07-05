@@ -245,6 +245,13 @@
         "parameters": [],
         "responses": {}
       }
+    },
+    "/storages/{id}/preview": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     }
   }
 }
