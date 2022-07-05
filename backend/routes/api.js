@@ -10,6 +10,14 @@ var nfHandler = require(path.join(rootController, '/nf'));
 var userCRUD = require(path.join(rootController, 'users'));
 var notificationCRUD = require(path.join(rootController, 'notifications'));
 var categoryCRUD = require(path.join(rootController, 'categories'));
+var transactionCRUD = require(path.join(rootController, 'transactions'));
+var productCRUD = require(path.join(rootController, 'products'));
+var storageCRUD = require(path.join(rootController, 'storages'));
+
+var auth = require(path.join(rootController, 'auth'));
+
+router.post('/login', auth.login);
+router.post('/register', auth.register);
 
 router.get('/users', userCRUD.all);
 router.get('/users/:id', userCRUD.view);
@@ -27,10 +35,33 @@ router.delete('/notifications/:id', notificationCRUD.destroy);
 
 router.get('/categories', categoryCRUD.all);
 router.get('/categories/:id', categoryCRUD.view);
-router.post('/categories/:id', categoryCRUD.store);
-router.put('/categories/', categoryCRUD.update);
-router.patch('/categories/', categoryCRUD.update);
+router.post('/categories', categoryCRUD.store);
+router.put('/categories/:id', categoryCRUD.update);
+router.patch('/categories/:id', categoryCRUD.update);
 router.delete('/categories/:id', categoryCRUD.destroy);
+
+router.get('/transactions', transactionCRUD.all);
+router.get('/transactions/:id', transactionCRUD.view);
+router.post('/transactions', transactionCRUD.store);
+router.put('/transactions/:id', transactionCRUD.update);
+router.patch('/transactions/:id', transactionCRUD.update);
+router.delete('/transactions/:id', transactionCRUD.destroy);
+
+router.get('/products', productCRUD.all);
+router.get('/products/:id', productCRUD.view);
+router.post('/products', productCRUD.store);
+router.put('/products/:id', productCRUD.update);
+router.patch('/products/:id', productCRUD.update);
+router.delete('/products/:id', productCRUD.destroy);
+
+router.get('/storages', storageCRUD.all);
+router.get('/storages/:id', storageCRUD.view);
+router.post('/storages', storageCRUD.store);
+router.put('/storages/:id', storageCRUD.update);
+router.patch('/storages/:id', storageCRUD.update);
+router.delete('/storages/:id', storageCRUD.destroy);
+router.get('/storages/:id/preview', storageCRUD.preview);
+
 
 // catch 404 and respond json
 router.all('/*', nfHandler);

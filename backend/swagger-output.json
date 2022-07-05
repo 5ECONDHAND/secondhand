@@ -7,7 +7,6 @@
   },
   "host": "localhost:3000",
   "basePath": "/api",
-  "tags": [],
   "schemes": [
     "http",
     "https"
@@ -29,15 +28,27 @@
     "application/json"
   ],
   "paths": {
+    "/login": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/register": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/users": {
       "get": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -45,25 +56,21 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "put": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "patch": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "delete": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -71,13 +78,11 @@
     },
     "/notifications": {
       "get": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -85,30 +90,168 @@
     },
     "/notifications/{id}": {
       "get": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "put": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "patch": {
-        "tags": [],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "delete": {
-        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/categories": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/transactions": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/products": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/storages": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/storages/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/storages/{id}/preview": {
+      "get": {
         "description": "",
         "parameters": [],
         "responses": {}
       }
     }
-  },
-  "definitions": {}
+  }
 }

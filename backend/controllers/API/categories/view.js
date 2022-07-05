@@ -9,22 +9,35 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  */
 async function controller(req, res, next) {
   var id = parseInt(req.params.id);
+
   if(isNaN(id)){
     return res.json({
-        error: true,
-        message: "Invalid id",
-        data: []
+      error: true,
+      message: "Invalid id",
+      data: []
     })
   }
+
+  var includePayload = {};
+
+  if (req.isAdmin) {
+    includePayload = {
+      include: {
+        Products: true
+      }
+    };
+  }
+
   const data = await prisma.category.findFirst({
-    where:{
-        id
-    }
+    where: {
+      id
+    },
+    ...includePayload,
   }).catch(err=>{
     return{
-        error: true,
-        message: err.message,
-        data: []
+      error: true,
+      message: err.message,
+      data: []
     }
   });
 
@@ -33,9 +46,9 @@ async function controller(req, res, next) {
   }
 
   res.json({
-    error:false,
+    error: false,
     message: 'Success',
-    data: []
+    data: [data]
   })
 }
 

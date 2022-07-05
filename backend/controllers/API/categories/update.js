@@ -19,6 +19,14 @@ async function controller(req, res, next) {
     })
   }
 
+  if(!req.isAdmin) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
   var dataPayload = {
     name: req.body.name,
     updatedAt: new Date(),

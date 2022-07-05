@@ -1,0 +1,8 @@
+{
+    "github-actions.workflows.pinned.workflows": [
+        ".github/workflows/backend-dev-deploy-base.yml",
+        ".github/workflows/backend-dev-deploy-head.yml"
+    ],
+    "github-actions.workflows.pinned.refresh.enabled": true,
+    "github-actions.workflows.pinned.refresh.interval": 65,
+}

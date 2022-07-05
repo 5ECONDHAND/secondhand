@@ -1,5 +1,5 @@
 /** @type {import('../../../models/instance')} */
-const prisma = require(process.env.ROOT_PATH + '/models/instance');
+const prisma = require(process.env.ROOT_PATH + "/models/instance");
 
 /**
  *
@@ -8,54 +8,149 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  * @param {import('express').NextFunction} next
  */
 
-async function controller(req, res, next){
-    var id = parseInt(req.params.id);
+async function controller(req, res, next) {
+  // @section checking id
+  var id = parseInt(req.params.id);
 
-    if(isNaN(id)){
-        return res.json({
-            error: true,
-            message: "Invalid ID",
-            data: [],
-        })
+  if (isNaN(id)) {
+    return res.json({
+      error: true,
+      message: "Invalid id",
+      data: [],
+    });
+  }
+
+  // @section checking authorization
+  const existingData = await prisma.product.findFirst({
+    where: {
+      id: id
+    },
+    select: {
+      id: true,
+      userId: true
     }
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
 
-    var dataPayload = {
-        updatedAt: new Date(),
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        User:{
-            connect:{
-                id: req.userId,
-            }
-        },
+  if (existingData && existingData.error) {
+    return res.json(existingData);
+  }
+
+  if (
+    req.userId != existingData.userId
+    && !req.isAdmin
+  ) {
+    return res.json({
+      error: true,
+      message: "Unauthorized access",
+      data: [],
+    });
+  }
+
+  // @section data builder
+  var dataPayload = {
+    updatedAt: new Date(),
+    name: req.body.name,
+    price: req.body.price,
+    status: req.body.status,
+    description: req.body.description,
+  };
+  //remove key with null value
+  dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
+
+  // @section Categories builder
+  if (
+    req.body.categories != null
+    && Array.isArray(req.body.categories)
+    && req.body.categories.length > 0
+  ) {
+    dataPayload.Categories = {
+      deleteMany: {},
+      connectOrCreate: []
     };
 
-    //remove key with null value
-    dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
+    var errorInLoop = false;
+    for (var i = 0; i < req.body.categories.length; i++) {
+      var categoryId = parseInt(req.body.categories[i]);
+      if (isNaN(categoryId)) {
+        errorInLoop = 'Invalid category id';
+        break;
+      }
 
-    const data = await prisma.product.update({
-        where:{
-            id
+      dataPayload.Categories.connectOrCreate.push({
+        create: {
+          categoryId
         },
-        data: dataPayload
-    }).catch(err=>{
-        return{
-            error: true,
-            message: err.message,
-            data:[]
+        where: {
+          categoryId_productId: {
+            categoryId,
+            productId: id
+          }
         }
-    });
-
-    if(data && data.error){
-        return res.json(data)
+      })
     }
 
-    req.json({
-        error: false,
-        message: "Product Updated",
-        data: [data],
-    })
+
+    if (errorInLoop) {
+      return res.json({
+        error: true,
+        message: errorInLoop,
+        data: [],
+      });
+    }
+  }
+
+  if (
+    req.files != null
+    && Array.isArray(req.files)
+    && req.files.length > 0
+  ) {
+    dataPayload.Photos = {
+      deleteMany: {},
+      create: []
+    };
+
+    for (var i = 0; i < req.files.length; i++) {
+      dataPayload.Photos.create.push({
+        Storage: {
+          create: {
+            filename: req.files[i].filename,
+            mimetype: req.files[i].mimetype,
+            size: req.files[i].size
+          }
+        }
+      });
+    }
+  }
+
+  // @section update product
+  const data = await prisma.product.update({
+    where: {
+      id: id
+    },
+    data: dataPayload,
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
+
+  if (data && data.error) {
+    return res.json(data);
+  }
+
+  res.json({
+    error: false,
+    message: "Product updated",
+    data: [data],
+  });
 }
 
 module.exports = controller;

@@ -7,38 +7,46 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
-
 async function controller(req, res, next){
-    var id = parseInt(req.params.id);
+  var id = parseInt(req.params.id);
 
-    if(isNaN(id)){
-        return res.json({
-            error: true,
-            message: 'Invalid id',
-            data: [],
-        })
-    }
-    const data = await prisma.category.delete({
-        where:{
-            id
-        }
-    }).catch(err =>{
-        return{
-            error: true,
-            message: err.message,
-            data: []
-        }
-    });
-
-    if(data && data.error){
-        return res.json(data)
-    }
-
-    res.json({
-        error: false,
-        message: 'Category deleted',
-        data: [],
+  if(isNaN(id)){
+    return res.json({
+      error: true,
+      message: 'Invalid id',
+      data: [],
     })
+  }
+
+  if(!req.isAdmin) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
+  const data = await prisma.category.delete({
+    where:{
+      id
+    }
+  }).catch(err =>{
+    return{
+      error: true,
+      message: err.message,
+      data: []
+    }
+  });
+
+  if(data && data.error){
+    return res.json(data)
+  }
+
+  res.json({
+    error: false,
+    message: 'Category deleted',
+    data: [data],
+  })
 }
 
 module.exports = controller;
