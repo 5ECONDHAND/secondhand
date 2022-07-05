@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const userApi = createApi({
   reducerPath: 'editApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://127.0.0.1:3000/api',
+    baseUrl: 'https://febesh5-dev.herokuapp.com/api',
   }),
   endpoints: (builder) => ({
     getUserById: builder.query({

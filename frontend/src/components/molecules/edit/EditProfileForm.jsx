@@ -1,16 +1,29 @@
-import { useState } from 'react'
-import { FormControl, FormHelperText, OutlinedInput, Button, Box, Grid } from '@mui/material'
+import { useState, useEffect } from 'react'
+import {
+  FormControl,
+  FormHelperText,
+  OutlinedInput,
+  Button,
+  Box,
+  Grid,
+  CircularProgress,
+} from '@mui/material'
 import { validateProfile } from '../../../utils/validators'
 import gambar from '../../../assets/images/Profile.png'
-
+import { useDispatch } from 'react-redux'
+import { useSnackbar } from 'notistack'
+import { useNavigate } from 'react-router-dom'
 import { useEditProfileMutation } from '../../../redux/services/userApi'
-import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
+import { selectUser } from '../../../redux/slices/userSlice'
+import { userActions } from '../../../redux/slices/userSlice'
 
 const EditProfileForm = () => {
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [preview, setPreview] = useState(null)
-
   const [error, setError] = useState({})
   const [values, setValues] = useState({
     nama: '',
@@ -19,21 +32,30 @@ const EditProfileForm = () => {
     nomor: '',
   })
   const user = useSelector(selectAuth)
-  const [editProfile] = useEditProfileMutation()
+  const userActive = useSelector(selectUser)
+
+  const [
+    editProfile,
+    {
+      data: editProfileData,
+      isLoading: isEditProfileLoading,
+      isSuccess: isEditProfileSuccess,
+      isError: isEditProfileError,
+    },
+  ] = useEditProfileMutation()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    validateProfile(values, setError)
-    await editProfile({
-      id: user.id,
-      fullname: values.nama,
-      city: values.kota,
-      address: values.alamat,
-      phoneNo: values.nomor,
-      token: user.token,
-    })
-    console.log(values)
-    console.log(error)
+    if (validateProfile(values, setError)) {
+      await editProfile({
+        id: user.id,
+        token: user.token,
+        fullname: values.nama,
+        city: values.kota,
+        address: values.alamat,
+        phoneNo: values.nomor,
+      })
+    }
   }
 
   const handleChange = (prop) => (event) => {
@@ -51,6 +73,41 @@ const EditProfileForm = () => {
       reader.readAsDataURL(selected)
     }
   }
+
+  useEffect(() => {
+    if (userActive?.city === null) {
+      enqueueSnackbar('You must first complete your profile', {
+        variant: 'warning',
+        autoHideDuration: 3000,
+        preventDuplicate: true,
+      })
+    }
+    setValues({
+      nama: userActive.fullname ? userActive.fullname : '',
+      kota: userActive.city ? userActive.city : '',
+      alamat: userActive.address ? userActive.address : '',
+      nomor: userActive.phoneNo ? userActive.phoneNo : '',
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (isEditProfileSuccess) {
+      console.log('Response', editProfileData)
+      dispatch(userActions.setUserActive(editProfileData.data[0]))
+      enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
+      setTimeout(() => {
+        navigate('/sales')
+      }, 1000)
+    } else if (isEditProfileError || editProfileData?.error) {
+      enqueueSnackbar(`${editProfileData?.message}`, {
+        variant: 'warning',
+        autoHideDuration: 3000,
+        preventDuplicate: true,
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editProfileData, isEditProfileSuccess, isEditProfileLoading, isEditProfileError])
 
   return (
     <div>
@@ -143,6 +200,7 @@ const EditProfileForm = () => {
                 error={error.alamat ? true : false}
                 type="text"
                 placeholder="Contoh: Jalan Ikan Hiu 33"
+                value={values.alamat}
                 onChange={handleChange('alamat')}
                 sx={{ borderRadius: '1rem' }}
                 multiline
@@ -169,21 +227,27 @@ const EditProfileForm = () => {
           </Grid>
           <Grid item>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                size="large"
-                disableElevation
-                sx={{
-                  borderRadius: '1rem',
-                  textTransform: 'none',
-                  background: '#7126B5',
-                  py: '15px',
-                }}
-              >
-                Simpan
-              </Button>
+              {isEditProfileLoading ? (
+                <Box sx={{ mx: 'auto' }}>
+                  <CircularProgress color="secondary" />
+                </Box>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                  sx={{
+                    borderRadius: '1rem',
+                    textTransform: 'none',
+                    background: '#7126B5',
+                    py: '15px',
+                  }}
+                >
+                  Simpan
+                </Button>
+              )}
             </FormControl>
           </Grid>
         </Grid>

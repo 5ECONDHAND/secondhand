@@ -82,7 +82,7 @@ const Auth = () => {
         >
           <Box>
             <Typography
-              variant="h4"
+              variant="h3"
               sx={{
                 display: { xs: 'block', md: 'none' },
                 fontWeight: 'bold',
@@ -92,7 +92,9 @@ const Auth = () => {
             >
               Second <br /> Hand.
             </Typography>
-            <h1 style={{ marginBottom: '2rem' }}>{status}</h1>
+            <Typography variant="h4" sx={{ mb: '2rem', fontWeight: 700 }}>
+              {status}
+            </Typography>
             {status === 'Masuk' ? (
               <>
                 <LoginForm />

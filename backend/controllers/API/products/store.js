@@ -7,7 +7,6 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
-
 async function controller(req, res, next){
     if(
         !req.body.name
@@ -82,6 +81,29 @@ async function controller(req, res, next){
           }
         }
       };
+    }
+
+    if (
+      req.files != null
+      && Array.isArray(req.files)
+      && req.files.length > 0
+      && dataPayload != null
+    ) {
+      dataPayload.data.Photos = {
+        create: []
+      };
+
+      for (var i = 0; i < req.files.length; i++) {
+        dataPayload.data.Photos.create.push({
+          Storage: {
+            create: {
+              filename: req.files[i].filename,
+              mimetype: req.files[i].mimetype,
+              size: req.files[i].size
+            }
+          }
+        });
+      }
     }
 
     if (dataPayload === null) {

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { FiSearch } from 'react-icons/fi'
 
-const Buttons = () => {
+const CategoryFilter = ({ setDataCategory }) => {
   const [active, setActive] = useState('Semua')
   const type = ['Semua', 'Hobi', 'Kendaraan', 'Baju', 'Elektronik', 'Kesehatan']
   const handleActive = (name) => {
     setActive(name)
+    setDataCategory(name)
   }
 
   return (
@@ -39,4 +40,4 @@ const Buttons = () => {
   )
 }
 
-export default Buttons
+export default CategoryFilter

@@ -3,6 +3,7 @@ import { productApi } from '../services/productApi'
 
 const initialState = {
   products: null,
+  productActive: null,
 }
 
 export const productSlice = createSlice({
@@ -11,6 +12,9 @@ export const productSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload
+    },
+    setProductActive: (state, action) => {
+      state.productActive = action.payload
     },
   },
   extraReducers: (builder) => {
