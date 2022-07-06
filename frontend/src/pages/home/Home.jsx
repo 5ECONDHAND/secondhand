@@ -60,6 +60,7 @@ const Home = () => {
   const logout = () => {
     dispatch(authActions.clearCredentials())
     dispatch(userActions.clearCredentials())
+    dispatch(productActions.clearProductWishlist())
     navigate('/login')
   }
 

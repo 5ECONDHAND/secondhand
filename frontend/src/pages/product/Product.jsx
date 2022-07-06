@@ -4,16 +4,25 @@ import { useParams } from 'react-router-dom'
 import { Navbar, ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, selectProductActive } from '../../redux/slices/productSlice'
 
 const Product = () => {
   const { id } = useParams()
+  const dispatch = useDispatch()
   const { data: productData, isSuccess } = useGetDataByIdQuery(id)
+  // const productActive = useSelector(selectProductActive)
+
+  const fillProductActive = () => {
+    dispatch(productActions.setProductActive(productData?.data[0]))
+  }
 
   useEffect(() => {
     if (isSuccess) {
+      fillProductActive()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData])
+  }, [isSuccess])
 
   return (
     <>
@@ -29,9 +38,11 @@ const Product = () => {
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
                   <ProductItem
                     type="buyer"
-                    productName={productData?.data[0].name}
-                    productCategory={productData?.data[0].Categories[0].Category.name}
-                    productPrice={productData?.data[0].price}
+                    product={productData?.data[0]}
+                    // product={productData?.data[0]}
+                    // productName={productData?.data[0].name}
+                    // productCategory={productData?.data[0].Categories[0].Category.name}
+                    // productPrice={productData?.data[0].price}
                   />
                 </Grid>
                 <Grid item xs={12}>
