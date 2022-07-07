@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useDropzone } from 'react-dropzone'
 import {
   FormControl,
   FormHelperText,
   OutlinedInput,
+  Alert,
   Button,
   Box,
   Grid,
@@ -19,12 +21,36 @@ import { selectAuth } from '../../../redux/slices/authSlice'
 import { selectUser } from '../../../redux/slices/userSlice'
 import { userActions } from '../../../redux/slices/userSlice'
 
+const thumb = {
+  display: 'inline-flex',
+  borderRadius: 2,
+  border: '1px solid #eaeaea',
+  marginBottom: 10,
+  marginTop: 10,
+  width: 96,
+  height: 96,
+  padding: 4,
+  boxSizing: 'border-box',
+}
+
+const thumbInner = {
+  display: 'flex',
+  minWidth: 0,
+  overflow: 'hidden',
+}
+
+const img = {
+  display: 'block',
+  width: 'auto',
+  height: '100%',
+}
+
 const EditProfileForm = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [preview, setPreview] = useState(null)
   const [error, setError] = useState({})
+  const [files, setFiles] = useState([])
   const [values, setValues] = useState({
     nama: '',
     kota: '',
@@ -33,7 +59,6 @@ const EditProfileForm = () => {
   })
   const user = useSelector(selectAuth)
   const userActive = useSelector(selectUser)
-
   const [
     editProfile,
     {
@@ -47,13 +72,20 @@ const EditProfileForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (validateProfile(values, setError)) {
+      const editData = new FormData()
+      editData.append("Photos", files[0])
+      editData.append("fullname", values.nama)
+      editData.append("city", values.kota)
+      editData.append("address", values.alamat)
+      editData.append("phoneNo", values.nomor)
+      // for (var t of editData.entries()){
+      //   console.log(t[0] + ', ' + t[1]);
+      // }
+      console.log(editData.get('Photos'));
       await editProfile({
         id: user.id,
         token: user.token,
-        fullname: values.nama,
-        city: values.kota,
-        address: values.alamat,
-        phoneNo: values.nomor,
+        editData
       })
     }
   }
@@ -62,17 +94,42 @@ const EditProfileForm = () => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  const handleImage = (e) => {
-    const selected = e.target.files[0]
-    const types = ['image/png', 'image/jpeg', 'image/jpg']
-    if (selected && types.includes(selected.type)) {
-      let reader = new FileReader()
-      reader.onloadend = () => {
-        setPreview(reader.result)
-      }
-      reader.readAsDataURL(selected)
-    }
-  }
+  const { fileRejections, getRootProps, getInputProps } = useDropzone({
+    maxFiles: 1,
+    accept: {
+      'image/*': [],
+    },
+    onDrop: (acceptedFiles) => {
+      setFiles(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      )
+      console.log(acceptedFiles)
+    },
+  })
+
+  const fileRejectionItems = fileRejections.map(() => {
+    return <div></div>
+  })
+
+  const thumbs = files.map((file) => (
+    <div style={thumb} key={file.name}>
+      <div style={thumbInner}>
+        <img
+          src={file.preview}
+          style={img}
+          // Revoke data uri after image is loaded
+          onLoad={() => {
+            URL.revokeObjectURL(file.preview)
+          }}
+          alt=""
+        />
+      </div>
+    </div>
+  ))
 
   useEffect(() => {
     if (userActive?.city === null) {
@@ -109,59 +166,51 @@ const EditProfileForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editProfileData, isEditProfileSuccess, isEditProfileLoading, isEditProfileError])
 
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
+  }, [files])
+
   return (
     <div>
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
         <Grid container direction="column">
-          <Grid item>
-            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-              {!preview && (
-                <Button
-                  variant="contained"
-                  component="label"
-                  onChange={handleImage}
-                  disableElevation
-                  sx={{
-                    background: '#E2D4F0',
-                    border: 'none',
-                    borderRadius: '12px',
-                    ':hover': { background: '#E2D4F0' },
-                    width: '96px',
-                    height: '96px',
-                  }}
-                >
-                  <img src={gambar} alt="" />
-                  <input type="file" hidden />
-                </Button>
-              )}
-            </Box>
-            {preview ? (
-              <>
-                <Button
-                  variant="contained"
-                  component="label"
-                  onChange={handleImage}
-                  disableElevation
-                  sx={{
-                    background: 'transparent',
-                    border: 'none',
-                    ':hover': { background: '#ebebeb' },
-                  }}
-                >
-                  <img
-                    src={preview}
-                    alt=""
-                    style={{
-                      width: '96px',
-                      height: '96px',
+        <Grid item>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
+              <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
+                Foto Produk
+              </FormHelperText>
+              <Box
+                {...getRootProps()}
+                sx={{
+                  mb: '1rem',
+                  maxWidth: { xs: '9ch', md: '9ch', lg: '9ch' },
+                  cursor: 'pointer',
+                }}
+              >
+                <input {...getInputProps()} />
+                {files.length !== 0 ? (
+                  <Box
+                    sx={{
+                      border: '1px dashed #D0D0D0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                      minWidth: { xs: '30ch', md: '40ch', lg: '50ch' },
                     }}
-                  />
-                  <input type="file" hidden />
-                </Button>
-              </>
-            ) : (
-              ''
-            )}
+                  >
+                    {thumbs}
+                  </Box>
+                ) : (
+                  <img src={gambar} alt="" />
+                )}
+              </Box>
+              {fileRejectionItems[0] && (
+                <Box sx={{ mb: '1rem' }}>
+                  <Alert severity="error">Maksimal 1 Gambar</Alert>
+                </Box>
+              )}
+            </FormControl>
           </Grid>
           <Grid item>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
