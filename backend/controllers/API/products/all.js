@@ -44,8 +44,32 @@ async function controller(req, res, next) {
     };
   }
 
+  
+  const wherePayload = {
+    where:{
+      OR: []
+    }
+  };
+
+  if(req.query.name != null){
+    wherePayload.where.OR.push({
+      name : req.query.name
+    })
+  }
+
+  if(req.query.categoryId != null){
+    wherePayload.where.OR.push({
+      Categories :{
+        every :{
+          categoryId : parseInt(req.query.categoryId)
+        }
+      }
+    })
+  }
+  
+
   const data = await prisma.product.findMany({
-    ...advanceLogicPayload,
+    ...advanceLogicPayload, ...wherePayload,
     include: {
       User: {
         select: {
