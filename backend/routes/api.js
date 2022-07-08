@@ -67,6 +67,7 @@ router.post('/bids', bidCRUD.store);
 router.put('/bids/:id', bidCRUD.update);
 router.patch('/bids/:id', bidCRUD.update);
 router.delete('/bids/:id', bidCRUD.destroy);
+router.post('/bids/accept', bidCRUD.accept);
 
 
 // catch 404 and respond json
