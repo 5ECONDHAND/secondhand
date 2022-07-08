@@ -26,6 +26,7 @@ async function controller(req, res, next) {
         select: {
           id: true,
           name: true,
+          status: true,
           price: true,
           description: true,
           createdAt: true,
@@ -44,11 +45,12 @@ async function controller(req, res, next) {
               phoneNo: true,
               fullname: true,
               email: true,
+              city: true,
+              address: true,
               Photos: true,
-              createdAt: true,
-              updatedAt: true
             }
-          }
+          },
+          createdAt: true
         }
       }
     }

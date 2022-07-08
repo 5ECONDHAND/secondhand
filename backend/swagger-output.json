@@ -252,6 +252,37 @@
         "parameters": [],
         "responses": {}
       }
+    },
+    "/bids": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/bids/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/bids/accept": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     }
   }
 }

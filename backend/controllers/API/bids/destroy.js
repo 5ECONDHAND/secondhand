@@ -7,18 +7,20 @@ const prisma = require(process.env.ROOT_PATH + "/models/instance");
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
+
 async function controller(req, res, next) {
+  // @section checking id
   var id = parseInt(req.params.id);
 
   if (isNaN(id)) {
     return res.json({
       error: true,
-      message: "Invalid id",
+      message: "Invalid productId",
       data: [],
     });
   }
 
-  if(!req.isAdmin) {
+  if (!req.userId) {
     return res.json({
       error: true,
       message: 'Unauthorized access',
@@ -26,9 +28,16 @@ async function controller(req, res, next) {
     })
   }
 
-  const data = await prisma.transaction.deleteMany({
+  const data = await prisma.transaction.update({
     where: {
-      id: id,
+      productId: id
+    },
+    data: {
+      Users: {
+        deleteMany: {
+          userId: req.userId
+        }
+      }
     },
   }).catch((err) => {
     return {
@@ -44,7 +53,7 @@ async function controller(req, res, next) {
 
   res.json({
     error: false,
-    message: "Transaction deleted",
+    message: "Bid deleted",
     data: [data],
   });
 }

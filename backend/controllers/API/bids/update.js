@@ -7,18 +7,20 @@ const prisma = require(process.env.ROOT_PATH + "/models/instance");
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
+
 async function controller(req, res, next) {
+  // @section checking id
   var id = parseInt(req.params.id);
 
   if (isNaN(id)) {
     return res.json({
       error: true,
-      message: "Invalid id",
+      message: "Invalid productId",
       data: [],
     });
   }
 
-  if(!req.isAdmin) {
+  if (!req.userId) {
     return res.json({
       error: true,
       message: 'Unauthorized access',
@@ -26,9 +28,33 @@ async function controller(req, res, next) {
     })
   }
 
-  const data = await prisma.transaction.deleteMany({
+  // @section data builder
+  var dataPayload = {
+    offeredPrice: req.body.offeredPrice,
+    description: req.body.description,
+  };
+  //remove key with null value
+  dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
+
+  // parse safe
+  if (dataPayload.offeredPrice) {
+    dataPayload.offeredPrice = parseFloat(req.body.offeredPrice).toFixed(2);
+  }
+
+  // @section update
+  const data = await prisma.transaction.update({
     where: {
-      id: id,
+      productId: id
+    },
+    data: {
+      Users: {
+        updateMany: {
+          where: {
+            userId: req.userId
+          },
+          data: dataPayload
+        }
+      }
     },
   }).catch((err) => {
     return {
@@ -44,7 +70,7 @@ async function controller(req, res, next) {
 
   res.json({
     error: false,
-    message: "Transaction deleted",
+    message: "Bid updated",
     data: [data],
   });
 }
