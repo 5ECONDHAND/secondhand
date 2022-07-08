@@ -44,18 +44,14 @@ async function controller(req, res, next) {
     };
   }
 
+  var wherePayload = {};
 
-  const wherePayload = {};
+  var whereORPayload = {
+    OR: []
+  };
 
   if(req.query.search){
-    if (!wherePayload.hasOwnProperty('where')) {
-      wherePayload.where = {};
-    }
-    if (!wherePayload.where.hasOwnProperty('OR')) {
-      wherePayload.where.OR = [];
-    }
-
-    wherePayload.where.OR.push({
+    whereORPayload.OR.push({
       name: {
         contains: req.query.search,
         mode: 'insensitive' // case-insensitive
@@ -73,14 +69,7 @@ async function controller(req, res, next) {
       });
     }
 
-    if (!wherePayload.hasOwnProperty('where')) {
-      wherePayload.where = {};
-    }
-    if (!wherePayload.where.hasOwnProperty('OR')) {
-      wherePayload.where.OR = [];
-    }
-
-    wherePayload.where.OR.push({
+    whereORPayload.OR.push({
       Categories: {
         some: {
           categoryId
@@ -89,9 +78,49 @@ async function controller(req, res, next) {
     })
   }
 
+  var whereANDPayload = null;
+
+  if (req.userId) {
+    whereANDPayload = {
+      AND: [{
+        userId: req.userId
+      }]
+    };
+  }
+
+  if (whereANDPayload != null) {
+    wherePayload = whereANDPayload;
+    wherePayload.AND.push(whereORPayload);
+
+    // final build wherePayload could be
+    /*
+    {
+      AND: [
+        {
+          userId: req.userId
+        },
+        {
+          OR: [] //whereORPayload
+        }
+      ]
+    }
+    */
+  } else {
+    wherePayload = whereORPayload;
+
+    // final build wherePayload could be
+    /*
+    {
+      OR: [] //whereORPayload
+    }
+    */
+  }
+
   const data = await prisma.product.findMany({
     ...advanceLogicPayload,
-    ...wherePayload,
+    where: {
+      ...wherePayload
+    },
     include: {
       User: {
         select: {
@@ -115,7 +144,29 @@ async function controller(req, res, next) {
           Category: true
         }
       },
-      Transaction: true
+      Transaction: {
+        include: {
+          Users: {
+            select: {
+              accepted: true,
+              offeredPrice: true,
+              description: true,
+              User: {
+                select: {
+                  id: true,
+                  phoneNo: true,
+                  fullname: true,
+                  email: true,
+                  city: true,
+                  address: true,
+                  Photos: true,
+                }
+              },
+              createdAt: true
+            }
+          }
+        }
+      }
     },
   }).catch((err) => {
     return {
