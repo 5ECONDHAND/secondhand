@@ -44,32 +44,54 @@ async function controller(req, res, next) {
     };
   }
 
-  
-  const wherePayload = {
-    where:{
-      OR: []
-    }
-  };
 
-  if(req.query.name != null){
+  const wherePayload = {};
+
+  if(req.query.search){
+    if (!wherePayload.hasOwnProperty('where')) {
+      wherePayload.where = {};
+    }
+    if (!wherePayload.where.hasOwnProperty('OR')) {
+      wherePayload.where.OR = [];
+    }
+
     wherePayload.where.OR.push({
-      name : req.query.name
+      name: {
+        contains: req.query.search,
+        mode: 'insensitive' // case-insensitive
+      }
     })
   }
 
-  if(req.query.categoryId != null){
+  if(req.query.categoryId){
+    var categoryId = parseInt(req.query.categoryId);
+    if (isNaN(categoryId)) {
+      return res.json({
+        error: true,
+        message: "Invalid categoryId",
+        data: [],
+      });
+    }
+
+    if (!wherePayload.hasOwnProperty('where')) {
+      wherePayload.where = {};
+    }
+    if (!wherePayload.where.hasOwnProperty('OR')) {
+      wherePayload.where.OR = [];
+    }
+
     wherePayload.where.OR.push({
-      Categories :{
-        every :{
-          categoryId : parseInt(req.query.categoryId)
+      Categories: {
+        some: {
+          categoryId
         }
       }
     })
   }
-  
 
   const data = await prisma.product.findMany({
-    ...advanceLogicPayload, ...wherePayload,
+    ...advanceLogicPayload,
+    ...wherePayload,
     include: {
       User: {
         select: {
