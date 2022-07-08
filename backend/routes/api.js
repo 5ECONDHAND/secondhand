@@ -13,6 +13,7 @@ var categoryCRUD = require(path.join(rootController, 'categories'));
 var transactionCRUD = require(path.join(rootController, 'transactions'));
 var productCRUD = require(path.join(rootController, 'products'));
 var storageCRUD = require(path.join(rootController, 'storages'));
+var bidCRUD = require(path.join(rootController, 'bids'));
 
 var auth = require(path.join(rootController, 'auth'));
 
@@ -61,6 +62,11 @@ router.put('/storages/:id', storageCRUD.update);
 router.patch('/storages/:id', storageCRUD.update);
 router.delete('/storages/:id', storageCRUD.destroy);
 router.get('/storages/:id/preview', storageCRUD.preview);
+
+router.post('/bids', bidCRUD.store);
+router.put('/bids/:id', bidCRUD.update);
+router.patch('/bids/:id', bidCRUD.update);
+router.delete('/bids/:id', bidCRUD.destroy);
 
 
 // catch 404 and respond json
