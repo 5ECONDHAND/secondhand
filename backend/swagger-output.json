@@ -276,6 +276,13 @@
         "parameters": [],
         "responses": {}
       }
+    },
+    "/bids/accept": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     }
   }
 }
