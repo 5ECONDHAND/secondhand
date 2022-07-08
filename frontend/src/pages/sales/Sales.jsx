@@ -127,13 +127,17 @@ const Sales = () => {
       if (dataCategory === 'Semua Produk' || dataCategory === 'Terjual') {
         return displayData.map((item, index) => (
           <Grid item xs={6} sm={4} md={4} key={index}>
-            <ProductCard product={item} />
+            <Box onClick={() => navigate(`/product/${item.id}`)}>
+              <ProductCard product={item} />
+            </Box>
           </Grid>
         ))
       } else if (dataCategory === 'Diminati') {
         return displayData.map((item, index) => (
           <Grid item xs={12} key={index}>
-            <OfferCardMini product={item} />
+            <Box onClick={() => navigate(`/offers/${item.id}`)}>
+              <OfferCardMini product={item} />
+            </Box>
           </Grid>
         ))
       }

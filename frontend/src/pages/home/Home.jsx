@@ -21,6 +21,7 @@ const Home = () => {
   const products = useSelector(selectProduct)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
+  console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {

@@ -5,7 +5,7 @@ import { toRupiah } from '../../../utils/functions'
 import { useNavigate } from 'react-router-dom'
 
 const ProductItem = (props) => {
-  const { productName, productCategory, productPrice, type } = props
+  const { productName, productCategory, productPrice, type, productId } = props
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => setOpen(true)
@@ -67,7 +67,7 @@ const ProductItem = (props) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
-                  onClick={() => navigate('/add/2')}
+                  onClick={() => navigate(`/add/${productId}`)}
                 >
                   Edit
                 </Button>

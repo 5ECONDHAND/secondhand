@@ -24,6 +24,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
+import axios from 'axios'
 
 const styles = {
   '&.MuiButton-root': {
@@ -68,7 +69,9 @@ const AddProductForm = (props) => {
     harga: '',
     kategori: '',
     deskripsi: '',
+    foto: null
   })
+  const [files, setFiles] = useState([])
   const user = useSelector(selectAuth)
   const { productId } = useParams()
 
@@ -111,9 +114,10 @@ const AddProductForm = (props) => {
         price: values.harga,
         description: values.deskripsi,
         categoryId: values.kategori,
+        files: values.foto[0],
         token: user.token,
       })
-      console.log('product updated')
+      console.log('product created')
     }
   }
 
@@ -135,10 +139,10 @@ const AddProductForm = (props) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
-    // console.log(values)
+
   }
 
-  const [files, setFiles] = useState([])
+  // foto
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     maxFiles: 4,
     accept: {
@@ -176,6 +180,17 @@ const AddProductForm = (props) => {
     </div>
   ))
 
+
+  useEffect(() => {
+    setValues({
+      nama: productData?.data[0] ? productData.data[0].name : '',
+      harga: productData?.data[0] ? productData.data[0].price : '',
+      kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.name : '',
+      deskripsi: productData?.data[0] ? productData.data[0].description : '',
+      foto: files
+    })
+  }, [productData, files])
+
   useEffect(() => {
     if (isPostProductSuccess || isPutProductSuccess) {
       if (productId) {
@@ -204,6 +219,9 @@ const AddProductForm = (props) => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
 
+
+  console.log(values)
+
   return (
     <div className="Form">
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
@@ -215,9 +233,7 @@ const AddProductForm = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.nama ? true : false}
-                placeholder={
-                  isProductSuccess && productId ? productData.data[0].name : 'Nama Produk'
-                }
+                placeholder='Nama Produk'
                 type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
@@ -233,7 +249,7 @@ const AddProductForm = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.harga ? true : false}
-                placeholder={isProductSuccess && productId ? productData.data[0].price : 'Rp 0,00'}
+                placeholder='Rp 0,00'
                 type="number"
                 value={values.harga}
                 onChange={handleChange('harga')}
@@ -279,11 +295,8 @@ const AddProductForm = (props) => {
                 multiline
                 error={error.deskripsi ? true : false}
                 type="text"
-                placeholder={
-                  isProductSuccess && productId
-                    ? productData.data[0].description
-                    : 'Contoh: Jalan Ikan Hiu 33'
-                }
+                placeholder='Contoh: Jalan Ikan Hiu 33'
+                value={values.deskripsi}
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
                 rows={4}

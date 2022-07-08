@@ -4,10 +4,14 @@ import { useParams } from 'react-router-dom'
 import { Navbar, ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
+import { selectUser } from '../../redux/slices/userSlice'
+import { useSelector } from 'react-redux'
 
 const Product = () => {
   const { id } = useParams()
   const { data: productData, isSuccess } = useGetDataByIdQuery(id)
+  const user = useSelector(selectUser)
+
 
   useEffect(() => {
     if (isSuccess) {
@@ -28,10 +32,11 @@ const Product = () => {
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
                   <ProductItem
-                    type="buyer"
+                    type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
                     productName={productData?.data[0].name}
                     productCategory={productData?.data[0].Categories[0].Category.name}
                     productPrice={productData?.data[0].price}
+                    productId={productData?.data[0].id}
                   />
                 </Grid>
                 <Grid item xs={12}>
