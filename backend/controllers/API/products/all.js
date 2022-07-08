@@ -44,8 +44,54 @@ async function controller(req, res, next) {
     };
   }
 
+
+  const wherePayload = {};
+
+  if(req.query.search){
+    if (!wherePayload.hasOwnProperty('where')) {
+      wherePayload.where = {};
+    }
+    if (!wherePayload.where.hasOwnProperty('OR')) {
+      wherePayload.where.OR = [];
+    }
+
+    wherePayload.where.OR.push({
+      name: {
+        contains: req.query.search,
+        mode: 'insensitive' // case-insensitive
+      }
+    })
+  }
+
+  if(req.query.categoryId){
+    var categoryId = parseInt(req.query.categoryId);
+    if (isNaN(categoryId)) {
+      return res.json({
+        error: true,
+        message: "Invalid categoryId",
+        data: [],
+      });
+    }
+
+    if (!wherePayload.hasOwnProperty('where')) {
+      wherePayload.where = {};
+    }
+    if (!wherePayload.where.hasOwnProperty('OR')) {
+      wherePayload.where.OR = [];
+    }
+
+    wherePayload.where.OR.push({
+      Categories: {
+        some: {
+          categoryId
+        }
+      }
+    })
+  }
+
   const data = await prisma.product.findMany({
     ...advanceLogicPayload,
+    ...wherePayload,
     include: {
       User: {
         select: {
