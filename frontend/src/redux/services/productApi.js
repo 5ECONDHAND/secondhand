@@ -34,8 +34,7 @@ export const productApi = createApi({
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-          "type": "formData"
+          "Content-Type": 'multipart/form-data',
         },
         body: { name: name, description: description, price: price, categoryId: categoryId, files: files },
       }),

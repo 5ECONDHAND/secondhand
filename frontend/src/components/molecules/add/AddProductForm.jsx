@@ -69,7 +69,6 @@ const AddProductForm = (props) => {
     harga: '',
     kategori: '',
     deskripsi: '',
-    foto: null
   })
   const [files, setFiles] = useState([])
   const user = useSelector(selectAuth)
@@ -108,15 +107,41 @@ const AddProductForm = (props) => {
   const handleAdd = async (event) => {
     console.log('adding product...')
     event.preventDefault()
+
     if (validateProduct(values, setError)) {
-      await postProduct({
+      axios.post('https://febesh5-dev.herokuapp.com/api/products', {
         name: values.nama,
         price: values.harga,
         description: values.deskripsi,
         categoryId: values.kategori,
-        files: values.foto[0],
-        token: user.token,
+        files: files[0],
+      }, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function () {
+        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
       })
+        .catch((e) => {
+          console.log(e)
+          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+        })
+
+      // await postProduct({
+      //   name: values.nama,
+      //   price: values.harga,
+      //   description: values.deskripsi,
+      //   categoryId: values.kategori,
+      //   files: fd.get('files'),
+      //   token: user.token,
+      // })
+      // console.log()
+      // console.log(values.nama)
+
       console.log('product created')
     }
   }
@@ -187,9 +212,8 @@ const AddProductForm = (props) => {
       harga: productData?.data[0] ? productData.data[0].price : '',
       kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.name : '',
       deskripsi: productData?.data[0] ? productData.data[0].description : '',
-      foto: files
     })
-  }, [productData, files])
+  }, [productData])
 
   useEffect(() => {
     if (isPostProductSuccess || isPutProductSuccess) {
@@ -219,8 +243,6 @@ const AddProductForm = (props) => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
 
-
-  console.log(values)
 
   return (
     <div className="Form">
