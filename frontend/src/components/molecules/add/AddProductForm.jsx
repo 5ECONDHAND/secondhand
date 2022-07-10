@@ -22,8 +22,9 @@ import {
 } from '../../../redux/services/productApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
+import { productActions } from '../../../redux/slices/productSlice'
 import axios from 'axios'
 
 const styles = {
@@ -73,6 +74,7 @@ const AddProductForm = (props) => {
   const [files, setFiles] = useState([])
   const user = useSelector(selectAuth)
   const { productId } = useParams()
+  const dispatch = useDispatch()
 
   const [
     postProduct,
@@ -120,8 +122,10 @@ const AddProductForm = (props) => {
           'Authorization': `Bearer ${user.token}`,
           'Content-Type': 'multipart/form-data'
         }
-      }).then(function () {
+      }).then(function (response) {
         enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+        dispatch(productActions.setProductNotifications(response.data.data[0]))
+        // console.log(response.data.data[0])
         setTimeout(() => {
           navigate('/sales')
         }, 2000)

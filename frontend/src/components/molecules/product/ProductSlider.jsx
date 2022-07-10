@@ -26,7 +26,8 @@ const BoxImg = ({ image, alt }) => {
   )
 }
 
-const ProductSlider = () => {
+const ProductSlider = ({ productPhoto }) => {
+  console.log(productPhoto)
   return (
     <>
       <Box
@@ -47,15 +48,17 @@ const ProductSlider = () => {
           spaceBetween={10}
           modules={[Navigation, Pagination]}
         >
-          <SwiperSlide>
+          {productPhoto?.map(item => (
+            <SwiperSlide>
+              <BoxImg image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`} />
+            </SwiperSlide>
+          ))}
+          {/* <SwiperSlide>
             <BoxImg image={dummy} />
           </SwiperSlide>
           <SwiperSlide>
             <BoxImg image={dummy} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <BoxImg image={dummy} />
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
       </Box>
     </>

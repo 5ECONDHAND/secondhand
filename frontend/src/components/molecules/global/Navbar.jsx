@@ -17,6 +17,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
+import { productActions, selectProductNotifications } from '../../../redux/slices/productSlice'
+import { useGetDataByIdQuery } from '../../../redux/services/productApi'
 
 const SearchField = () => {
   const { pathname } = useLocation()
@@ -70,6 +72,10 @@ const UserButton = ({ userId }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const dispatch = useDispatch()
+  const notificationProductAdd = useSelector(selectProductNotifications)
+  const notifData = useGetDataByIdQuery(notificationProductAdd.id)
+  console.log(notifData)
+
   const logout = () => {
     dispatch(authActions.clearCredentials())
     dispatch(userActions.clearCredentials())
@@ -78,6 +84,7 @@ const UserButton = ({ userId }) => {
 
   useEffect(() => {
     if (pathname === '/') setActive('')
+    if (notificationProductAdd) setNotif(true)
   }, [pathname])
 
   const handleActive = (name) => {
@@ -89,7 +96,7 @@ const UserButton = ({ userId }) => {
       case 'Notification':
         // no notification route so direct to /sales if width < 900 (md to sm && xs)
         if (window.innerWidth < 900) return navigate('/sales')
-        return setPopup(!popup), setNotif(!notif)
+        return setPopup(!popup), setNotif(!notif), setNotif(false)
       case 'Account':
         if (window.innerWidth < 900) return navigate(`/edit/${userId}`)
         return setShowProfile(!showProfile)
@@ -97,6 +104,11 @@ const UserButton = ({ userId }) => {
         break
     }
   }
+
+  const handleNotifClick = () => {
+    setNotif(false)
+  }
+
   return (
     <>
       <Box sx={{ display: 'flex', gap: '20px', flexDirection: { xs: 'column', md: 'row' } }}>
@@ -145,105 +157,41 @@ const UserButton = ({ userId }) => {
                           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                        <Grid
-                          container
-                          sx={{
-                            gap: '10px',
-                            ':hover': { backgroundColor: '#f7f7f7' },
-                            padding: '10px',
-                            borderRadius: '12px',
-                          }}
-                          onClick={() => navigate('/product')}
-                        >
-                          <Grid>
-                            <img src={casio1} alt="jam" width="80px" height="80px" />
+                        {notifData ? [notifData]?.map(item => (
+                          <Grid
+                            container
+                            sx={{
+                              gap: '10px',
+                              ':hover': { backgroundColor: '#f7f7f7' },
+                              padding: '10px',
+                              borderRadius: '12px',
+                            }}
+                            onClick={handleNotifClick}
+                          >
+                            <Grid>
+                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0].Photos[0].storageId}/preview`} alt="product-img" width="80px" height="80px" />
+                            </Grid>
+                            <Grid>
+                              <Typography variant="body2">Berhasil Ditambahkan</Typography>
+                              <Typography variant="subtitle1">{item.data.data[0].name}</Typography>
+                              <Typography variant="subtitle1">Rp. {item.data.data[0].price}</Typography>
+                              {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
+                            </Grid>
+                            <Grid sx={{ marginLeft: 'auto' }}>
+                              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <Typography variant="body2">{new Date(item.data.data[0].createdAt).toISOString().substring(0, 10)}</Typography>
+                                <Box
+                                  sx={{
+                                    width: '10px',
+                                    height: '10px',
+                                    backgroundColor: 'red',
+                                    borderRadius: '50px',
+                                  }}
+                                />
+                              </Box>
+                            </Grid>
                           </Grid>
-                          <Grid>
-                            <Typography variant="body2">Penawaran Produk</Typography>
-                            <Typography variant="subtitle1">Jam Tangan Casio</Typography>
-                            <Typography variant="subtitle1">Rp. 250.000</Typography>
-                            <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography>
-                          </Grid>
-                          <Grid sx={{ marginLeft: 'auto' }}>
-                            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                              <Typography variant="body2">20 Apr, 14:04</Typography>
-                              <Box
-                                sx={{
-                                  width: '10px',
-                                  height: '10px',
-                                  backgroundColor: 'red',
-                                  borderRadius: '50px',
-                                }}
-                              />
-                            </Box>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          container
-                          sx={{
-                            gap: '10px',
-                            ':hover': { backgroundColor: '#f7f7f7' },
-                            padding: '10px',
-                            borderRadius: '12px',
-                          }}
-                          onClick={() => navigate('/product')}
-                        >
-                          <Grid>
-                            <img src={casio1} alt="jam" width="80px" height="80px" />
-                          </Grid>
-                          <Grid>
-                            <Typography variant="body2">Penawaran Produk</Typography>
-                            <Typography variant="subtitle1">Jam Tangan Casio</Typography>
-                            <Typography variant="subtitle1">Rp. 250.000</Typography>
-                            <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography>
-                          </Grid>
-                          <Grid sx={{ marginLeft: 'auto' }}>
-                            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                              <Typography variant="body2">20 Apr, 14:04</Typography>
-                              <Box
-                                sx={{
-                                  width: '10px',
-                                  height: '10px',
-                                  backgroundColor: 'red',
-                                  borderRadius: '50px',
-                                }}
-                              />
-                            </Box>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          container
-                          sx={{
-                            gap: '10px',
-                            ':hover': { backgroundColor: '#f7f7f7' },
-                            padding: '10px',
-                            borderRadius: '12px',
-                          }}
-                          onClick={() => navigate('/product')}
-                        >
-                          <Grid>
-                            <img src={casio1} alt="jam" width="80px" height="80px" />
-                          </Grid>
-                          <Grid>
-                            <Typography variant="body2">Penawaran Produk</Typography>
-                            <Typography variant="subtitle1">Jam Tangan Casio</Typography>
-                            <Typography variant="subtitle1">Rp. 250.000</Typography>
-                            <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography>
-                          </Grid>
-                          <Grid sx={{ marginLeft: 'auto' }}>
-                            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                              <Typography variant="body2">20 Apr, 14:04</Typography>
-                              <Box
-                                sx={{
-                                  width: '10px',
-                                  height: '10px',
-                                  backgroundColor: 'red',
-                                  borderRadius: '50px',
-                                }}
-                              />
-                            </Box>
-                          </Grid>
-                        </Grid>
+                        )) : 'kosong'}
                       </Box>
                     </Box>
                   )}

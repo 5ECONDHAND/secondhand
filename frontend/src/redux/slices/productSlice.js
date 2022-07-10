@@ -4,7 +4,8 @@ import { productApi } from '../services/productApi'
 const initialState = {
   products: null,
   productActive: null,
-  productPreview: null
+  productPreview: null,
+  productNotifications: [],
 }
 
 export const productSlice = createSlice({
@@ -19,6 +20,10 @@ export const productSlice = createSlice({
     },
     setProductPreview: (state, action) => {
       state.productPreview = action.payload
+    },
+    setProductNotifications: (state, action) => {
+      console.log(action)
+      state.productNotifications = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -29,6 +34,7 @@ export const productSlice = createSlice({
 })
 
 export const selectProduct = (state) => state.persist.products.products
-export const selectProductPreview = (state) => state.products.productPreview
+export const selectProductPreview = (state) => state.productPreview
+export const selectProductNotifications = (state) => state.persist.products.productNotifications
 export const productActions = { ...productSlice.actions }
 export default productSlice.reducer

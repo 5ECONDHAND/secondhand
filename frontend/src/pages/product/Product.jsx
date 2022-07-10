@@ -11,6 +11,7 @@ const Product = () => {
   const { id } = useParams()
   const { data: productData, isSuccess } = useGetDataByIdQuery(id)
   const user = useSelector(selectUser)
+  // console.log(productData)
 
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const Product = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData])
+  console.log(productData?.data[0].Photos)
 
   return (
     <>
@@ -27,7 +29,7 @@ const Product = () => {
           {isSuccess ? (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
-                <ProductSlider />
+                <ProductSlider productPhoto={productData?.data[0].Photos} />
               </Grid>
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
@@ -37,6 +39,7 @@ const Product = () => {
                     productCategory={productData?.data[0].Categories[0].Category.name}
                     productPrice={productData?.data[0].price}
                     productId={productData?.data[0].id}
+                    storageId={productData?.data[0]?.Photos[0]?.storageId}
                   />
                 </Grid>
                 <Grid item xs={12}>

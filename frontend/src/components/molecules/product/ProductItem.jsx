@@ -5,7 +5,7 @@ import { toRupiah } from '../../../utils/functions'
 import { useNavigate } from 'react-router-dom'
 
 const ProductItem = (props) => {
-  const { productName, productCategory, productPrice, type, productId } = props
+  const { productName, productCategory, productPrice, type, productId, storageId } = props
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => setOpen(true)
@@ -98,7 +98,7 @@ const ProductItem = (props) => {
             )}
           </Stack>
         </Stack>
-        <NegotiateModal open={open} handleClose={handleClose} />
+        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} storageId={storageId} />
       </Paper>
     </>
   )
