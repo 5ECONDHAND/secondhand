@@ -119,13 +119,10 @@ async function controller(req, res, next) {
   }
 
   if (
-    wherePayload
-    && wherePayload.where.hasOwnProperty('AND')
-    && !wherePayload.where.AND.length > 0
-    && wherePayload.where.hasOwnProperty('OR')
-    && !wherePayload.where.OR.length > 0
+    Object.keys(wherePayload.where).length === 0
+    && Object.getPrototypeOf(wherePayload.where) === Object.prototype
   ) {
-    wherePayload = {};
+    wherePayload = {}; // if it's only empty object, then set it to {}
   }
 
   const data = await prisma.product.findMany({
