@@ -17,14 +17,14 @@ export const userApi = createApi({
       }),
     }),
     editProfile: builder.mutation({
-      query: ({ id, editData, token }) => ({
+      query: ({ id, fullname, city, address, phoneNo, token }) => ({
         url: `/users/${id}`,
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: { Photos: editData.get('Photos'), fullname: editData.get('fullname'), city: editData.get('city'), address: editData.get('address'), phoneNo: editData.get('phoneNo') },
+        body: { fullname: fullname, city: city, address: address, phoneNo: phoneNo },
       }),
     }),
   }),

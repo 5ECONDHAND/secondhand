@@ -74,7 +74,6 @@ const EditProfileForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (validateProfile(values, setError)) {
-      console.log(userId);
       axios.put(`https://febesh5-dev.herokuapp.com/api/users/${userId}`, {
         fullname: values.nama,
         city: values.kota,
@@ -88,6 +87,7 @@ const EditProfileForm = () => {
         }
       }).then(function (response) {
         enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
+        
         setTimeout(() => {
           navigate('/sales')
         }, 2000)
@@ -96,6 +96,7 @@ const EditProfileForm = () => {
           console.log(e)
           enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
         })
+        
       // const editData = new FormData()
       // editData.append("files", files[0])
       // editData.append("fullname", values.nama)
@@ -114,6 +115,7 @@ const EditProfileForm = () => {
       //   editData
       // })
     }
+    
   }
 
   const handleChange = (prop) => (event) => {
@@ -302,12 +304,12 @@ const EditProfileForm = () => {
             </FormControl>
           </Grid>
           <Grid item>
-            {/* <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
+            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               {isEditProfileLoading ? (
                 <Box sx={{ mx: 'auto' }}>
                   <CircularProgress color="secondary" />
                 </Box>
-              ) : ( */}
+              ) : (
                 <Button
                   type="submit"
                   fullWidth
@@ -323,8 +325,8 @@ const EditProfileForm = () => {
                 >
                   Simpan
                 </Button>
-              {/* )}
-            </FormControl> */}
+              )}
+            </FormControl>
           </Grid>
         </Grid>
       </Box>
