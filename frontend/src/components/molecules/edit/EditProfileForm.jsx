@@ -87,7 +87,6 @@ const EditProfileForm = () => {
         }
       }).then(function (response) {
         enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
-        
         setTimeout(() => {
           navigate('/sales')
         }, 2000)
