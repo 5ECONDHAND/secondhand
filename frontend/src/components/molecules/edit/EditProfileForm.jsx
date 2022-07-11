@@ -14,12 +14,13 @@ import { validateProfile } from '../../../utils/validators'
 import gambar from '../../../assets/images/Profile.png'
 import { useDispatch } from 'react-redux'
 import { useSnackbar } from 'notistack'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEditProfileMutation } from '../../../redux/services/userApi'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
-import { selectUser } from '../../../redux/slices/userSlice'
+import { selectUser, updateUser } from '../../../redux/slices/userSlice'
 import { userActions } from '../../../redux/slices/userSlice'
+import axios from 'axios'
 
 const thumb = {
   display: 'inline-flex',
@@ -57,6 +58,7 @@ const EditProfileForm = () => {
     alamat: '',
     nomor: '',
   })
+  const {userId} = useParams()
   const user = useSelector(selectAuth)
   const userActive = useSelector(selectUser)
   const [
@@ -72,21 +74,45 @@ const EditProfileForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (validateProfile(values, setError)) {
-      const editData = new FormData()
-      editData.append("Photos", files[0])
-      editData.append("fullname", values.nama)
-      editData.append("city", values.kota)
-      editData.append("address", values.alamat)
-      editData.append("phoneNo", values.nomor)
+      console.log(userId);
+      axios.put(`https://febesh5-dev.herokuapp.com/api/users/${userId}`, {
+        fullname: values.nama,
+        city: values.kota,
+        address: values.alamat,
+        phoneNo: values.nomor,
+        files: files[0],
+      }, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
+      })
+        .catch((e) => {
+          console.log(e)
+          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+        })
+      // const editData = new FormData()
+      // editData.append("files", files[0])
+      // editData.append("fullname", values.nama)
+      // editData.append("city", values.kota)
+      // editData.append("address", values.alamat)
+      // editData.append("phoneNo", values.nomor)
       // for (var t of editData.entries()){
       //   console.log(t[0] + ', ' + t[1]);
       // }
-      console.log(editData.get('Photos'));
-      await editProfile({
-        id: user.id,
-        token: user.token,
-        editData
-      })
+      // dispatch(updateUser({editData, userId}))
+      // console.log(userId);
+
+      // await editProfile({
+      //   id: user.id,
+      //   token: user.token,
+      //   editData
+      // })
     }
   }
 
@@ -149,6 +175,7 @@ const EditProfileForm = () => {
   }, [])
 
   useEffect(() => {
+    
     if (isEditProfileSuccess) {
       console.log('Response', editProfileData)
       dispatch(userActions.setUserActive(editProfileData.data[0]))
@@ -164,7 +191,7 @@ const EditProfileForm = () => {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editProfileData, isEditProfileSuccess, isEditProfileLoading, isEditProfileError])
+  }, [])
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
@@ -275,12 +302,12 @@ const EditProfileForm = () => {
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
+            {/* <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               {isEditProfileLoading ? (
                 <Box sx={{ mx: 'auto' }}>
                   <CircularProgress color="secondary" />
                 </Box>
-              ) : (
+              ) : ( */}
                 <Button
                   type="submit"
                   fullWidth
@@ -296,8 +323,8 @@ const EditProfileForm = () => {
                 >
                   Simpan
                 </Button>
-              )}
-            </FormControl>
+              {/* )}
+            </FormControl> */}
           </Grid>
         </Grid>
       </Box>
