@@ -44,9 +44,7 @@ async function controller(req, res, next) {
     };
   }
 
-  var wherePayload = {
-    where: {}
-  };
+  var wherePayload = {};
 
   var whereORPayload = {
     OR: []
@@ -91,8 +89,11 @@ async function controller(req, res, next) {
   }
 
   if (whereANDPayload != null) {
-    wherePayload.where = whereANDPayload;
-    wherePayload.where.AND.push(whereORPayload);
+    wherePayload = whereANDPayload;
+
+    if (whereORPayload.OR.length > 0) {
+      wherePayload.AND.push(whereORPayload);
+    }
 
     // final build wherePayload could be
     /*
@@ -107,8 +108,13 @@ async function controller(req, res, next) {
       ]
     }
     */
-  } else {
-    wherePayload.where = whereORPayload;
+  }
+
+  if (
+    whereANDPayload == null
+    && whereORPayload.OR.length > 0
+  ) {
+    wherePayload = whereORPayload;
 
     // final build wherePayload could be
     /*
@@ -118,16 +124,11 @@ async function controller(req, res, next) {
     */
   }
 
-  if (
-    Object.keys(wherePayload.where).length === 0
-    && Object.getPrototypeOf(wherePayload.where) === Object.prototype
-  ) {
-    wherePayload = {}; // if it's only empty object, then set it to {}
-  }
-
   const data = await prisma.product.findMany({
     ...advanceLogicPayload,
-    ...wherePayload,
+    where: {
+      ...wherePayload
+    },
     include: {
       User: {
         select: {
