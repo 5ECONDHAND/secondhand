@@ -118,6 +118,16 @@ async function controller(req, res, next) {
     */
   }
 
+  if (
+    wherePayload
+    && wherePayload.where.hasOwnProperty('AND')
+    && !wherePayload.where.AND.length > 0
+    && wherePayload.where.hasOwnProperty('OR')
+    && !wherePayload.where.OR.length > 0
+  ) {
+    wherePayload = {};
+  }
+
   const data = await prisma.product.findMany({
     ...advanceLogicPayload,
     ...wherePayload,
