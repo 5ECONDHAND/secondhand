@@ -39,11 +39,29 @@ async function controller(req, res, next){
       });
     }
 
-    var countProduct = await prisma.product.count({
-      'where': {
-        'userId': req.userId,
+    const countProduct = await prisma.product.count({
+      where: {
+        userId: req.userId,
       }
-    })
+    }).catch(err => {
+      return{
+        error: true,
+        message: err.message,
+        data: [],
+      }
+    });
+
+    if (countProduct && countProduct.error) {
+      return res.json(countProduct);
+    }
+
+    if (countProduct >= 4) {
+      return res.json({
+        error: true,
+        message: "You can't create anymore products",
+        data: [],
+      });
+    }
 
     var dataPayload = {
       name: req.body.name,
