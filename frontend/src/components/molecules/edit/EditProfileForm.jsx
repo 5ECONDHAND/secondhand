@@ -15,12 +15,13 @@ import gambar from '../../../assets/images/Profile.png'
 import { useDispatch } from 'react-redux'
 import { useSnackbar } from 'notistack'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEditProfileMutation } from '../../../redux/services/userApi'
+import { userActions } from '../../../redux/slices/userSlice'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
-import { selectUser, updateUser } from '../../../redux/slices/userSlice'
-import { userActions } from '../../../redux/slices/userSlice'
+import { selectUser } from '../../../redux/slices/userSlice'
+
 import axios from 'axios'
+
 
 const thumb = {
   display: 'inline-flex',
@@ -61,16 +62,8 @@ const EditProfileForm = () => {
   const {userId} = useParams()
   const user = useSelector(selectAuth)
   const userActive = useSelector(selectUser)
-  const [
-    editProfile,
-    {
-      data: editProfileData,
-      isLoading: isEditProfileLoading,
-      isSuccess: isEditProfileSuccess,
-      isError: isEditProfileError,
-    },
-  ] = useEditProfileMutation()
 
+  
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (validateProfile(values, setError)) {
@@ -87,6 +80,8 @@ const EditProfileForm = () => {
         }
       }).then(function (response) {
         enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
+        dispatch(userActions.setUserActive(response.data.data[0]))
+        console.log(response.data.data[0])
         setTimeout(() => {
           navigate('/sales')
         }, 2000)
@@ -175,25 +170,7 @@ const EditProfileForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    
-    if (isEditProfileSuccess) {
-      console.log('Response', editProfileData)
-      dispatch(userActions.setUserActive(editProfileData.data[0]))
-      enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
-      setTimeout(() => {
-        navigate('/sales')
-      }, 1000)
-    } else if (isEditProfileError || editProfileData?.error) {
-      enqueueSnackbar(`${editProfileData?.message}`, {
-        variant: 'warning',
-        autoHideDuration: 3000,
-        preventDuplicate: true,
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+  
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
@@ -235,7 +212,7 @@ const EditProfileForm = () => {
               </Box>
               {fileRejectionItems[0] && (
                 <Box sx={{ mb: '1rem' }}>
-                  <Alert severity="error">Maksimal 1 Gambar</Alert>
+                  <Alert severity="error">Maksimal 1 Gambar dan Ukuran 5MB</Alert>
                 </Box>
               )}
             </FormControl>
@@ -304,11 +281,10 @@ const EditProfileForm = () => {
           </Grid>
           <Grid item>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
-              {isEditProfileLoading ? (
-                <Box sx={{ mx: 'auto' }}>
+                {/* <Box sx={{ mx: 'auto' }}>
                   <CircularProgress color="secondary" />
-                </Box>
-              ) : (
+                </Box> */}
+
                 <Button
                   type="submit"
                   fullWidth
@@ -324,7 +300,6 @@ const EditProfileForm = () => {
                 >
                   Simpan
                 </Button>
-              )}
             </FormControl>
           </Grid>
         </Grid>
