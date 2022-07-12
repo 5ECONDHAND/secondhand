@@ -6,19 +6,28 @@ import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecu
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, selectProductActive } from '../../redux/slices/productSlice'
 
 const Product = () => {
   const { id } = useParams()
+  const dispatch = useDispatch()
   const { data: productData, isSuccess } = useGetDataByIdQuery(id)
   const user = useSelector(selectUser)
   // console.log(productData)
 
+  // const productActive = useSelector(selectProductActive)
+
+  const fillProductActive = () => {
+    dispatch(productActions.setProductActive(productData?.data[0]))
+  }
 
   useEffect(() => {
     if (isSuccess) {
+      fillProductActive()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData])
+  }, [productData, isSuccess])
   console.log(productData?.data[0].Photos)
 
   return (
@@ -34,12 +43,18 @@ const Product = () => {
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
                   <ProductItem
+                    // type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
+                    // productName={productData?.data[0].name}
+                    // productCategory={productData?.data[0].Categories[0].Category.name}
+                    // productPrice={productData?.data[0].price}
+                    // productId={productData?.data[0].id}
+                    // storageId={productData?.data[0]?.Photos[0]?.storageId}
                     type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
-                    productName={productData?.data[0].name}
-                    productCategory={productData?.data[0].Categories[0].Category.name}
-                    productPrice={productData?.data[0].price}
-                    productId={productData?.data[0].id}
-                    storageId={productData?.data[0]?.Photos[0]?.storageId}
+                    product={productData?.data[0]}
+                    // product={productData?.data[0]}
+                    // productName={productData?.data[0].name}
+                    // productCategory={productData?.data[0].Categories[0].Category.name}
+                    // productPrice={productData?.data[0].price}
                   />
                 </Grid>
                 <Grid item xs={12}>

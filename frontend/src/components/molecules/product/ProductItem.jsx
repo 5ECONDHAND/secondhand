@@ -1,16 +1,66 @@
-import { useState } from 'react'
-import { Button, Paper, Stack, Typography } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { Button, IconButton, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
 import { useNavigate } from 'react-router-dom'
+import { FaHeart } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { useSnackbar } from 'notistack'
+import { productActions, selectProductWishlist } from '../../../redux/slices/productSlice'
+import { selectUser } from '../../../redux/slices/userSlice'
 
-const ProductItem = (props) => {
-  const { productName, productCategory, productPrice, type, productId, storageId } = props
+const ProductItem = ({ product, type }) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  // redux state
+  const userActive = useSelector(selectUser)
+  const productWishlist = useSelector(selectProductWishlist)
+  // local state
+  const [wishlist, setWishlist] = useState(false)
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const navigate = useNavigate()
+
+  const checkWishlist = () => {
+    if (productWishlist.length > 0) {
+      for (const x of productWishlist) {
+        if (x.wish.id === product?.id) {
+          setWishlist(true)
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  const addWishlist = () => {
+    setWishlist(true)
+    if (userActive && product !== null) {
+      dispatch(productActions.addProductWishlist({ wish: product }))
+      enqueueSnackbar('Wishlist Added', {
+        variant: 'success',
+        autoHideDuration: 1000,
+      })
+    }
+  }
+
+  const removeWishlist = () => {
+    setWishlist(false)
+    if (userActive && product !== null) {
+      dispatch(productActions.removeProductWishlist({ id: product?.id }))
+      enqueueSnackbar('Wishlist Removed', {
+        variant: 'warning',
+        autoHideDuration: 1000,
+      })
+    }
+  }
+
+  useEffect(() => {
+    checkWishlist()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wishlist])
 
   return (
     <>
@@ -23,14 +73,29 @@ const ProductItem = (props) => {
       >
         <Stack direction="column" justifyContent="flex-start" spacing={2} padding={2}>
           <Stack direction="column">
-            <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {productName ? productName : 'productName'}
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="body1" sx={{ fontWeight: '500' }}>
+                {product?.name ? product?.name : 'productName'}
+              </Typography>
+              {type === 'buyer' && userActive && userActive?.fullname !== product?.User.fullname ? (
+                wishlist ? (
+                  <IconButton onClick={removeWishlist} sx={{ color: '#FF5050' }}>
+                    <FaHeart size={20} />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={addWishlist}>
+                    <FaHeart size={20} />
+                  </IconButton>
+                )
+              ) : null}
+            </Stack>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-              {productCategory ? productCategory : 'productCategory'}
+              {product?.Categories[0].Category.name
+                ? product?.Categories[0].Category.name
+                : 'productCategory'}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
-              {toRupiah(productPrice) || toRupiah(250000)}
+              {toRupiah(product?.price) || toRupiah(0)}
             </Typography>
             {type === 'seller' ? (
               <>
