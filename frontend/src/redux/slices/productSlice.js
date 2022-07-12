@@ -25,7 +25,7 @@ export const productSlice = createSlice({
     setProductNotifications: (state, action) => {
       console.log(action)
       state.productNotifications = action.payload
-    }
+    },
     addProductWishlist: (state, action) => {
       state.productWishlist = [...state.productWishlist, action.payload]
     },

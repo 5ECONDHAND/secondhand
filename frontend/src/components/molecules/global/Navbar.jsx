@@ -10,7 +10,17 @@ import {
   Grid,
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
-import { FiLogIn, FiSearch, FiMenu, FiList, FiBell, FiUser, FiLogOut, FiSettings, FiShoppingCart } from 'react-icons/fi'
+import {
+  FiLogIn,
+  FiSearch,
+  FiMenu,
+  FiList,
+  FiBell,
+  FiUser,
+  FiLogOut,
+  FiSettings,
+  FiShoppingCart,
+} from 'react-icons/fi'
 import casio1 from '../../../assets/images/dummy-image.jpg'
 import { useNavigate, useLocation } from 'react-router-dom'
 // import { selectUser } from '../../redux/slices/userSlice'
@@ -19,6 +29,7 @@ import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
 import { productActions, selectProductNotifications } from '../../../redux/slices/productSlice'
 import { useGetDataByIdQuery } from '../../../redux/services/productApi'
+import { toRupiah } from '../../../utils/functions'
 
 const SearchField = () => {
   const { pathname } = useLocation()
@@ -73,8 +84,8 @@ const UserButton = ({ userId }) => {
   const { pathname } = useLocation()
   const dispatch = useDispatch()
   const notificationProductAdd = useSelector(selectProductNotifications)
-  const notifData = useGetDataByIdQuery(notificationProductAdd.id)
-  console.log(notifData)
+  const notifData = useGetDataByIdQuery(notificationProductAdd?.id)
+  // console.log(notifData)
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
@@ -157,41 +168,63 @@ const UserButton = ({ userId }) => {
                           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                        {notifData ? [notifData]?.map(item => (
-                          <Grid
-                            container
-                            sx={{
-                              gap: '10px',
-                              ':hover': { backgroundColor: '#f7f7f7' },
-                              padding: '10px',
-                              borderRadius: '12px',
-                            }}
-                            onClick={handleNotifClick}
-                          >
-                            <Grid>
-                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0].Photos[0].storageId}/preview`} alt="product-img" width="80px" height="80px" />
-                            </Grid>
-                            <Grid>
-                              <Typography variant="body2">Berhasil Ditambahkan</Typography>
-                              <Typography variant="subtitle1">{item.data.data[0].name}</Typography>
-                              <Typography variant="subtitle1">Rp. {item.data.data[0].price}</Typography>
-                              {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
-                            </Grid>
-                            <Grid sx={{ marginLeft: 'auto' }}>
-                              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <Typography variant="body2">{new Date(item.data.data[0].createdAt).toISOString().substring(0, 10)}</Typography>
-                                <Box
-                                  sx={{
-                                    width: '10px',
-                                    height: '10px',
-                                    backgroundColor: 'red',
-                                    borderRadius: '50px',
-                                  }}
-                                />
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        )) : 'kosong'}
+                        {notifData
+                          ? [notifData]?.map((item) => (
+                              <Grid
+                                container
+                                sx={{
+                                  gap: '10px',
+                                  ':hover': { backgroundColor: '#f7f7f7' },
+                                  padding: '10px',
+                                  borderRadius: '12px',
+                                }}
+                                onClick={handleNotifClick}
+                              >
+                                <Grid>
+                                  <img
+                                    src={
+                                      `https://febesh5-dev.herokuapp.com/api/storages/${item?.data.data[0]?.Photos[0]?.storageId}/preview` ||
+                                      casio1
+                                    }
+                                    alt="product-img"
+                                    width="80px"
+                                    height="80px"
+                                  />
+                                </Grid>
+                                <Grid>
+                                  <Typography variant="body2">Berhasil Ditambahkan</Typography>
+                                  <Typography variant="subtitle1">
+                                    {item.data.data[0]?.name}
+                                  </Typography>
+                                  <Typography variant="subtitle1">
+                                    {toRupiah(item.data.data[0]?.price)}
+                                    {/* Rp. {item.data.data[0]?.price} */}
+                                  </Typography>
+                                  {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
+                                </Grid>
+                                <Grid sx={{ marginLeft: 'auto' }}>
+                                  <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <Typography variant="body2">
+                                      {/* {moment(item.data.data[0]?.createdAt).format('DD/MM/YYYY')} */}
+                                      {item.data.data[0]?.createdAt
+                                        ? new Date(item.data.data[0]?.createdAt)
+                                            .toISOString()
+                                            .substring(0, 10)
+                                        : 'time not found'}
+                                    </Typography>
+                                    <Box
+                                      sx={{
+                                        width: '10px',
+                                        height: '10px',
+                                        backgroundColor: 'red',
+                                        borderRadius: '50px',
+                                      }}
+                                    />
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            ))
+                          : 'kosong'}
                       </Box>
                     </Box>
                   )}
@@ -213,30 +246,47 @@ const UserButton = ({ userId }) => {
                         flexDirection: 'column',
                         gap: '10px',
                         borderRadius: '12px',
-                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)'
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                       }}
                     >
-                      <Box sx={{
-                        display: 'flex', gap: '10px', alignItems: 'center', ':hover': {
-                          color: '#7126B5',
-                        }
-                      }} onClick={() => navigate(`/edit/${userId}`)}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          gap: '10px',
+                          alignItems: 'center',
+                          ':hover': {
+                            color: '#7126B5',
+                          },
+                        }}
+                        onClick={() => navigate(`/edit/${userId}`)}
+                      >
                         <FiSettings />
                         <Typography>Edit Profile</Typography>
                       </Box>
-                      <Box sx={{
-                        display: 'flex', gap: '10px', alignItems: 'center', ':hover': {
-                          color: '#7126B5',
-                        }
-                      }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          gap: '10px',
+                          alignItems: 'center',
+                          ':hover': {
+                            color: '#7126B5',
+                          },
+                        }}
+                      >
                         <FiShoppingCart />
                         <Typography>Whishlist</Typography>
                       </Box>
-                      <Box sx={{
-                        display: 'flex', gap: '10px', alignItems: 'center', ':hover': {
-                          color: '#7126B5',
-                        }
-                      }} onClick={logout}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          gap: '10px',
+                          alignItems: 'center',
+                          ':hover': {
+                            color: '#7126B5',
+                          },
+                        }}
+                        onClick={logout}
+                      >
                         <FiLogOut />
                         <Typography>Logout</Typography>
                       </Box>
@@ -261,7 +311,13 @@ const UserButton = ({ userId }) => {
             </Typography>
           </Box>
         ))}
-        <Button sx={{ display: { xs: 'block', md: 'none', backgroundColor: '#7126B5', color: 'white' } }} variant='contained' onClick={logout}>Logout</Button>
+        <Button
+          sx={{ display: { xs: 'block', md: 'none', backgroundColor: '#7126B5', color: 'white' } }}
+          variant="contained"
+          onClick={logout}
+        >
+          Logout
+        </Button>
       </Box>
     </>
   )
@@ -319,17 +375,19 @@ const Navbar = () => {
               >
                 <Typography variant="subtitle2">Lengkapi Info Akun</Typography>
               </Box>
-            ) : pathname === '/offers' ? (<Box
-              sx={{
-                textAlign: 'center',
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                margin: 'auto',
-              }}
-            >
-              <Typography variant="subtitle2">Info Penawar</Typography>
-            </Box>) : (
+            ) : pathname === '/offers' ? (
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  margin: 'auto',
+                }}
+              >
+                <Typography variant="subtitle2">Info Penawar</Typography>
+              </Box>
+            ) : (
               <Box display={{ xs: 'none', sm: 'none', md: 'block' }}>
                 <SearchField />
               </Box>

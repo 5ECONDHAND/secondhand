@@ -19,7 +19,8 @@ const BoxImg = ({ image, alt }) => {
         alt={alt}
         sx={{
           width: '100%',
-          height: 'auto',
+          height: '100%',
+          objectFit: 'cover',
         }}
       />
     </>
@@ -48,17 +49,25 @@ const ProductSlider = ({ productPhoto }) => {
           spaceBetween={10}
           modules={[Navigation, Pagination]}
         >
-          {productPhoto?.map(item => (
+          {productPhoto ? (
+            productPhoto?.map((item, index) => (
+              <SwiperSlide key={index}>
+                <BoxImg
+                  image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`}
+                />
+              </SwiperSlide>
+            ))
+          ) : (
             <SwiperSlide>
-              <BoxImg image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`} />
+              <BoxImg image={dummy} />
             </SwiperSlide>
-          ))}
-          {/* <SwiperSlide>
+          )}
+          <SwiperSlide>
             <BoxImg image={dummy} />
           </SwiperSlide>
           <SwiperSlide>
             <BoxImg image={dummy} />
-          </SwiperSlide> */}
+          </SwiperSlide>
         </Swiper>
       </Box>
     </>

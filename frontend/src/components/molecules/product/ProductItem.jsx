@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Button, IconButton, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { FaHeart } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
@@ -10,6 +10,8 @@ import { productActions, selectProductWishlist } from '../../../redux/slices/pro
 import { selectUser } from '../../../redux/slices/userSlice'
 
 const ProductItem = ({ product, type }) => {
+  const location = useLocation()
+  console.log('LOCATION', location)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
@@ -97,7 +99,7 @@ const ProductItem = ({ product, type }) => {
             <Typography variant="body1" sx={{ my: '1rem' }}>
               {toRupiah(product?.price) || toRupiah(0)}
             </Typography>
-            {type === 'seller' ? (
+            {type === 'seller' &&  ? (
               <>
                 <Button
                   fullWidth
@@ -132,7 +134,7 @@ const ProductItem = ({ product, type }) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
-                  onClick={() => navigate(`/add/${productId}`)}
+                  onClick={() => navigate(`/add/${product?.id}`)}
                 >
                   Edit
                 </Button>
@@ -163,7 +165,13 @@ const ProductItem = ({ product, type }) => {
             )}
           </Stack>
         </Stack>
-        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} storageId={storageId} />
+        <NegotiateModal
+          open={open}
+          handleClose={handleClose}
+          productName={product?.name}
+          productPrice={product?.price}
+          storageId={product?.Photos[0]?.storageId}
+        />
       </Paper>
     </>
   )

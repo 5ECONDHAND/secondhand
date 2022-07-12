@@ -21,7 +21,6 @@ const Home = () => {
   const products = useSelector(selectProduct)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
-  console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -78,6 +77,7 @@ const Home = () => {
 
   useEffect(() => {
     if (isProductSuccess) {
+      console.log(productData)
       fillProducts()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
