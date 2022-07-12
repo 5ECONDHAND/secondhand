@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Button, IconButton, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { matchRoutes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { FaHeart } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
@@ -10,9 +10,6 @@ import { productActions, selectProductWishlist } from '../../../redux/slices/pro
 import { selectUser } from '../../../redux/slices/userSlice'
 
 const ProductItem = ({ product, type }) => {
-  const location = useLocation()
-  console.log('LOCATION', location)
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   // redux state
@@ -21,6 +18,17 @@ const ProductItem = ({ product, type }) => {
   // local state
   const [wishlist, setWishlist] = useState(false)
   const [open, setOpen] = useState(false)
+
+  // routings variables
+  const routes = [{ path: '/product/:id' }]
+  const location = useLocation()
+  const navigate = useNavigate()
+  const useCurrentPath = () => {
+    const location = useLocation()
+    const [{ route }] = matchRoutes(routes, location)
+    return route.path
+  }
+  const currentPath = useCurrentPath()
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -99,17 +107,20 @@ const ProductItem = ({ product, type }) => {
             <Typography variant="body1" sx={{ my: '1rem' }}>
               {toRupiah(product?.price) || toRupiah(0)}
             </Typography>
-            {type === 'seller' &&  ? (
+            {type === 'seller' ? (
               <>
                 <Button
                   fullWidth
                   variant="contained"
                   size="large"
                   disableElevation
+                  disabled={currentPath === '/product/:id' ? true : false}
                   sx={{
                     borderRadius: '1rem',
                     textTransform: 'none',
                     background: '#7126B5',
+                    // border: '1px solid #7126B5',
+
                     border: '1px solid #7126B5',
                     py: '10px',
                     mb: '10px',
@@ -125,6 +136,7 @@ const ProductItem = ({ product, type }) => {
                   variant="contained"
                   size="large"
                   disableElevation
+                  disabled={currentPath === '/product/:id' ? true : false}
                   sx={{
                     borderRadius: '1rem',
                     textTransform: 'none',

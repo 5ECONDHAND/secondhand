@@ -49,7 +49,7 @@ const ProductSlider = ({ productPhoto }) => {
           spaceBetween={10}
           modules={[Navigation, Pagination]}
         >
-          {productPhoto ? (
+          {productPhoto?.length !== 0 ? (
             productPhoto?.map((item, index) => (
               <SwiperSlide key={index}>
                 <BoxImg
@@ -62,12 +62,13 @@ const ProductSlider = ({ productPhoto }) => {
               <BoxImg image={dummy} />
             </SwiperSlide>
           )}
-          <SwiperSlide>
+
+          {/* <SwiperSlide>
             <BoxImg image={dummy} />
           </SwiperSlide>
           <SwiperSlide>
             <BoxImg image={dummy} />
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
       </Box>
     </>
