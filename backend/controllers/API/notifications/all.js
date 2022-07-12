@@ -8,25 +8,7 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  * @param {import('express').NextFunction} next
  */
 async function controller(req, res, next) {
-  var wherePayload = null;
-
-  if (req.userId) {
-    wherePayload = {
-      where: {
-        User: {
-          is: {
-            id: req.userId
-          }
-        }
-      }
-    };
-  }
-
-  if (req.isAdmin) {
-    wherePayload = {};
-  }
-
-  if (wherePayload === null) {
+  if (!req.userId) {
     return res.json({
       error: true,
       message: 'Unauthorized access',
@@ -34,8 +16,16 @@ async function controller(req, res, next) {
     });
   }
 
+  const wherePayload = {
+    User: {
+      is: {
+        id: req.userId
+      }
+    }
+  };
+
   const data = await prisma.notification.findMany({
-    ...wherePayload,
+    where: wherePayload,
     include: {
       User: true
     }

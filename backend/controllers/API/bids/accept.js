@@ -68,10 +68,7 @@ async function controller(req, res, next) {
     return res.json(productData);
   }
 
-  if (
-    req.userId != productData.userId
-    && !req.isAdmin
-  ) {
+  if (req.userId != productData.userId) {
     return res.json({
       error: true,
       message: "Unauthorized access",

@@ -18,32 +18,7 @@ async function controller(req, res, next) {
     })
   }
 
-  var wherePayload = null;
-
-  if (req.userId) {
-    wherePayload = {
-      where: {
-        AND: [
-          {
-            id: id
-          },
-          {
-            userId: req.userId
-          }
-        ]
-      }
-    };
-  }
-
-  if (req.isAdmin) {
-    wherePayload = {
-      where: {
-        id: id
-      }
-    };
-  }
-
-  if (wherePayload === null) {
+  if (!req.userId) {
     return res.json({
       error: true,
       message: 'Unauthorized access',
@@ -51,8 +26,19 @@ async function controller(req, res, next) {
     });
   }
 
+  const wherePayload = {
+    AND: [
+      {
+        id: id
+      },
+      {
+        userId: req.userId
+      }
+    ]
+  };
+
   const data = await prisma.notification.deleteMany({
-    ...wherePayload,
+    where: wherePayload,
   }).catch(err => {
     return {
       error: true,

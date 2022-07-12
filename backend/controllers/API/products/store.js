@@ -31,70 +31,52 @@ async function controller(req, res, next){
       });
     }
 
-    var dataPayload = null;
-
-    if (req.userId) {
-      dataPayload = {
-        data: {
-          name: req.body.name,
-          price: req.body.price,
-          description: req.body.description,
-          Categories: {
-            create: {
-              categoryId
-            }
-          },
-          User: {
-            connect: {
-              id: req.userId
-            }
-          },
-          Transaction: {
-            create: {
-              status: 'DECIDING'
-            }
-          }
-        }
-      };
+    if (!req.userId) {
+      return res.json({
+        error: true,
+        message: "Unauthorized access",
+        data: [],
+      });
     }
 
-    if (req.isAdmin) {
-      dataPayload = {
-        data: {
-          name: req.body.name,
-          price: req.body.price,
-          description: req.body.description,
-          Categories: {
-            create: {
-              categoryId
-            }
-          },
-          User: {
-            connect: {
-              id: req.body.userId //admin can set this
-            }
-          },
-          Transaction: {
-            create: {
-              status: 'DECIDING'
-            }
-          }
+    var countProduct = await prisma.product.count({
+      'where': {
+        'userId': req.userId,
+      }
+    })
+
+    var dataPayload = {
+      name: req.body.name,
+      price: req.body.price,
+      description: req.body.description,
+      Categories: {
+        create: {
+          categoryId
         }
-      };
-    }
+      },
+      User: {
+        connect: {
+          id: req.userId
+        }
+      },
+      Transaction: {
+        create: {
+          status: 'DECIDING'
+        }
+      }
+    };
 
     if (
       req.files != null
       && Array.isArray(req.files)
       && req.files.length > 0
-      && dataPayload != null
     ) {
-      dataPayload.data.Photos = {
+      dataPayload.Photos = {
         create: []
       };
 
       for (var i = 0; i < req.files.length; i++) {
-        dataPayload.data.Photos.create.push({
+        dataPayload.Photos.create.push({
           Storage: {
             create: {
               filename: req.files[i].filename,
@@ -106,16 +88,8 @@ async function controller(req, res, next){
       }
     }
 
-    if (dataPayload === null) {
-      return res.json({
-        error: true,
-        message: "Unauthorized access",
-        data: [],
-      });
-    }
-
     const data = await prisma.product.create({
-      ...dataPayload,
+      data: dataPayload
     }).catch(err => {
       return{
         error: true,
