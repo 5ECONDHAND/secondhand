@@ -35,27 +35,9 @@ async function controller(req, res, next) {
   const data = await prisma.user.findMany({
     ...wherePayload,
     include: {
-      Transaction: {
+      Transactions: {
         include: {
-          Users: {
-            select: {
-              accepted: true,
-              offeredPrice: true,
-              description: true,
-              User: {
-                select: {
-                  id: true,
-                  phoneNo: true,
-                  fullname: true,
-                  email: true,
-                  city: true,
-                  address: true,
-                  Photos: true,
-                }
-              },
-              createdAt: true
-            }
-          }
+          Transaction: true
         }
       },
       Photos: {

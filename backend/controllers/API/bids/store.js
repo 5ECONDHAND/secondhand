@@ -60,6 +60,13 @@ async function controller(req, res, next){
           userId: req.userId,
         }
       }
+    },
+    include: {
+      Product: {
+        include: {
+          Photos: true
+        }
+      }
     }
   }).catch(err => {
     return{
@@ -71,6 +78,33 @@ async function controller(req, res, next){
 
   if(data && data.error){
     return res.json(data)
+  }
+
+  const notifData = {
+    title: 'Penawaran Produk',
+    productName: data.Product.name,
+    productId: data.Product.id,
+    realPrice: data.Product.price,
+    offeredPrice: offeredPrice,
+    imageId: data.Product.Photos && data.Product.Photos[0] && data.Product.Photos[0].id,
+    bidder: req.userId
+  }
+
+  const notification = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId: data.Product.userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notification && notification.error){
+    return res.json(notification)
   }
 
   res.json({

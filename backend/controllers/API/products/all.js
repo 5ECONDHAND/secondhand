@@ -90,7 +90,10 @@ async function controller(req, res, next) {
 
   if (whereANDPayload != null) {
     wherePayload = whereANDPayload;
-    wherePayload.AND.push(whereORPayload);
+
+    if (whereORPayload.OR.length > 0) {
+      wherePayload.AND.push(whereORPayload);
+    }
 
     // final build wherePayload could be
     /*
@@ -105,7 +108,12 @@ async function controller(req, res, next) {
       ]
     }
     */
-  } else {
+  }
+
+  if (
+    whereANDPayload == null
+    && whereORPayload.OR.length > 0
+  ) {
     wherePayload = whereORPayload;
 
     // final build wherePayload could be
