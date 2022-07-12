@@ -16,27 +16,27 @@ export const productApi = createApi({
     }),
     // patch product
     putProduct: builder.mutation({
-      query: ({ id, name, description, price, categoryId, token }) => ({
+      query: ({ id, name, description, price, categoryId, files, token }) => ({
         url: `/products/${id}`,
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: { name: name, description: description, price: price, categoryId: categoryId },
+        body: { name: name, description: description, price: price, categoryId: categoryId, files: files },
       }),
       // providesTags: ['PutProduct'],
     }),
     // store product
     postProduct: builder.mutation({
-      query: ({ name, description, price, categoryId, token }) => ({
+      query: ({ name, description, price, categoryId, files, token }) => ({
         url: '/products',
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          "Content-Type": 'multipart/form-data',
         },
-        body: { name: name, description: description, price: price, categoryId: categoryId },
+        body: { name: name, description: description, price: price, categoryId: categoryId, files: files },
       }),
       // providesTags: ['PostProduct'],
     }),

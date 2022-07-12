@@ -4,6 +4,8 @@ import { productApi } from '../services/productApi'
 const initialState = {
   products: null,
   productActive: null,
+  productPreview: null,
+  productNotifications: [],
   productWishlist: [],
 }
 
@@ -17,6 +19,13 @@ export const productSlice = createSlice({
     setProductActive: (state, action) => {
       state.productActive = { ...state.productActive, ...action.payload }
     },
+    setProductPreview: (state, action) => {
+      state.productPreview = action.payload
+    },
+    setProductNotifications: (state, action) => {
+      console.log(action)
+      state.productNotifications = action.payload
+    }
     addProductWishlist: (state, action) => {
       state.productWishlist = [...state.productWishlist, action.payload]
     },
@@ -34,6 +43,8 @@ export const productSlice = createSlice({
 })
 
 export const selectProduct = (state) => state.persist.products.products
+export const selectProductPreview = (state) => state.productPreview
+export const selectProductNotifications = (state) => state.persist.products.productNotifications
 export const selectProductActive = (state) => state.persist.products.productActive
 export const selectProductWishlist = (state) => state.persist.products.productWishlist
 export const productActions = { ...productSlice.actions }

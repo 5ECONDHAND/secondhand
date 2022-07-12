@@ -132,7 +132,7 @@ const ProductItem = ({ product, type }) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
-                  onClick={() => navigate('/add/2')}
+                  onClick={() => navigate(`/add/${productId}`)}
                 >
                   Edit
                 </Button>
@@ -163,7 +163,7 @@ const ProductItem = ({ product, type }) => {
             )}
           </Stack>
         </Stack>
-        <NegotiateModal open={open} handleClose={handleClose} />
+        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} storageId={storageId} />
       </Paper>
     </>
   )

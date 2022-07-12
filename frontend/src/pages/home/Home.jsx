@@ -21,6 +21,7 @@ const Home = () => {
   const products = useSelector(selectProduct)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
+  console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -87,10 +88,10 @@ const Home = () => {
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+        {/* <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
           {displayLogin()}
           {userActive ? <>{<h5>'Name',{userActive.fullname || 'null'}</h5>}</> : null}
-        </div>
+        </div> */}
 
         {isProductSuccess ? (
           products?.length > 0 ? (

@@ -28,7 +28,8 @@ const ModalStyle = {
   p: 4,
 }
 
-const ProductMiniCard = (props) => {
+const ProductMiniCard = ({ name, price, storageId }) => {
+  console.log(storageId)
   return (
     <>
       <Paper
@@ -48,14 +49,14 @@ const ProductMiniCard = (props) => {
         >
           <Avatar
             alt="A"
-            src={'gambar produk'}
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${storageId}/preview`}
             sx={{ width: 56, height: 56, borderRadius: '12px' }}
           />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {'Nama produk'}
+              {name}
             </Typography>
-            <Typography variant="body2">{toRupiah(250000)}</Typography>
+            <Typography variant="body2">{toRupiah(price)}</Typography>
           </Stack>
         </Stack>
       </Paper>
@@ -144,7 +145,7 @@ const NegotiateInput = (props) => {
 }
 
 const NegotiateModal = (props) => {
-  const { open, handleClose } = props
+  const { open, handleClose, productName, productPrice, storageId } = props
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -159,7 +160,7 @@ const NegotiateModal = (props) => {
             Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi
             penjual.
           </Typography>
-          <ProductMiniCard />
+          <ProductMiniCard name={productName} price={productPrice} storageId={storageId} />
           <NegotiateInput handleClose={handleClose} />
         </Box>
       </Modal>

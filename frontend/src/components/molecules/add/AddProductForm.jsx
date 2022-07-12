@@ -22,8 +22,10 @@ import {
 } from '../../../redux/services/productApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
+import { productActions } from '../../../redux/slices/productSlice'
+import axios from 'axios'
 
 const styles = {
   '&.MuiButton-root': {
@@ -69,8 +71,10 @@ const AddProductForm = (props) => {
     kategori: '',
     deskripsi: '',
   })
+  const [files, setFiles] = useState([])
   const user = useSelector(selectAuth)
   const { productId } = useParams()
+  const dispatch = useDispatch()
 
   const [
     postProduct,
@@ -105,15 +109,44 @@ const AddProductForm = (props) => {
   const handleAdd = async (event) => {
     console.log('adding product...')
     event.preventDefault()
+
     if (validateProduct(values, setError)) {
-      await postProduct({
+      axios.post('https://febesh5-dev.herokuapp.com/api/products', {
         name: values.nama,
         price: values.harga,
         description: values.deskripsi,
         categoryId: values.kategori,
-        token: user.token,
+        files: files[0],
+      }, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+        dispatch(productActions.setProductNotifications(response.data.data[0]))
+        // console.log(response.data.data[0])
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
       })
-      console.log('product updated')
+        .catch((e) => {
+          console.log(e)
+          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+        })
+
+      // await postProduct({
+      //   name: values.nama,
+      //   price: values.harga,
+      //   description: values.deskripsi,
+      //   categoryId: values.kategori,
+      //   files: fd.get('files'),
+      //   token: user.token,
+      // })
+      // console.log()
+      // console.log(values.nama)
+
+      console.log('product created')
     }
   }
 
@@ -135,10 +168,10 @@ const AddProductForm = (props) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
-    // console.log(values)
+
   }
 
-  const [files, setFiles] = useState([])
+  // foto
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     maxFiles: 4,
     accept: {
@@ -176,6 +209,16 @@ const AddProductForm = (props) => {
     </div>
   ))
 
+
+  useEffect(() => {
+    setValues({
+      nama: productData?.data[0] ? productData.data[0].name : '',
+      harga: productData?.data[0] ? productData.data[0].price : '',
+      kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.name : '',
+      deskripsi: productData?.data[0] ? productData.data[0].description : '',
+    })
+  }, [productData])
+
   useEffect(() => {
     if (isPostProductSuccess || isPutProductSuccess) {
       if (productId) {
@@ -204,6 +247,7 @@ const AddProductForm = (props) => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
 
+
   return (
     <div className="Form">
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
@@ -215,9 +259,7 @@ const AddProductForm = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.nama ? true : false}
-                placeholder={
-                  isProductSuccess && productId ? productData.data[0].name : 'Nama Produk'
-                }
+                placeholder='Nama Produk'
                 type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
@@ -233,7 +275,7 @@ const AddProductForm = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.harga ? true : false}
-                placeholder={isProductSuccess && productId ? productData.data[0].price : 'Rp 0,00'}
+                placeholder='Rp 0,00'
                 type="number"
                 value={values.harga}
                 onChange={handleChange('harga')}
@@ -279,11 +321,8 @@ const AddProductForm = (props) => {
                 multiline
                 error={error.deskripsi ? true : false}
                 type="text"
-                placeholder={
-                  isProductSuccess && productId
-                    ? productData.data[0].description
-                    : 'Contoh: Jalan Ikan Hiu 33'
-                }
+                placeholder='Contoh: Jalan Ikan Hiu 33'
+                value={values.deskripsi}
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
                 rows={4}

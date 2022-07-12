@@ -3,6 +3,7 @@ import { toRupiah } from '../../../utils/functions'
 import dummy from '../../../assets/images/dummy-image.jpg'
 
 const ProductCard = ({ product }) => {
+  // console.log(product.Photos[0].Storage.filename);
   return (
     <>
       <Box
@@ -18,7 +19,7 @@ const ProductCard = ({ product }) => {
         <Stack direction="column" padding={1}>
           <Box
             component={'img'}
-            src={dummy}
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${product.Photos[0]?.storageId}/preview`}
             alt=""
             sx={{
               width: '100%',
