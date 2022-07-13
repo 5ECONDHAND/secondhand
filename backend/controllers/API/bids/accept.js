@@ -68,6 +68,14 @@ async function controller(req, res, next) {
     return res.json(productData);
   }
 
+  if (!productData) {
+    return res.json({
+      error: true,
+      message: "Product not found",
+      data: [],
+    });
+  }
+
   if (req.userId != productData.userId) {
     return res.json({
       error: true,
