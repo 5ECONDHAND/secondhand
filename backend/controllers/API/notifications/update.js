@@ -19,38 +19,24 @@ async function controller(req, res, next) {
     })
   }
 
-  var wherePayload = null;
-
-  if (req.userId) {
-    wherePayload = {
-      where: {
-        AND: [
-          {
-            id: id
-          },
-          {
-            userId: req.userId
-          }
-        ]
-      }
-    };
-  }
-
-  if (req.isAdmin) {
-    wherePayload = {
-      where: {
-        id: id
-      }
-    };
-  }
-
-  if (wherePayload === null) {
+  if (!req.userId) {
     return res.json({
       error: true,
       message: 'Unauthorized access',
       data: [],
     });
   }
+
+  const wherePayload = {
+    AND: [
+      {
+        id: id
+      },
+      {
+        userId: req.userId
+      }
+    ]
+  };
 
   var dataPayload = {
     data: req.body.data,
@@ -62,7 +48,7 @@ async function controller(req, res, next) {
   dataPayload = Object.fromEntries(Object.entries(dataPayload).filter(([_, v]) => v != null));
 
   const data = await prisma.notification.updateMany({
-    ...wherePayload,
+    where: wherePayload,
     data: dataPayload
   }).catch(err => {
     return {

@@ -18,10 +18,7 @@ async function controller(req, res, next) {
     })
   }
 
-  if(
-    req.userId != id
-    && !req.isAdmin
-  ) {
+  if(req.userId != id) {
     return res.json({
       error: true,
       message: 'Unauthorized access',
@@ -34,27 +31,9 @@ async function controller(req, res, next) {
       id
     },
     include: {
-      Transaction: {
+      Transactions: {
         include: {
-          Users: {
-            select: {
-              accepted: true,
-              offeredPrice: true,
-              description: true,
-              User: {
-                select: {
-                  id: true,
-                  phoneNo: true,
-                  fullname: true,
-                  email: true,
-                  city: true,
-                  address: true,
-                  Photos: true,
-                }
-              },
-              createdAt: true
-            }
-          }
+          Transaction: true
         }
       },
       Photos: {

@@ -80,6 +80,14 @@ async function controller(req, res, next){
     return res.json(data)
   }
 
+  if (!data) {
+    return res.json({
+      error: true,
+      message: "No transaction found with this productId",
+      data: [],
+    });
+  }
+
   const notifData = {
     title: 'Penawaran Produk',
     productName: data.Product.name,

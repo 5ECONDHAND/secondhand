@@ -68,10 +68,15 @@ async function controller(req, res, next) {
     return res.json(productData);
   }
 
-  if (
-    req.userId != productData.userId
-    && !req.isAdmin
-  ) {
+  if (!productData) {
+    return res.json({
+      error: true,
+      message: "Product not found",
+      data: [],
+    });
+  }
+
+  if (req.userId != productData.userId) {
     return res.json({
       error: true,
       message: "Unauthorized access",
