@@ -1,9 +1,10 @@
 name: Deployment Heroku DEV STAGE
 
+env:
+  CI: false
+  
 on:
   pull_request:
-    paths: 
-      - 'backend/**'
     branches:
       - develop
     types: [opened, synchronize, reopened, closed]
@@ -16,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ format('origin/{0}', github.base_ref) }}
+          ref: ${{ github.base_ref }}
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -27,17 +28,16 @@ jobs:
           yarn install
           yarn build
           cp -av ./build/. ../backend/public/
-      - name: Tidy backend public folder
-        working-directory: ./backend
-        run: |
-          mv -v ./public/static/. ./public/
-          mv -v ./public/index.html ./views/
+          cp -av ./build/index.html ../backend/views/
+          rm -f ../backend/public/index.html
       - name: Commit changes
         run: |
           git config --global user.name 'Github Action'
           git config --global user.email 'github.action@users.noreply.github.com'
+          openssl rand -hex 12 > ./backend/public/commit-sha.txt
+          git add .
           git commit -am "Automated commit (base-dev)"
-          git push origin ${{ format('origin/{0}', github.base_ref) }}
+          git push
       - name: deploy from base_ref
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -53,7 +53,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ format('origin/{0}', github.head_ref) }}
+          ref: ${{ github.head_ref }}
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -64,17 +64,16 @@ jobs:
           yarn install
           yarn build
           cp -av ./build/. ../backend/public/
-      - name: Tidy backend public folder
-        working-directory: ./backend
-        run: |
-          mv -v ./public/static/. ./public/
-          mv -v ./public/index.html ./views/
+          cp -av ./build/index.html ../backend/views/
+          rm -f ../backend/public/index.html
       - name: Commit changes
         run: |
           git config --global user.name 'Github Action'
           git config --global user.email 'github.action@users.noreply.github.com'
+          openssl rand -hex 12 > ./backend/public/commit-sha.txt
+          git add .
           git commit -am "Automated commit (head-dev)"
-          git push origin ${{ format('origin/{0}', github.head_ref) }}
+          git push
       - name: deploy from head_ref
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
