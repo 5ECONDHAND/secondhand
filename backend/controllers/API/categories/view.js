@@ -32,7 +32,13 @@ async function controller(req, res, next) {
     where: {
       id
     },
-    ...includePayload,
+    include: {
+      _count: {
+        select: {
+          Products: true
+        }
+      }
+    },
   }).catch(err=>{
     return{
       error: true,
