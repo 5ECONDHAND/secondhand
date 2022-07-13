@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ format('origin/{0}', github.base_ref) }}
+          ref: ${{ github.base_ref }}
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -35,7 +35,7 @@ jobs:
           git config --global user.name 'Github Action'
           git config --global user.email 'github.action@users.noreply.github.com'
           git commit -am "Automated commit (base-dev)"
-          git push origin ${{ format('origin/{0}', github.base_ref) }}
+          git push
       - name: deploy from base_ref
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -51,7 +51,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ format('origin/{0}', github.head_ref) }}
+          ref: ${{ github.head_ref }}
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -72,7 +72,7 @@ jobs:
           git config --global user.name 'Github Action'
           git config --global user.email 'github.action@users.noreply.github.com'
           git commit -am "Automated commit (head-dev)"
-          git push origin ${{ format('origin/{0}', github.head_ref) }}
+          git push
       - name: deploy from head_ref
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
