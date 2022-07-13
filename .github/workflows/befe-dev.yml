@@ -27,12 +27,10 @@ jobs:
         run: |
           yarn install
           yarn build
+          cp -av ./build/static/. ../backend/public/
           cp -av ./build/. ../backend/public/
-      - name: Tidy backend public folder
-        working-directory: ./backend
-        run: |
-          mv -v ./public/static/. ./public/
-          mv -v ./public/index.html ./views/
+          rm -rf ../backend/public/static
+          rm -f ../backend/public/index.html
       - name: Commit changes
         run: |
           git config --global user.name 'Github Action'
@@ -64,12 +62,10 @@ jobs:
         run: |
           yarn install
           yarn build
+          cp -av ./build/static/. ../backend/public/
           cp -av ./build/. ../backend/public/
-      - name: Tidy backend public folder
-        working-directory: ./backend
-        run: |
-          mv -v ./public/static/. ./public/
-          mv -v ./public/index.html ./views/
+          rm -rf ../backend/public/static
+          rm -f ../backend/public/index.html
       - name: Commit changes
         run: |
           git config --global user.name 'Github Action'
