@@ -7,7 +7,7 @@ if (!process.env.ROOT_PATH) {
 // load environment variables from .env file
 if (!process.env.LOADED_ENV) {
   require('dotenv').config({ path: process.env.ROOT_PATH + '/.env' });
-  process.env.APP_NAME = process.env.APP_NAME ? process.env.APP_NAME : 'Binar Challenge';
+  process.env.APP_NAME = process.env.APP_NAME ? process.env.APP_NAME : 'SecondHand Kel5';
 }
 
 
