@@ -19,10 +19,23 @@ async function controller(req, res, next) {
     });
   }
 
+  const wherePayload = {
+    AND: [
+      {
+        status: 'PUBLISH'
+      },
+      {
+        id: id
+      }
+    ]
+  };
+
+  if (req.userId) {
+    wherePayload.AND.shift();
+  }
+
   const data = await prisma.product.findFirst({
-    where: {
-      id
-    },
+    where: wherePayload,
     include: {
       User: {
         select: {

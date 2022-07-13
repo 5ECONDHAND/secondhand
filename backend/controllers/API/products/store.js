@@ -8,123 +8,123 @@ const prisma = require(process.env.ROOT_PATH + '/models/instance');
  * @param {import('express').NextFunction} next
  */
 async function controller(req, res, next){
-    if(
-        !req.body.name
-        || !req.body.price
-        || !req.body.categoryId
-        || !req.body.description
-    ){
-      return res.json({
-        error: true,
-        message: 'Please fill name, price, categoryId, and description',
-        data:[],
-      })
-    }
+  if(
+      !req.body.name
+      || !req.body.price
+      || !req.body.categoryId
+      || !req.body.description
+  ){
+    return res.json({
+      error: true,
+      message: 'Please fill name, price, categoryId, and description',
+      data:[],
+    })
+  }
 
-    var categoryId = parseInt(req.body.categoryId);
+  var categoryId = parseInt(req.body.categoryId);
 
-    if (isNaN(categoryId)) {
-      return res.json({
-        error: true,
-        message: "Invalid categoryId",
-        data: [],
-      });
-    }
-
-    if (!req.userId) {
-      return res.json({
-        error: true,
-        message: "Unauthorized access",
-        data: [],
-      });
-    }
-
-    const countProduct = await prisma.product.count({
-      where: {
-        userId: req.userId,
-      }
-    }).catch(err => {
-      return{
-        error: true,
-        message: err.message,
-        data: [],
-      }
+  if (isNaN(categoryId)) {
+    return res.json({
+      error: true,
+      message: "Invalid categoryId",
+      data: [],
     });
+  }
 
-    if (countProduct && countProduct.error) {
-      return res.json(countProduct);
+  if (!req.userId) {
+    return res.json({
+      error: true,
+      message: "Unauthorized access",
+      data: [],
+    });
+  }
+
+  const countProduct = await prisma.product.count({
+    where: {
+      userId: req.userId,
     }
-
-    if (countProduct >= 4) {
-      return res.json({
-        error: true,
-        message: "You can't create anymore products",
-        data: [],
-      });
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
     }
+  });
 
-    var dataPayload = {
-      name: req.body.name,
-      price: req.body.price,
-      description: req.body.description,
-      Categories: {
-        create: {
-          categoryId
-        }
-      },
-      User: {
-        connect: {
-          id: req.userId
-        }
-      },
-      Transaction: {
-        create: {
-          status: 'DECIDING'
-        }
+  if (countProduct && countProduct.error) {
+    return res.json(countProduct);
+  }
+
+  if (countProduct >= 4) {
+    return res.json({
+      error: true,
+      message: "You can't create anymore products",
+      data: [],
+    });
+  }
+
+  var dataPayload = {
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description,
+    Categories: {
+      create: {
+        categoryId
       }
+    },
+    User: {
+      connect: {
+        id: req.userId
+      }
+    },
+    Transaction: {
+      create: {
+        status: 'DECIDING'
+      }
+    }
+  };
+
+  if (
+    req.files != null
+    && Array.isArray(req.files)
+    && req.files.length > 0
+  ) {
+    dataPayload.Photos = {
+      create: []
     };
 
-    if (
-      req.files != null
-      && Array.isArray(req.files)
-      && req.files.length > 0
-    ) {
-      dataPayload.Photos = {
-        create: []
-      };
-
-      for (var i = 0; i < req.files.length; i++) {
-        dataPayload.Photos.create.push({
-          Storage: {
-            create: {
-              filename: req.files[i].filename,
-              mimetype: req.files[i].mimetype,
-              size: req.files[i].size
-            }
+    for (var i = 0; i < req.files.length; i++) {
+      dataPayload.Photos.create.push({
+        Storage: {
+          create: {
+            filename: req.files[i].filename,
+            mimetype: req.files[i].mimetype,
+            size: req.files[i].size
           }
-        });
-      }
+        }
+      });
     }
+  }
 
-    const data = await prisma.product.create({
-      data: dataPayload
-    }).catch(err => {
-      return{
-        error: true,
-        message: err.message,
-        data: [],
-      }
-    });
-
-    if(data && data.error){
-      return res.json(data)
+  const data = await prisma.product.create({
+    data: dataPayload
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
     }
+  });
 
-    res.json({
-      error: false,
-      message: 'Product created',
-      data: [data],
-    })
+  if(data && data.error){
+    return res.json(data)
+  }
+
+  res.json({
+    error: false,
+    message: 'Product created',
+    data: [data],
+  })
 }
 
 module.exports = controller
