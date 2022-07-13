@@ -24,14 +24,14 @@ jobs:
       - name: Build frontend & copy to backend public
         working-directory: ./frontend
         run: |
-        yarn install
-        yarn build
-        cp -av ./build/. ../backend/public/
+          yarn install
+          yarn build
+          cp -av ./build/. ../backend/public/
       - name: Tidy backend public folder
         working-directory: ./backend
         run: |
-        mv -v ./public/static/. ./public/
-        mv -v ./public/index.html ./views/
+          mv -v ./public/static/. ./public/
+          mv -v ./public/index.html ./views/
       - name: Commit changes
         run: |
           git config --global user.name 'Github Action'
@@ -61,14 +61,14 @@ jobs:
       - name: Build frontend & copy to backend public
         working-directory: ./frontend
         run: |
-        yarn install
-        yarn build
-        cp -av ./build/. ../backend/public/
+          yarn install
+          yarn build
+          cp -av ./build/. ../backend/public/
       - name: Tidy backend public folder
         working-directory: ./backend
         run: |
-        mv -v ./public/static/. ./public/
-        mv -v ./public/index.html ./views/
+          mv -v ./public/static/. ./public/
+          mv -v ./public/index.html ./views/
       - name: Commit changes
         run: |
           git config --global user.name 'Github Action'
