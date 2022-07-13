@@ -1,5 +1,8 @@
 name: Deployment Heroku DEV STAGE
 
+env:
+  CI: false
+  
 on:
   pull_request:
     branches:
@@ -23,7 +26,6 @@ jobs:
         working-directory: ./frontend
         run: |
           yarn install
-          echo "CI=false" >> $GITHUB_ENV
           yarn build
           cp -av ./build/. ../backend/public/
       - name: Tidy backend public folder
@@ -61,7 +63,6 @@ jobs:
         working-directory: ./frontend
         run: |
           yarn install
-          echo "CI=false" >> $GITHUB_ENV
           yarn build
           cp -av ./build/. ../backend/public/
       - name: Tidy backend public folder
