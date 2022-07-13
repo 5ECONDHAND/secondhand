@@ -8,11 +8,28 @@ export const productApi = createApi({
   refetchOnMountOrArgChange: 15,
   tagTypes: ['PutProduct', 'PostProduct', 'DeleteProduct'],
   endpoints: (builder) => ({
+    // queries
     getData: builder.query({
       query: () => '/products',
     }),
+    // products seller
+    getProductsSeller: builder.query({
+      query: (token) => ({
+        url: '/products',
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }),
+    }),
     getDataById: builder.query({
-      query: (id) => `/products/${id}`,
+      query: ({ id, token }) => ({
+        url: `/products/${id}`,
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }),
     }),
     // patch product
     putProduct: builder.mutation({
@@ -45,7 +62,9 @@ export const productApi = createApi({
 
 export const {
   useGetDataQuery,
+  useGetProductsSellerQuery,
   useGetDataByIdQuery,
-  usePostProductMutation,
+  UseSearchMutation,
   usePutProductMutation,
+  usePostProductMutation,
 } = productApi

@@ -18,19 +18,43 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
 import { productActions, selectProductNotifications } from '../../../redux/slices/productSlice'
-import { useGetDataByIdQuery } from '../../../redux/services/productApi'
+import { useGetDataByIdQuery, useGetDataQuery } from '../../../redux/services/productApi'
+import axios from 'axios'
 
 const SearchField = () => {
   const { pathname } = useLocation()
+  const [search, setSearch] = useState('')
+  const dispatch = useDispatch()
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  )
+  // console.log(productData)
+  const handleSearch = async () => {
+    if (search === '') {
+      dispatch(productActions.setProductSearch(null))
+      dispatch(productActions.setProducts(productData?.data))
+    } else {
+      // console.log(search)
+      axios.get(`https://febesh5-dev.herokuapp.com/api/products?search=${search}`)
+        .then(response => {
+          // console.log({ error: false, message: 'Success', data: response.data.data })
+          dispatch(productActions.setProductSearch(response?.data.data))
+        })
+        .catch(e => console.log(e))
+    }
+  }
+
   return (
-    <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+    <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }} >
       <OutlinedInput
+        onChange={(e) => setSearch(e.target.value)}
         disabled={pathname !== '/' ? true : false}
         placeholder="Cari di sini..."
         // onChange={handleChange("nama")}
         sx={{ borderRadius: '16px', height: '48px', backgroundColor: '#EEEEEE', border: 'gray' }}
         endAdornment={
-          <InputAdornment position="end" sx={{ mr: '0.5rem' }}>
+          <InputAdornment onClick={handleSearch} position="end" sx={{ mr: '0.5rem' }}>
             <IconButton edge="end">
               <FiSearch />
             </IconButton>
@@ -73,12 +97,18 @@ const UserButton = ({ userId }) => {
   const { pathname } = useLocation()
   const dispatch = useDispatch()
   const notificationProductAdd = useSelector(selectProductNotifications)
-  const notifData = useGetDataByIdQuery(notificationProductAdd.id)
-  console.log(notifData)
+  // console.log(notificationProductAdd)
+  const user = useSelector(selectUser)
+  let notifId = notificationProductAdd?.id
+  let userToken = user.accessToken
+  // console.log(notifId)
+  const notifData = useGetDataByIdQuery({ id: notifId, token: userToken })
+  // console.log(userToken)
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
     dispatch(userActions.clearCredentials())
+    dispatch(productActions.clearCredentials())
     navigate('/login')
   }
 
@@ -88,7 +118,7 @@ const UserButton = ({ userId }) => {
   }, [pathname])
 
   const handleActive = (name) => {
-    console.log(name)
+    // console.log(name)
     setActive(name)
     switch (name) {
       case 'Menu':
@@ -157,8 +187,9 @@ const UserButton = ({ userId }) => {
                           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                        {notifData ? [notifData]?.map(item => (
+                        {notifData.data.error ? 'kosong' : [notifData].map((item, index) => (
                           <Grid
+                            key={index}
                             container
                             sx={{
                               gap: '10px',
@@ -169,7 +200,7 @@ const UserButton = ({ userId }) => {
                             onClick={handleNotifClick}
                           >
                             <Grid>
-                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0].Photos[0].storageId}/preview`} alt="product-img" width="80px" height="80px" />
+                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0]?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" />
                             </Grid>
                             <Grid>
                               <Typography variant="body2">Berhasil Ditambahkan</Typography>
@@ -191,7 +222,7 @@ const UserButton = ({ userId }) => {
                               </Box>
                             </Grid>
                           </Grid>
-                        )) : 'kosong'}
+                        ))}
                       </Box>
                     </Box>
                   )}

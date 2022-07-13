@@ -5,7 +5,7 @@ import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
-import { productActions, selectProduct } from '../../redux/slices/productSlice'
+import { productActions, selectProduct, selectProductSearch } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
 import { selectUser, userActions } from '../../redux/slices/userSlice'
@@ -13,15 +13,16 @@ import { selectUser, userActions } from '../../redux/slices/userSlice'
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const userActive = useSelector(selectUser)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
   )
-  const userActive = useSelector(selectUser)
   const products = useSelector(selectProduct)
+  const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
-  console.log(productData)
+  // console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -76,11 +77,13 @@ const Home = () => {
   }, [dataCategory, products])
 
   useEffect(() => {
-    if (isProductSuccess) {
+    if (searchResult) {
+      dispatch(productActions.setProducts(searchResult))
+    } else {
       fillProducts()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData, isProductSuccess, products])
+  }, [productData, isProductSuccess, products, searchResult])
 
   return (
     <>

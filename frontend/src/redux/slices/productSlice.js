@@ -6,6 +6,7 @@ const initialState = {
   productActive: null,
   productPreview: null,
   productNotifications: [],
+  productSearch: null
 }
 
 export const productSlice = createSlice({
@@ -22,9 +23,12 @@ export const productSlice = createSlice({
       state.productPreview = action.payload
     },
     setProductNotifications: (state, action) => {
-      console.log(action)
       state.productNotifications = action.payload
-    }
+    },
+    setProductSearch: (state, action) => {
+      state.productSearch = action.payload
+    },
+    clearCredentials: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addMatcher(productApi.endpoints.getData.matchFulfilled, (state, { payload }) => {
@@ -34,7 +38,8 @@ export const productSlice = createSlice({
 })
 
 export const selectProduct = (state) => state.persist.products.products
-export const selectProductPreview = (state) => state.productPreview
+export const selectProductPreview = (state) => state.persist.products.productPreview
 export const selectProductNotifications = (state) => state.persist.products.productNotifications
+export const selectProductSearch = (state) => state.persist.products.productSearch
 export const productActions = { ...productSlice.actions }
 export default productSlice.reducer

@@ -48,17 +48,17 @@ const ProductSlider = ({ productPhoto }) => {
           spaceBetween={10}
           modules={[Navigation, Pagination]}
         >
-          {productPhoto?.map(item => (
-            <SwiperSlide>
-              <BoxImg image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`} />
+          {productPhoto?.map((item, index) => (
+            <SwiperSlide key={index}>
+              {item.storageId ? <BoxImg image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`} /> : <img
+                src={item.preview}
+                onLoad={() => {
+                  URL.revokeObjectURL(item.preview)
+                }}
+                alt=""
+              />}
             </SwiperSlide>
           ))}
-          {/* <SwiperSlide>
-            <BoxImg image={dummy} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <BoxImg image={dummy} />
-          </SwiperSlide> */}
         </Swiper>
       </Box>
     </>

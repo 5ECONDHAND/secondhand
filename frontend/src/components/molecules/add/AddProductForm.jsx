@@ -24,8 +24,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
-import { productActions } from '../../../redux/slices/productSlice'
+import { productActions, selectProduct } from '../../../redux/slices/productSlice'
 import axios from 'axios'
+import { selectUser } from '../../../redux/slices'
 
 const styles = {
   '&.MuiButton-root': {
@@ -73,8 +74,13 @@ const AddProductForm = (props) => {
   })
   const [files, setFiles] = useState([])
   const user = useSelector(selectAuth)
+  const userLogin = useSelector(selectUser)
+  let token = userLogin.accessToken
+  const productsData = useSelector(selectProduct)
   const { productId } = useParams()
   const dispatch = useDispatch()
+  const userProductLength = productsData?.filter((item) => item.User.fullname === userLogin.fullname).length
+  console.log(userProductLength)
 
   const [
     postProduct,
@@ -96,21 +102,118 @@ const AddProductForm = (props) => {
     },
   ] = usePutProductMutation()
 
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery(productId)
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery({ id: productId, token: token })
+  // console.log(productData)
 
-  const handleSubmit = (event) => {
-    if (productId) {
+  const handleSubmit = (event, name = '') => {
+    if (productId && name === '') {
       handleUpdate(event)
+    } else if (name === 'preview') {
+      handlePreview(event)
     } else {
       handleAdd(event)
     }
   }
 
+
   const handleAdd = async (event) => {
-    console.log('adding product...')
-    event.preventDefault()
+    if (userProductLength >= 4) {
+      enqueueSnackbar('Maximum Product Stock', { variant: 'error', autoHideDuration: 1000 })
+      navigate('/sales')
+    }
+    const formData = new FormData();
 
     if (validateProduct(values, setError)) {
+      axios.post('https://febesh5-dev.herokuapp.com/api/products', {
+        name: values.nama,
+        price: values.harga,
+        description: values.deskripsi,
+        categoryId: values.kategori,
+        status: 'PUBLISH'
+      }, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+        dispatch(productActions.setProductNotifications(response.data.data[0]))
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
+      })
+        .catch((e) => {
+          console.log(e)
+          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+        })
+      console.log('product created')
+    }
+  }
+
+  const handleUpdate = async (event) => {
+    console.log('updating product...')
+    event.preventDefault()
+    if (validateProduct(values, setError)) {
+      axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
+        name: values.nama,
+        price: values.harga,
+        description: values.deskripsi,
+        categoryId: values.kategori,
+        files: files[0],
+        token: user.token,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
+        dispatch(productActions.setProductNotifications(response.data.data[0]))
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
+      })
+        .catch((e) => {
+          console.log(e)
+          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+        })
+      console.log('product updated')
+    }
+  }
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value })
+
+  }
+
+
+  const handlePreview = (event) => {
+    event.preventDefault()
+    console.log(files)
+    if (productId) {
+      axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
+        name: values.nama,
+        price: values.harga,
+        description: values.deskripsi,
+        categoryId: values.kategori,
+        files: files[0],
+        token: user.token,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        dispatch(productActions.setProductPreview({
+          data: response.data.data[0],
+        }))
+        navigate(`/preview/${response.data.data[0].id}`)
+      })
+        .catch((e) => {
+          console.log(e)
+          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+        })
+    } else {
       axios.post('https://febesh5-dev.herokuapp.com/api/products', {
         name: values.nama,
         price: values.harga,
@@ -123,57 +226,22 @@ const AddProductForm = (props) => {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
-        dispatch(productActions.setProductNotifications(response.data.data[0]))
-        // console.log(response.data.data[0])
-        setTimeout(() => {
-          navigate('/sales')
-        }, 2000)
+        console.log(response.data);
+        dispatch(productActions.setProductPreview({
+          data: response.data.data[0],
+        }))
+        navigate(`/preview/${response.data.data[0].id}`)
       })
         .catch((e) => {
           console.log(e)
-          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
         })
-
-      // await postProduct({
-      //   name: values.nama,
-      //   price: values.harga,
-      //   description: values.deskripsi,
-      //   categoryId: values.kategori,
-      //   files: fd.get('files'),
-      //   token: user.token,
-      // })
-      // console.log()
-      // console.log(values.nama)
-
-      console.log('product created')
     }
-  }
-
-  const handleUpdate = async (event) => {
-    console.log('updating product...')
-    event.preventDefault()
-    if (validateProduct(values, setError)) {
-      await putProduct({
-        id: productId,
-        name: values.nama,
-        price: values.harga,
-        description: values.deskripsi,
-        categoryId: values.kategori,
-        token: user.token,
-      })
-      console.log('product updated')
-    }
-  }
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-
   }
 
   // foto
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     maxFiles: 4,
+    maxSize: 250000,
     accept: {
       'image/*': [],
     },
@@ -250,7 +318,7 @@ const AddProductForm = (props) => {
 
   return (
     <div className="Form">
-      <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+      <Box component="form" autoComplete="off">
         <Grid container direction="column">
           <Grid item xs={12}>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
@@ -362,7 +430,7 @@ const AddProductForm = (props) => {
               </Box>
               {fileRejectionItems[0] && (
                 <Box sx={{ mb: '1rem' }}>
-                  <Alert severity="error">Maksimal 4 Gambar</Alert>
+                  <Alert severity="error">Maksimal 4 Gambar dan Ukuran Maksimal 2mb </Alert>
                 </Box>
               )}
             </FormControl>
@@ -376,10 +444,11 @@ const AddProductForm = (props) => {
             </Box>
           ) : (
             <>
-              <Button fullWidth variant="outlined" size="large" disableElevation sx={styles}>
+              <Button type="submit" fullWidth variant="outlined" size="large" disableElevation sx={styles} onClick={(e) => handleSubmit(e, 'preview')}>
                 Preview
               </Button>
               <Button
+                onClick={(e) => handleSubmit(e)}
                 type="submit"
                 fullWidth
                 variant="contained"

@@ -7,20 +7,19 @@ import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
-import { useGetDataQuery } from '../../redux/services/productApi'
+import { useGetDataQuery, useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
+import { useSnackbar } from 'notistack'
 
 const Sales = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
-    {},
-    { refetchOnMountOrArgChange: true }
-  )
   const user = useSelector(selectUser)
-  const products = useSelector(selectProduct)
+  const { data: productData, isSuccess: isProductSuccess } = useGetProductsSellerQuery(user.accessToken)
+  const products = useSelector(selectProduct) // get from redux
   const [displayData, setDisplayData] = useState()
   const [dataCategory, setDataCategory] = useState('Semua Produk')
+  const { enqueueSnackbar } = useSnackbar()
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -56,7 +55,7 @@ const Sales = () => {
       fillProducts()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products])
+  }, [products, productData])
 
   useEffect(() => {
     if (products) {
@@ -64,6 +63,19 @@ const Sales = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCategory, products])
+
+  console.log(productData)
+
+  const userProductLength = products?.filter((item) => item.User.fullname === user.fullname).length
+  // console.log(userProductLength)
+
+  const handleAdd = () => {
+    if (userProductLength >= 4) {
+      enqueueSnackbar('Maximum Product Stock', { variant: 'error', autoHideDuration: 3000 })
+    } else {
+      navigate('/add')
+    }
+  }
 
   const ProductAddArea = () => {
     return (
@@ -84,7 +96,7 @@ const Sales = () => {
               color: '#8A8A8A',
               cursor: 'pointer',
             }}
-            onClick={() => navigate('/add')}
+            onClick={handleAdd}
           >
             <FiPlus size={24} />
             <Typography variant="body2" sx={{ mt: 1 }}>
