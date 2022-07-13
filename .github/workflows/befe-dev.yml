@@ -35,6 +35,7 @@ jobs:
         run: |
           git config --global user.name 'Github Action'
           git config --global user.email 'github.action@users.noreply.github.com'
+          git add .
           git commit -am "Automated commit (base-dev)"
           git push
       - name: deploy from base_ref
@@ -70,6 +71,7 @@ jobs:
         run: |
           git config --global user.name 'Github Action'
           git config --global user.email 'github.action@users.noreply.github.com'
+          git add .
           git commit -am "Automated commit (head-dev)"
           git push
       - name: deploy from head_ref
