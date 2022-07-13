@@ -27,9 +27,8 @@ jobs:
         run: |
           yarn install
           yarn build
-          cp -av ./build/static/. ../backend/public/
           cp -av ./build/. ../backend/public/
-          rm -rf ../backend/public/static
+          cp -av ./build/index.html ../backend/views/
           rm -f ../backend/public/index.html
       - name: Commit changes
         run: |
@@ -63,9 +62,8 @@ jobs:
         run: |
           yarn install
           yarn build
-          cp -av ./build/static/. ../backend/public/
           cp -av ./build/. ../backend/public/
-          rm -rf ../backend/public/static
+          cp -av ./build/index.html ../backend/views/
           rm -f ../backend/public/index.html
       - name: Commit changes
         run: |
