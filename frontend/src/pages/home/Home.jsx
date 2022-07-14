@@ -5,7 +5,7 @@ import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authActions } from '../../redux/slices/authSlice'
-import { productActions, selectProduct } from '../../redux/slices/productSlice'
+import { productActions, selectProduct, selectProductSearch } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
 import { selectUser, userActions } from '../../redux/slices/userSlice'
@@ -13,14 +13,16 @@ import { selectUser, userActions } from '../../redux/slices/userSlice'
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const userActive = useSelector(selectUser)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
   )
-  const userActive = useSelector(selectUser)
   const products = useSelector(selectProduct)
+  const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
+  // console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -60,6 +62,7 @@ const Home = () => {
   const logout = () => {
     dispatch(authActions.clearCredentials())
     dispatch(userActions.clearCredentials())
+    dispatch(productActions.clearProductWishlist())
     navigate('/login')
   }
 
@@ -75,21 +78,23 @@ const Home = () => {
   }, [dataCategory, products])
 
   useEffect(() => {
-    if (isProductSuccess) {
+    if (searchResult) {
+      dispatch(productActions.setProducts(searchResult))
+    } else {
       fillProducts()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData, isProductSuccess, products])
+  }, [productData, isProductSuccess, products, searchResult])
 
   return (
     <>
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+        {/* <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
           {displayLogin()}
           {userActive ? <>{<h5>'Name',{userActive.fullname || 'null'}</h5>}</> : null}
-        </div>
+        </div> */}
 
         {isProductSuccess ? (
           products?.length > 0 ? (

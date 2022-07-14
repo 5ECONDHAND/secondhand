@@ -24,7 +24,7 @@ export const userApi = createApi({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: { fullname: fullname, city: city, address: address, phoneNo: phoneNo },
+        body: { fullname: fullname, city: city, address: address, phoneNo: phoneNo }
       }),
     }),
   }),

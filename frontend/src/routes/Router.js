@@ -20,9 +20,13 @@ const Router = () => {
 
   const ProtectedRoute = ({ isAllowed, redirectPath, children }) => {
     if (!isAllowed) {
-      setTimeout(() => {
+      if (redirectPath === '/') {
+        setTimeout(() => {
+          return <Navigate to={redirectPath} replace />
+        }, 1000)
+      } else {
         return <Navigate to={redirectPath} replace />
-      }, 1000)
+      }
     }
     return children ? children : <Outlet />
   }
@@ -50,9 +54,10 @@ const Router = () => {
                 />
               }
             >
+              <Route path="/preview/:productId" element={<Product />} />
               <Route path="/add" element={<AddProduct />} />
               <Route path="/add/:productId" element={<AddProduct />} />
-              <Route path="/offers" element={<Offers />} />
+              <Route path="/offers/:id" element={<Offers />} />
             </Route>
           </Route>
         </Routes>
