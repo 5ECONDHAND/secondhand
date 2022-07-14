@@ -1,76 +1,72 @@
-import { useState, useEffect } from 'react'
-import { Button, IconButton, Paper, Stack, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Button, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
-import { matchRoutes, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { FaHeart } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { productActions, selectProductPreview } from '../../../redux/slices'
+import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { productActions, selectProductWishlist } from '../../../redux/slices/productSlice'
 import { selectUser } from '../../../redux/slices/userSlice'
+import { validateProduct } from '../../../utils/validators'
 
-const ProductItem = ({ product, type }) => {
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
-  // redux state
-  const userActive = useSelector(selectUser)
-  const productWishlist = useSelector(selectProductWishlist)
-  // local state
-  const [wishlist, setWishlist] = useState(false)
+const ProductItem = (props) => {
+  const { productName, productCategory, productPrice, type, productId, storageId, productDesc } = props
   const [open, setOpen] = useState(false)
-
-  // routings variables
-  const routes = [{ path: '/product/:id' }]
-  const location = useLocation()
-  const navigate = useNavigate()
-  const useCurrentPath = () => {
-    const location = useLocation()
-    const [{ route }] = matchRoutes(routes, location)
-    return route.path
-  }
-  const currentPath = useCurrentPath()
-
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+  const navigate = useNavigate()
+  const [categoryNumber, setCategoryNumber] = useState('')
+  const category = ['Hobi', 'Kendaraan', 'Baju', 'Elektronik', 'Kesehatan']
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  const userLogin = useSelector(selectUser)
 
-  const checkWishlist = () => {
-    if (productWishlist.length > 0) {
-      for (const x of productWishlist) {
-        if (x.wish.id === product?.id) {
-          setWishlist(true)
-          return true
-        }
-      }
-    }
-    return false
-  }
-
-  const addWishlist = () => {
-    setWishlist(true)
-    if (userActive && product !== null) {
-      dispatch(productActions.addProductWishlist({ wish: product }))
-      enqueueSnackbar('Wishlist Added', {
-        variant: 'success',
-        autoHideDuration: 1000,
-      })
-    }
-  }
-
-  const removeWishlist = () => {
-    setWishlist(false)
-    if (userActive && product !== null) {
-      dispatch(productActions.removeProductWishlist({ id: product?.id }))
-      enqueueSnackbar('Wishlist Removed', {
-        variant: 'warning',
-        autoHideDuration: 1000,
-      })
-    }
+  // preview product
+  const productPreview = useSelector(selectProductPreview)
+  const data = {
+    nama: productPreview?.name,
+    harga: parseInt(productPreview?.price),
+    deskripsi: productPreview?.description,
+    kategori: parseInt(productPreview?.categoryId),
+    token: productPreview?.token
   }
 
   useEffect(() => {
-    checkWishlist()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wishlist])
+    if (typeof productCategory === 'number') setCategoryNumber(category[productCategory])
+  })
+
+  // update state from draft to public
+  const handleAdd = async () => {
+    console.log('adding product...')
+    axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
+      id: productId,
+      name: productName,
+      price: productPrice,
+      description: productDesc,
+      categoryId: productCategory,
+      status: 'PUBLISH'
+    }, {
+      headers: {
+        'Authorization': `Bearer ${userLogin.accessToken}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(function (response) {
+      enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+      dispatch(productActions.setProductNotifications(response.data.data[0]))
+      setTimeout(() => {
+        navigate('/sales')
+      }, 2000)
+    })
+      .catch((e) => {
+        console.log(e)
+        enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+      })
+    console.log('product created')
+    setTimeout(() => {
+      navigate('/sales')
+    }, 2000)
+  }
 
   return (
     <>
@@ -100,9 +96,7 @@ const ProductItem = ({ product, type }) => {
               ) : null}
             </Stack>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-              {product?.Categories[0].Category.name
-                ? product?.Categories[0].Category.name
-                : 'productCategory'}
+              {typeof productCategory !== 'number' ? productCategory : categoryNumber}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
               {toRupiah(product?.price) || toRupiah(0)}
@@ -110,6 +104,7 @@ const ProductItem = ({ product, type }) => {
             {type === 'seller' ? (
               <>
                 <Button
+                  onClick={() => handleAdd()}
                   fullWidth
                   variant="contained"
                   size="large"
@@ -177,13 +172,7 @@ const ProductItem = ({ product, type }) => {
             )}
           </Stack>
         </Stack>
-        <NegotiateModal
-          open={open}
-          handleClose={handleClose}
-          productName={product?.name}
-          productPrice={product?.price}
-          storageId={product?.Photos[0]?.storageId}
-        />
+        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} token={userLogin.accessToken} productId={productId} storageId={storageId} />
       </Paper>
     </>
   )

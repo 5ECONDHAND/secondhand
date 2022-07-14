@@ -54,6 +54,7 @@ const Router = () => {
                 />
               }
             >
+              <Route path="/preview/:productId" element={<Product />} />
               <Route path="/add" element={<AddProduct />} />
               <Route path="/add/:productId" element={<AddProduct />} />
               <Route path="/offers/:id" element={<Offers />} />
