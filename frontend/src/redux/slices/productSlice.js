@@ -6,7 +6,7 @@ const initialState = {
   productActive: null,
   productPreview: null,
   productNotifications: [],
-  productSearch: null
+  productSearch: null,
   productWishlist: [],
 }
 

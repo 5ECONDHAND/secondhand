@@ -79,7 +79,9 @@ const AddProductForm = (props) => {
   const productsData = useSelector(selectProduct)
   const { productId } = useParams()
   const dispatch = useDispatch()
-  const userProductLength = productsData?.filter((item) => item.User.fullname === userLogin.fullname).length
+  const userProductLength = productsData?.filter(
+    (item) => item.User.fullname === userLogin.fullname
+  ).length
   console.log(userProductLength)
 
   const [
@@ -102,7 +104,10 @@ const AddProductForm = (props) => {
     },
   ] = usePutProductMutation()
 
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery({ id: productId, token: token })
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery({
+    id: productId,
+    token: token,
+  })
   // console.log(productData)
 
   const handleSubmit = (event, name = '') => {
@@ -115,33 +120,39 @@ const AddProductForm = (props) => {
     }
   }
 
-
   const handleAdd = async (event) => {
+    event.preventDefault()
     if (userProductLength >= 4) {
       enqueueSnackbar('Maximum Product Stock', { variant: 'error', autoHideDuration: 1000 })
-      navigate('/sales')
+      return navigate('/sales')
     }
-    const formData = new FormData();
+    // const formData = new FormData()
 
     if (validateProduct(values, setError)) {
-      axios.post('https://febesh5-dev.herokuapp.com/api/products', {
-        name: values.nama,
-        price: values.harga,
-        description: values.deskripsi,
-        categoryId: values.kategori,
-        status: 'PUBLISH'
-      }, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
-        dispatch(productActions.setProductNotifications(response.data.data[0]))
-        setTimeout(() => {
-          navigate('/sales')
-        }, 2000)
-      })
+      axios
+        .post(
+          'https://febesh5-dev.herokuapp.com/api/products',
+          {
+            name: values.nama,
+            price: values.harga,
+            description: values.deskripsi,
+            categoryId: values.kategori,
+            status: 'PUBLISH',
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        .then(function (response) {
+          enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+          dispatch(productActions.setProductNotifications(response.data.data[0]))
+          setTimeout(() => {
+            navigate('/sales')
+          }, 2000)
+        })
         .catch((e) => {
           console.log(e)
           enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
@@ -151,28 +162,34 @@ const AddProductForm = (props) => {
   }
 
   const handleUpdate = async (event) => {
-    console.log('updating product...')
     event.preventDefault()
+    console.log('updating product...')
     if (validateProduct(values, setError)) {
-      axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
-        name: values.nama,
-        price: values.harga,
-        description: values.deskripsi,
-        categoryId: values.kategori,
-        files: files[0],
-        token: user.token,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
-        dispatch(productActions.setProductNotifications(response.data.data[0]))
-        setTimeout(() => {
-          navigate('/sales')
-        }, 2000)
-      })
+      axios
+        .put(
+          `https://febesh5-dev.herokuapp.com/api/products/${productId}`,
+          {
+            name: values.nama,
+            price: values.harga,
+            description: values.deskripsi,
+            categoryId: values.kategori,
+            files: files[0],
+            token: user.token,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        .then(function (response) {
+          enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
+          dispatch(productActions.setProductNotifications(response.data.data[0]))
+          setTimeout(() => {
+            navigate('/sales')
+          }, 2000)
+        })
         .catch((e) => {
           console.log(e)
           enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
@@ -183,55 +200,69 @@ const AddProductForm = (props) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value })
-
   }
-
 
   const handlePreview = (event) => {
     event.preventDefault()
     console.log(files)
     if (productId) {
-      axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
-        name: values.nama,
-        price: values.harga,
-        description: values.deskripsi,
-        categoryId: values.kategori,
-        files: files[0],
-        token: user.token,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        dispatch(productActions.setProductPreview({
-          data: response.data.data[0],
-        }))
-        navigate(`/preview/${response.data.data[0].id}`)
-      })
+      axios
+        .put(
+          `https://febesh5-dev.herokuapp.com/api/products/${productId}`,
+          {
+            name: values.nama,
+            price: values.harga,
+            description: values.deskripsi,
+            categoryId: values.kategori,
+            files: files[0],
+            token: user.token,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        .then(function (response) {
+          dispatch(
+            productActions.setProductPreview({
+              data: response.data.data[0],
+            })
+          )
+          navigate(`/preview/${response.data.data[0].id}`)
+        })
         .catch((e) => {
           console.log(e)
           enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
         })
     } else {
-      axios.post('https://febesh5-dev.herokuapp.com/api/products', {
-        name: values.nama,
-        price: values.harga,
-        description: values.deskripsi,
-        categoryId: values.kategori,
-        files: files[0],
-      }, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        console.log(response.data);
-        dispatch(productActions.setProductPreview({
-          data: response.data.data[0],
-        }))
-        navigate(`/preview/${response.data.data[0].id}`)
-      })
+      axios
+        .post(
+          'https://febesh5-dev.herokuapp.com/api/products',
+          {
+            name: values.nama,
+            price: values.harga,
+            description: values.deskripsi,
+            categoryId: values.kategori,
+            files: files[0],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        .then(function (response) {
+          console.log(response.data)
+          dispatch(
+            productActions.setProductPreview({
+              data: response.data.data[0],
+            })
+          )
+          navigate(`/preview/${response.data.data[0].id}`)
+        })
         .catch((e) => {
           console.log(e)
         })
@@ -277,12 +308,11 @@ const AddProductForm = (props) => {
     </div>
   ))
 
-
   useEffect(() => {
     setValues({
       nama: productData?.data[0] ? productData.data[0].name : '',
       harga: productData?.data[0] ? productData.data[0].price : '',
-      kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.name : '',
+      kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.id : '',
       deskripsi: productData?.data[0] ? productData.data[0].description : '',
     })
   }, [productData])
@@ -315,7 +345,6 @@ const AddProductForm = (props) => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
   }, [files])
 
-
   return (
     <div className="Form">
       <Box component="form" autoComplete="off">
@@ -327,7 +356,7 @@ const AddProductForm = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.nama ? true : false}
-                placeholder='Nama Produk'
+                placeholder="Nama Produk"
                 type="text"
                 value={values.nama}
                 onChange={handleChange('nama')}
@@ -343,7 +372,7 @@ const AddProductForm = (props) => {
               </FormHelperText>
               <OutlinedInput
                 error={error.harga ? true : false}
-                placeholder='Rp 0,00'
+                placeholder="Rp 0,00"
                 type="number"
                 value={values.harga}
                 onChange={handleChange('harga')}
@@ -364,13 +393,13 @@ const AddProductForm = (props) => {
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
-                <MenuItem disabled value="">
+                {/* <MenuItem disabled value="">
                   <em>
                     {isProductSuccess && productId
-                      ? productData?.data[0].Categories[0].Category.name
+                      ? productData?.data[0].Categories[0].Category.id
                       : 'Pilih Kategori'}
                   </em>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem value={1}>Hobi</MenuItem>
                 <MenuItem value={2}>Kendaraan</MenuItem>
                 <MenuItem value={3}>Baju</MenuItem>
@@ -389,7 +418,7 @@ const AddProductForm = (props) => {
                 multiline
                 error={error.deskripsi ? true : false}
                 type="text"
-                placeholder='Contoh: Jalan Ikan Hiu 33'
+                placeholder="Contoh: Jalan Ikan Hiu 33"
                 value={values.deskripsi}
                 onChange={handleChange('deskripsi')}
                 sx={{ borderRadius: '1rem' }}
@@ -444,7 +473,15 @@ const AddProductForm = (props) => {
             </Box>
           ) : (
             <>
-              <Button type="submit" fullWidth variant="outlined" size="large" disableElevation sx={styles} onClick={(e) => handleSubmit(e, 'preview')}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                size="large"
+                disableElevation
+                sx={styles}
+                onClick={(e) => handleSubmit(e, 'preview')}
+              >
                 Preview
               </Button>
               <Button

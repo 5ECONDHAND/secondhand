@@ -11,7 +11,8 @@ import { selectUser } from '../../../redux/slices/userSlice'
 import { validateProduct } from '../../../utils/validators'
 
 const ProductItem = (props) => {
-  const { productName, productCategory, productPrice, type, productId, storageId, productDesc } = props
+  const { productName, productCategory, productPrice, type, productId, storageId, productDesc } =
+    props
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -22,42 +23,55 @@ const ProductItem = (props) => {
   const { enqueueSnackbar } = useSnackbar()
   const userLogin = useSelector(selectUser)
 
-  // preview product
   const productPreview = useSelector(selectProductPreview)
   const data = {
     nama: productPreview?.name,
     harga: parseInt(productPreview?.price),
     deskripsi: productPreview?.description,
     kategori: parseInt(productPreview?.categoryId),
-    token: productPreview?.token
+    token: productPreview?.token,
   }
 
   useEffect(() => {
     if (typeof productCategory === 'number') setCategoryNumber(category[productCategory])
   })
 
-  // update state from draft to public
+  const handleBack = () => {
+    if (productId !== '') {
+      return navigate(`/add/${productId}`)
+    }
+    return navigate(`/add/`)
+  }
+
+  // console.log(typeof data.price)
+
   const handleAdd = async () => {
     console.log('adding product...')
-    axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
-      id: productId,
-      name: productName,
-      price: productPrice,
-      description: productDesc,
-      categoryId: productCategory,
-      status: 'PUBLISH'
-    }, {
-      headers: {
-        'Authorization': `Bearer ${userLogin.accessToken}`,
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(function (response) {
-      enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
-      dispatch(productActions.setProductNotifications(response.data.data[0]))
-      setTimeout(() => {
-        navigate('/sales')
-      }, 2000)
-    })
+    axios
+      .put(
+        `https://febesh5-dev.herokuapp.com/api/products/${productId}`,
+        {
+          id: productId,
+          name: productName,
+          price: productPrice,
+          description: productDesc,
+          categoryId: productCategory,
+          status: 'PUBLISH',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userLogin.accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+      .then(function (response) {
+        enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+        dispatch(productActions.setProductNotifications(response.data.data[0]))
+        setTimeout(() => {
+          navigate('/sales')
+        }, 2000)
+      })
       .catch((e) => {
         console.log(e)
         enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
@@ -66,7 +80,41 @@ const ProductItem = (props) => {
     setTimeout(() => {
       navigate('/sales')
     }, 2000)
+    // e.preventDefault()
+    // if (validateProduct(data, setError)) {
+    //   const fd = new FormData()
+    //   fd.append('name', data.nama)
+    //   fd.append('harga', data.harga)
+    //   fd.append('deskripsi', data.deskripsi)
+    //   fd.append('kategori', data.kategori)
+    //   await axios.post('https://febesh5-dev.herokuapp.com/api/products', {
+    //     name: fd.get('name'),
+    //     price: fd.get('harga'),
+    //     description: fd.get('deskripsi'),
+    //     categoryId: fd.get('kategori'),
+    //     // files: files[0],
+    //   }, {
+    //     headers: {
+    //       'Authorization': `Bearer ${data.token}`,
+    //       'Content-Type': 'multipart/form-data',
+    //     }
+    //   }).then(function (response) {
+    //     console.log(response)
+    //     enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
+    //     dispatch(productActions.setProductNotifications(response.data.data[0]))
+    //     // console.log(response.data.data[0])
+    //     setTimeout(() => {
+    //       navigate('/sales')
+    //     }, 2000)
+    //   })
+    //     .catch((e) => {
+    //       console.log(e)
+    //       enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+    //     })
+    //   console.log('product created')
+    // }
   }
+  // console.log(error)
 
   return (
     <>
@@ -79,27 +127,14 @@ const ProductItem = (props) => {
       >
         <Stack direction="column" justifyContent="flex-start" spacing={2} padding={2}>
           <Stack direction="column">
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography variant="body1" sx={{ fontWeight: '500' }}>
-                {product?.name ? product?.name : 'productName'}
-              </Typography>
-              {type === 'buyer' && userActive && userActive?.fullname !== product?.User.fullname ? (
-                wishlist ? (
-                  <IconButton onClick={removeWishlist} sx={{ color: '#FF5050' }}>
-                    <FaHeart size={20} />
-                  </IconButton>
-                ) : (
-                  <IconButton onClick={addWishlist}>
-                    <FaHeart size={20} />
-                  </IconButton>
-                )
-              ) : null}
-            </Stack>
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              {productName ? productName : 'productName'}
+            </Typography>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
               {typeof productCategory !== 'number' ? productCategory : categoryNumber}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
-              {toRupiah(product?.price) || toRupiah(0)}
+              {toRupiah(productPrice) || toRupiah(250000)}
             </Typography>
             {type === 'seller' ? (
               <>
@@ -109,13 +144,10 @@ const ProductItem = (props) => {
                   variant="contained"
                   size="large"
                   disableElevation
-                  disabled={currentPath === '/product/:id' ? true : false}
                   sx={{
                     borderRadius: '1rem',
                     textTransform: 'none',
                     background: '#7126B5',
-                    // border: '1px solid #7126B5',
-
                     border: '1px solid #7126B5',
                     py: '10px',
                     mb: '10px',
@@ -131,7 +163,6 @@ const ProductItem = (props) => {
                   variant="contained"
                   size="large"
                   disableElevation
-                  disabled={currentPath === '/product/:id' ? true : false}
                   sx={{
                     borderRadius: '1rem',
                     textTransform: 'none',
@@ -141,7 +172,7 @@ const ProductItem = (props) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
-                  onClick={() => navigate(`/add/${product?.id}`)}
+                  onClick={() => handleBack()}
                 >
                   Edit
                 </Button>
@@ -172,7 +203,13 @@ const ProductItem = (props) => {
             )}
           </Stack>
         </Stack>
-        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} token={userLogin.accessToken} productId={productId} storageId={storageId} />
+        <NegotiateModal
+          open={open}
+          handleClose={handleClose}
+          productName={productName}
+          productPrice={productPrice}
+          storageId={storageId}
+        />
       </Paper>
     </>
   )

@@ -8,15 +8,14 @@ import { selectUser } from '../../redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProductPreview } from '../../redux/slices'
 import { validateProduct } from '../../utils/validators'
-import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { productActions, selectProductActive } from '../../redux/slices/productSlice'
+import axios from 'axios'
 
 const Product = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
   const previewProduct = useSelector(selectProductPreview)
-  const { data: productData, isSuccess } = useGetDataByIdQuery(id)
+  // const { data: productData, isSuccess } = useGetDataByIdQuery(id)
   const user = useSelector(selectUser)
   let previewId = previewProduct?.data?.id
   let userToken = user?.accessToken
@@ -35,6 +34,7 @@ const Product = () => {
         return 'buyer'
       }
     }
+  }
   // const productActive = useSelector(selectProductActive)
 
   const fillProductActive = () => {
@@ -57,19 +57,45 @@ const Product = () => {
           {isSuccess && productData !== null ? (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
-                <ProductSlider productPhoto={productData?.error ? previewProductData?.data?.data[0]?.Photos : productData?.data[0].Photos} />
+                <ProductSlider
+                  productPhoto={
+                    productData?.error
+                      ? previewProductData?.data?.data[0]?.Photos
+                      : productData?.data[0].Photos
+                  }
+                />
               </Grid>
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
                   <ProductItem
                     type={checkType()}
-                    productName={productData?.error ? previewProduct?.data.name : productData?.data[0]?.name}
-                    productCategory={productData?.error ? previewProduct?.data.categoryId : productData?.data[0]?.Categories[0].Category.name}
-                    productPrice={productData?.error ? previewProduct?.data.price : productData?.data[0]?.price}
-                    productId={productData?.error ? previewProduct?.data.id : productData?.data[0]?.id}
-                    storageId={productData?.error ? previewProduct?.files : productData?.data[0]?.Photos[0]?.storageId}
-                    productDesc={productData?.error ? previewProduct?.data.description : productData?.data[0]?.description}
-                    type={productData?.data[0].User.fullname === user?.fullname ? 'seller' : 'buyer'}
+                    productName={
+                      productData?.error ? previewProduct?.data.name : productData?.data[0]?.name
+                    }
+                    productCategory={
+                      productData?.error
+                        ? previewProduct?.data.categoryId
+                        : productData?.data[0]?.Categories[0].Category.name
+                    }
+                    productPrice={
+                      productData?.error ? previewProduct?.data.price : productData?.data[0]?.price
+                    }
+                    productId={
+                      productData?.error ? previewProduct?.data.id : productData?.data[0]?.id
+                    }
+                    storageId={
+                      productData?.error
+                        ? previewProduct?.files
+                        : productData?.data[0]?.Photos[0]?.storageId
+                    }
+                    productDesc={
+                      productData?.error
+                        ? previewProduct?.data.description
+                        : productData?.data[0]?.description
+                    }
+                    // type={
+                    //   productData?.data[0].User.fullname === user?.fullname ? 'seller' : 'buyer'
+                    // }
                     product={productData?.data[0]}
                     // type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
                     // productName={productData?.data[0].name}
@@ -85,13 +111,21 @@ const Product = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <ProfileCard
-                    sellerName={productData?.error ? user.fullname : productData?.data[0]?.User.fullname}
+                    sellerName={
+                      productData?.error ? user.fullname : productData?.data[0]?.User.fullname
+                    }
                     sellerCity={productData?.error ? user.city : productData?.data[0]?.User.city}
                   />
                 </Grid>
               </Grid>
               <Grid item xs={12} sm={12} md={10}>
-                <ProductDesc productDesc={productData?.error ? previewProduct.data.description : productData?.data[0]?.description} />
+                <ProductDesc
+                  productDesc={
+                    productData?.error
+                      ? previewProduct.data.description
+                      : productData?.data[0]?.description
+                  }
+                />
               </Grid>
             </>
           ) : (
