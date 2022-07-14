@@ -50,7 +50,6 @@ const Router = () => {
                 />
               }
             >
-              <Route exact path="/preview/" element={<Product />} />
               <Route path="/preview/:productId" element={<Product />} />
               <Route path="/add" element={<AddProduct />} />
               <Route path="/add/:productId" element={<AddProduct />} />

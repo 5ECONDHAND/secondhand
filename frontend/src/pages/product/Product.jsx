@@ -15,18 +15,12 @@ const Product = () => {
   const { id } = useParams()
   const previewProduct = useSelector(selectProductPreview)
   const user = useSelector(selectUser)
-  const [previewProductData, setPreviewProductData] = useState()
   let previewId = previewProduct?.data?.id
   let userToken = user?.accessToken
 
   const { data: productData, isSuccess } = useGetDataByIdQuery({ id: id, token: userToken }) //id from url
-  const fetchData = useGetDataByIdQuery({ id: previewId, token: userToken }) // id from product
-  console.log(user.accessToken)
-  // console.log(previewProductData.data)
-
-  // useEffect(() => {
-  //   setPreviewProductData(fetchData)
-  // }, [fetchData])
+  const previewProductData = useGetDataByIdQuery({ id: previewId, token: userToken }) // id from product
+  console.log(productData)
 
   function checkType() {
     if (productData.error) {

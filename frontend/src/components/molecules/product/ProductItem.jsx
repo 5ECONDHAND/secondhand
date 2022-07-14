@@ -22,6 +22,7 @@ const ProductItem = (props) => {
   const { enqueueSnackbar } = useSnackbar()
   const userLogin = useSelector(selectUser)
 
+  // preview product
   const productPreview = useSelector(selectProductPreview)
   const data = {
     nama: productPreview?.name,
@@ -35,15 +36,7 @@ const ProductItem = (props) => {
     if (typeof productCategory === 'number') setCategoryNumber(category[productCategory])
   })
 
-  const handleBack = () => {
-    if (productId !== '') {
-      return navigate(`/add/${productId}`)
-    }
-    return navigate(`/add/`)
-  }
-
-  // console.log(typeof data.price)
-
+  // update state from draft to public
   const handleAdd = async () => {
     console.log('adding product...')
     axios.put(`https://febesh5-dev.herokuapp.com/api/products/${productId}`, {
@@ -73,41 +66,7 @@ const ProductItem = (props) => {
     setTimeout(() => {
       navigate('/sales')
     }, 2000)
-    // e.preventDefault()
-    // if (validateProduct(data, setError)) {
-    //   const fd = new FormData()
-    //   fd.append('name', data.nama)
-    //   fd.append('harga', data.harga)
-    //   fd.append('deskripsi', data.deskripsi)
-    //   fd.append('kategori', data.kategori)
-    //   await axios.post('https://febesh5-dev.herokuapp.com/api/products', {
-    //     name: fd.get('name'),
-    //     price: fd.get('harga'),
-    //     description: fd.get('deskripsi'),
-    //     categoryId: fd.get('kategori'),
-    //     // files: files[0],
-    //   }, {
-    //     headers: {
-    //       'Authorization': `Bearer ${data.token}`,
-    //       'Content-Type': 'multipart/form-data',
-    //     }
-    //   }).then(function (response) {
-    //     console.log(response)
-    //     enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
-    //     dispatch(productActions.setProductNotifications(response.data.data[0]))
-    //     // console.log(response.data.data[0])
-    //     setTimeout(() => {
-    //       navigate('/sales')
-    //     }, 2000)
-    //   })
-    //     .catch((e) => {
-    //       console.log(e)
-    //       enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
-    //     })
-    //   console.log('product created')
-    // }
   }
-  // console.log(error)
 
   return (
     <>
@@ -165,7 +124,7 @@ const ProductItem = (props) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
-                  onClick={() => handleBack()}
+                  onClick={() => navigate(`/add/${productId}`)}
                 >
                   Edit
                 </Button>
@@ -196,7 +155,7 @@ const ProductItem = (props) => {
             )}
           </Stack>
         </Stack>
-        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} storageId={storageId} />
+        <NegotiateModal open={open} handleClose={handleClose} productName={productName} productPrice={productPrice} token={userLogin.accessToken} productId={productId} storageId={storageId} />
       </Paper>
     </>
   )

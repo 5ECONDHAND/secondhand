@@ -15,6 +15,9 @@ import { FiX } from 'react-icons/fi'
 import { validateNegotiateAmount } from '../../../utils/validators'
 import { useSnackbar } from 'notistack'
 import { toRupiah } from '../../../utils/functions'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../../redux/slices'
 
 const ModalStyle = {
   position: 'absolute',
@@ -29,7 +32,6 @@ const ModalStyle = {
 }
 
 const ProductMiniCard = ({ name, price, storageId }) => {
-  console.log(storageId)
   return (
     <>
       <Paper
@@ -70,7 +72,7 @@ const NegotiateInput = (props) => {
     amount: 0,
   })
 
-  const { handleClose } = props
+  const { handleClose, productId, token } = props
   const { enqueueSnackbar } = useSnackbar()
 
   const fireAlert = (msg = 'Success', variant) => {
@@ -81,8 +83,14 @@ const NegotiateInput = (props) => {
     event.preventDefault()
     validateNegotiateAmount(values, setError)
 
-    // console.log('FORM VALUES', values)
-    // console.log('ERROR STATE', error)
+    axios.post('https://febesh5-dev.herokuapp.com/api/bids', {
+      productId: productId,
+      offeredPrice: values.amount
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
   }
 
   const handleChange = (prop) => (event) => {
@@ -145,7 +153,7 @@ const NegotiateInput = (props) => {
 }
 
 const NegotiateModal = (props) => {
-  const { open, handleClose, productName, productPrice, storageId } = props
+  const { open, handleClose, productName, productPrice, storageId, productId, token } = props
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -161,7 +169,7 @@ const NegotiateModal = (props) => {
             penjual.
           </Typography>
           <ProductMiniCard name={productName} price={productPrice} storageId={storageId} />
-          <NegotiateInput handleClose={handleClose} />
+          <NegotiateInput handleClose={handleClose} productId={productId} token={token} />
         </Box>
       </Modal>
     </>
