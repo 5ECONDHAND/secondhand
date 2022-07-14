@@ -24,7 +24,7 @@ jobs:
           node-version: 16
       - name: Cleaning previous frontend build
         working-directory: ./backend
-        run: rm -f ./public/*
+        run: rm -rf ./public/*
       - name: Build frontend & copy to backend public
         working-directory: ./frontend
         run: |
@@ -63,7 +63,7 @@ jobs:
           node-version: 16
       - name: Cleaning previous frontend build
         working-directory: ./backend
-        run: rm -f ./public/*
+        run: rm -rf ./public/*
       - name: Build frontend & copy to backend public
         working-directory: ./frontend
         run: |
