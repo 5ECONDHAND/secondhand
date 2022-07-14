@@ -67,6 +67,7 @@ async function controller(req, res, next){
     name: req.body.name,
     price: req.body.price,
     description: req.body.description,
+    status: req.body.status || 'DRAFT',
     Categories: {
       create: {
         categoryId
