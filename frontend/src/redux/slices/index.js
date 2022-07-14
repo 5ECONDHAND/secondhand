@@ -1,3 +1,11 @@
-export { selectAuth, authActions } from './authSlice'
-export { selectProduct, productActions } from './productSlice'
-export { selectUser, userActions } from './userSlice'
+export { authActions, selectAuth } from './authSlice'
+export { userActions, selectUser } from './userSlice'
+export {
+  productActions,
+  selectProduct,
+  selectProductActive,
+  selectProductWishlist,
+  selectProductNotifications,
+  selectProductPreview,
+  selectProductSearch,
+} from './productSlice'

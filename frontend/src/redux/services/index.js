@@ -5,5 +5,7 @@ export {
   useGetDataQuery,
   usePostProductMutation,
   usePutProductMutation,
+  UseSearchMutation,
+  useGetProductsSellerQuery
 } from './productApi'
 export { userApi, useEditProfileMutation, useGetUserByIdQuery } from './userApi'
