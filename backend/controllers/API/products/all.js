@@ -44,8 +44,75 @@ async function controller(req, res, next) {
     };
   }
 
+  var wherePayload = {
+    AND: [{
+      status: 'PUBLISH'
+    }]
+  };
+
+  if (req.userId) {
+    if (wherePayload.AND[0].status === 'PUBLISH') {
+      wherePayload.AND.shift(); // remove to get all status
+    }
+
+    wherePayload.AND.push({
+      userId: req.userId
+    });
+  }
+
+  var whereORPayload = {
+    OR: []
+  };
+
+  if(req.query.search){
+    whereORPayload.OR.push({
+      name: {
+        contains: req.query.search,
+        mode: 'insensitive' // case-insensitive
+      }
+    })
+  }
+
+  if(req.query.categoryId){
+    var categoryId = parseInt(req.query.categoryId);
+    if (isNaN(categoryId)) {
+      return res.json({
+        error: true,
+        message: "Invalid categoryId",
+        data: [],
+      });
+    }
+
+    whereORPayload.OR.push({
+      Categories: {
+        some: {
+          categoryId
+        }
+      }
+    })
+  }
+
+  if (whereORPayload.OR.length > 0) {
+    wherePayload.AND.push(whereORPayload);
+
+    // final build wherePayload could be
+    /*
+    {
+      AND: [
+        {
+          userId: req.userId
+        },
+        {
+          OR: [] //whereORPayload
+        }
+      ]
+    }
+    */
+  }
+
   const data = await prisma.product.findMany({
     ...advanceLogicPayload,
+    where: wherePayload,
     include: {
       User: {
         select: {
@@ -59,13 +126,39 @@ async function controller(req, res, next) {
           updatedAt: true
         }
       },
-      Photos: true,
-      Categories: {
-        'include': {
-          'Category': true
+      Photos: {
+        include: {
+          Storage: true
         }
       },
-      Transaction: true
+      Categories: {
+        include: {
+          Category: true
+        }
+      },
+      Transaction: {
+        include: {
+          Users: {
+            select: {
+              accepted: true,
+              offeredPrice: true,
+              description: true,
+              User: {
+                select: {
+                  id: true,
+                  phoneNo: true,
+                  fullname: true,
+                  email: true,
+                  city: true,
+                  address: true,
+                  Photos: true,
+                }
+              },
+              createdAt: true
+            }
+          }
+        }
+      }
     },
   }).catch((err) => {
     return {

@@ -41,10 +41,15 @@ async function controller(req, res, next) {
     return res.json(existingData);
   }
 
-  if (
-    req.userId != existingData.userId
-    && !req.isAdmin
-  ) {
+  if (!existingData) {
+    return res.json({
+      error: true,
+      message: "Product not found",
+      data: [],
+    });
+  }
+
+  if (req.userId != existingData.userId) {
     return res.json({
       error: true,
       message: "Unauthorized access",
@@ -95,11 +100,35 @@ async function controller(req, res, next) {
       })
     }
 
+
     if (errorInLoop) {
       return res.json({
         error: true,
         message: errorInLoop,
         data: [],
+      });
+    }
+  }
+
+  if (
+    req.files != null
+    && Array.isArray(req.files)
+    && req.files.length > 0
+  ) {
+    dataPayload.Photos = {
+      deleteMany: {},
+      create: []
+    };
+
+    for (var i = 0; i < req.files.length; i++) {
+      dataPayload.Photos.create.push({
+        Storage: {
+          create: {
+            filename: req.files[i].filename,
+            mimetype: req.files[i].mimetype,
+            size: req.files[i].size
+          }
+        }
       });
     }
   }

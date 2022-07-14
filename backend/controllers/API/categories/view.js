@@ -18,21 +18,17 @@ async function controller(req, res, next) {
     })
   }
 
-  var includePayload = {};
-
-  if (req.isAdmin) {
-    includePayload = {
-      include: {
-        Products: true
-      }
-    };
-  }
-
   const data = await prisma.category.findFirst({
     where: {
       id
     },
-    ...includePayload,
+    include: {
+      _count: {
+        select: {
+          Products: true
+        }
+      }
+    },
   }).catch(err=>{
     return{
       error: true,

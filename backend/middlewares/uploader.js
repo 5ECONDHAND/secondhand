@@ -36,7 +36,9 @@ async function middleware(req, res, next) {
     //'/api',
     ///\/api\/(?=\.|\/|$)\S*/g,
 
-    /^\/api\//g
+    /^\/api\/products(\/[0-9]+)?$/g,
+    /^\/api\/users(\/[0-9]+)?$/g,
+    /^\/api\/storages(\/)?$/g,
   ];
 
   // check is path is in appliedPaths, regex

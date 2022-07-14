@@ -1,11 +1,11 @@
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = __dirname;
+}
+
 // load environment variables from .env file
 if (!process.env.LOADED_ENV) {
   require('dotenv').config({ path: process.env.ROOT_PATH + '/.env' });
   process.env.APP_NAME = process.env.APP_NAME ? process.env.APP_NAME : 'SecondHand Kel5';
-}
-
-if (!process.env.ROOT_PATH) {
-  process.env.ROOT_PATH = __dirname;
 }
 
 // load dependencies
