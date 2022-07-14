@@ -6,7 +6,7 @@ export const productApi = createApi({
     baseUrl: 'https://febesh5-dev.herokuapp.com/api',
   }),
   refetchOnMountOrArgChange: 15,
-  tagTypes: ['PutProduct', 'PostProduct', 'DeleteProduct'],
+  // tagTypes: ['PutProduct', 'PostProduct', 'DeleteProduct'],
   endpoints: (builder) => ({
     // queries
     getData: builder.query({
@@ -42,7 +42,7 @@ export const productApi = createApi({
         },
         body: { name: name, description: description, price: price, categoryId: categoryId, files: files },
       }),
-      providesTags: ['PutProduct'],
+      // providesTags: ['PutProduct'],
     }),
     // store product
     postProduct: builder.mutation({
@@ -55,7 +55,7 @@ export const productApi = createApi({
         },
         body: { name: name, description: description, price: price, categoryId: categoryId, files: files },
       }),
-      providesTags: ['PostProduct'],
+      // providesTags: ['PostProduct'],
     }),
   }),
 })

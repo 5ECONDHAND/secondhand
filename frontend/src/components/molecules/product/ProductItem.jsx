@@ -79,14 +79,27 @@ const ProductItem = (props) => {
       >
         <Stack direction="column" justifyContent="flex-start" spacing={2} padding={2}>
           <Stack direction="column">
-            <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {productName ? productName : 'productName'}
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="body1" sx={{ fontWeight: '500' }}>
+                {product?.name ? product?.name : 'productName'}
+              </Typography>
+              {type === 'buyer' && userActive && userActive?.fullname !== product?.User.fullname ? (
+                wishlist ? (
+                  <IconButton onClick={removeWishlist} sx={{ color: '#FF5050' }}>
+                    <FaHeart size={20} />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={addWishlist}>
+                    <FaHeart size={20} />
+                  </IconButton>
+                )
+              ) : null}
+            </Stack>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
               {typeof productCategory !== 'number' ? productCategory : categoryNumber}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
-              {toRupiah(productPrice) || toRupiah(250000)}
+              {toRupiah(product?.price) || toRupiah(0)}
             </Typography>
             {type === 'seller' ? (
               <>
@@ -96,10 +109,13 @@ const ProductItem = (props) => {
                   variant="contained"
                   size="large"
                   disableElevation
+                  disabled={currentPath === '/product/:id' ? true : false}
                   sx={{
                     borderRadius: '1rem',
                     textTransform: 'none',
                     background: '#7126B5',
+                    // border: '1px solid #7126B5',
+
                     border: '1px solid #7126B5',
                     py: '10px',
                     mb: '10px',
@@ -115,6 +131,7 @@ const ProductItem = (props) => {
                   variant="contained"
                   size="large"
                   disableElevation
+                  disabled={currentPath === '/product/:id' ? true : false}
                   sx={{
                     borderRadius: '1rem',
                     textTransform: 'none',
@@ -124,7 +141,7 @@ const ProductItem = (props) => {
                     py: '10px',
                     '&:hover': { color: '#ffffff', background: '#631fa1' },
                   }}
-                  onClick={() => navigate(`/add/${productId}`)}
+                  onClick={() => navigate(`/add/${product?.id}`)}
                 >
                   Edit
                 </Button>

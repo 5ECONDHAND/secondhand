@@ -10,10 +10,13 @@ import { productActions, selectProductPreview } from '../../redux/slices'
 import { validateProduct } from '../../utils/validators'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
+import { productActions, selectProductActive } from '../../redux/slices/productSlice'
 
 const Product = () => {
   const { id } = useParams()
+  const dispatch = useDispatch()
   const previewProduct = useSelector(selectProductPreview)
+  const { data: productData, isSuccess } = useGetDataByIdQuery(id)
   const user = useSelector(selectUser)
   let previewId = previewProduct?.data?.id
   let userToken = user?.accessToken
@@ -32,13 +35,18 @@ const Product = () => {
         return 'buyer'
       }
     }
+  // const productActive = useSelector(selectProductActive)
+
+  const fillProductActive = () => {
+    dispatch(productActions.setProductActive(productData?.data[0]))
   }
 
   useEffect(() => {
     if (isSuccess) {
+      fillProductActive()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productData])
+  }, [productData, isSuccess])
   // console.log(productData?.data[0].Photos)
 
   return (
@@ -46,7 +54,7 @@ const Product = () => {
       <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
-          {isSuccess ? (
+          {isSuccess && productData !== null ? (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
                 <ProductSlider productPhoto={productData?.error ? previewProductData?.data?.data[0]?.Photos : productData?.data[0].Photos} />
@@ -61,6 +69,18 @@ const Product = () => {
                     productId={productData?.error ? previewProduct?.data.id : productData?.data[0]?.id}
                     storageId={productData?.error ? previewProduct?.files : productData?.data[0]?.Photos[0]?.storageId}
                     productDesc={productData?.error ? previewProduct?.data.description : productData?.data[0]?.description}
+                    type={productData?.data[0].User.fullname === user?.fullname ? 'seller' : 'buyer'}
+                    product={productData?.data[0]}
+                    // type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
+                    // productName={productData?.data[0].name}
+                    // productCategory={productData?.data[0].Categories[0].Category.name}
+                    // productPrice={productData?.data[0].price}
+                    // productId={productData?.data[0].id}
+                    // storageId={productData?.data[0]?.Photos[0]?.storageId}
+                    // product={productData?.data[0]}
+                    // productName={productData?.data[0].name}
+                    // productCategory={productData?.data[0].Categories[0].Category.name}
+                    // productPrice={productData?.data[0].price}
                   />
                 </Grid>
                 <Grid item xs={12}>
