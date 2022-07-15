@@ -15,6 +15,9 @@ import { FiX } from 'react-icons/fi'
 import { validateNegotiateAmount } from '../../../utils/validators'
 import { useSnackbar } from 'notistack'
 import { toRupiah } from '../../../utils/functions'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../../redux/slices'
 
 const ModalStyle = {
   position: 'absolute',
@@ -28,7 +31,7 @@ const ModalStyle = {
   p: 4,
 }
 
-const ProductMiniCard = (props) => {
+const ProductMiniCard = ({ name, price, storageId }) => {
   return (
     <>
       <Paper
@@ -48,14 +51,14 @@ const ProductMiniCard = (props) => {
         >
           <Avatar
             alt="A"
-            src={'gambar produk'}
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${storageId}/preview`}
             sx={{ width: 56, height: 56, borderRadius: '12px' }}
           />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {'Nama produk'}
+              {name}
             </Typography>
-            <Typography variant="body2">{toRupiah(250000)}</Typography>
+            <Typography variant="body2">{toRupiah(price)}</Typography>
           </Stack>
         </Stack>
       </Paper>
@@ -69,7 +72,7 @@ const NegotiateInput = (props) => {
     amount: 0,
   })
 
-  const { handleClose } = props
+  const { handleClose, productId, token } = props
   const { enqueueSnackbar } = useSnackbar()
 
   const fireAlert = (msg = 'Success', variant) => {
@@ -80,8 +83,14 @@ const NegotiateInput = (props) => {
     event.preventDefault()
     validateNegotiateAmount(values, setError)
 
-    // console.log('FORM VALUES', values)
-    // console.log('ERROR STATE', error)
+    axios.post('https://febesh5-dev.herokuapp.com/api/bids', {
+      productId: productId,
+      offeredPrice: values.amount
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
   }
 
   const handleChange = (prop) => (event) => {
@@ -144,7 +153,7 @@ const NegotiateInput = (props) => {
 }
 
 const NegotiateModal = (props) => {
-  const { open, handleClose } = props
+  const { open, handleClose, productName, productPrice, storageId, productId, token } = props
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -159,8 +168,8 @@ const NegotiateModal = (props) => {
             Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi
             penjual.
           </Typography>
-          <ProductMiniCard />
-          <NegotiateInput handleClose={handleClose} />
+          <ProductMiniCard name={productName} price={productPrice} storageId={storageId} />
+          <NegotiateInput handleClose={handleClose} productId={productId} token={token} />
         </Box>
       </Modal>
     </>

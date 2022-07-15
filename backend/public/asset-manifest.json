@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/static/css/main.0956cf5a.css",
+    "main.js": "/static/js/main.8b5e6afb.js",
+    "static/js/787.2b3c71f0.chunk.js": "/static/js/787.2b3c71f0.chunk.js",
+    "static/media/login-splash.png": "/static/media/login-splash.5ce5667b537084ac672f.png",
+    "static/media/banner-image.png": "/static/media/banner-image.5a04d8e69d8d31b22593.png",
+    "static/media/dummy-image.jpg": "/static/media/dummy-image.41f7fb88e69588005b88.jpg",
+    "static/media/poppins-all-400-normal.woff": "/static/media/poppins-all-400-normal.6fbfdac99c274b77fe96.woff",
+    "static/media/poppins-all-500-normal.woff": "/static/media/poppins-all-500-normal.4716bc1dd9f51751d3ef.woff",
+    "static/media/poppins-all-700-normal.woff": "/static/media/poppins-all-700-normal.34a71a4b9d011ddf66e9.woff",
+    "static/media/poppins-devanagari-400-normal.woff2": "/static/media/poppins-devanagari-400-normal.64d5f06ee726edd58ca3.woff2",
+    "static/media/poppins-devanagari-700-normal.woff2": "/static/media/poppins-devanagari-700-normal.349ed9fa39221b45ae9a.woff2",
+    "static/media/poppins-devanagari-500-normal.woff2": "/static/media/poppins-devanagari-500-normal.f43b6ebf46ee6fba0555.woff2",
+    "static/media/empty-product.png": "/static/media/empty-product.b8dc86076f195ff0e534.png",
+    "static/media/empty.png": "/static/media/empty.a0e622294ca75e4ba453.png",
+    "static/media/banner-gift.png": "/static/media/banner-gift.78e9c0c851514593ffb4.png",
+    "static/media/poppins-latin-400-normal.woff2": "/static/media/poppins-latin-400-normal.405055dd680fa1dcdfa2.woff2",
+    "static/media/poppins-latin-700-normal.woff2": "/static/media/poppins-latin-700-normal.d86662fe776dae29ea78.woff2",
+    "static/media/poppins-latin-500-normal.woff2": "/static/media/poppins-latin-500-normal.08491d3f7fe7ae88ef44.woff2",
+    "static/media/poppins-latin-ext-400-normal.woff2": "/static/media/poppins-latin-ext-400-normal.4f38b4331448d2313adc.woff2",
+    "static/media/poppins-latin-ext-500-normal.woff2": "/static/media/poppins-latin-ext-500-normal.b59bcdf2f050e663ca29.woff2",
+    "static/media/poppins-latin-ext-700-normal.woff2": "/static/media/poppins-latin-ext-700-normal.63d2a69665d58b22ceea.woff2",
+    "static/media/carouselButtonLeft.svg": "/static/media/carouselButtonLeft.f9f0bbd0e4407f06aeb3.svg",
+    "static/media/carouselButtonRight.svg": "/static/media/carouselButtonRight.bfbc9dab9bda33ca2885.svg",
+    "index.html": "/index.html",
+    "main.0956cf5a.css.map": "/static/css/main.0956cf5a.css.map",
+    "main.8b5e6afb.js.map": "/static/js/main.8b5e6afb.js.map",
+    "787.2b3c71f0.chunk.js.map": "/static/js/787.2b3c71f0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0956cf5a.css",
+    "static/js/main.8b5e6afb.js"
+  ]
+}

@@ -18,43 +18,18 @@ async function controller(req, res, next) {
     });
   }
 
-  var wherePayload = null;
-
-  if (req.userId) {
-    wherePayload = {
-      where: {
-        AND: [
-          {
-            id: id,
-          },
-          {
-            Product: {
-              userId: req.userId,
-            },
-          },
-        ],
-      },
-    };
-  }
-
-  if (req.isAdmin) {
-    wherePayload = {
-      where: {
-        id: id,
-      },
-    };
-  }
-
-  if (wherePayload === null) {
+  if(!req.isAdmin) {
     return res.json({
       error: true,
-      message: "Unauthorized access",
+      message: 'Unauthorized access',
       data: [],
-    });
+    })
   }
 
   const data = await prisma.transaction.deleteMany({
-    ...wherePayload,
+    where: {
+      id: id,
+    },
   }).catch((err) => {
     return {
       error: true,

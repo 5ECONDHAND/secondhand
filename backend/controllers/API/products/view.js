@@ -19,10 +19,23 @@ async function controller(req, res, next) {
     });
   }
 
+  const wherePayload = {
+    AND: [
+      {
+        status: 'PUBLISH'
+      },
+      {
+        id: id
+      }
+    ]
+  };
+
+  if (req.userId) {
+    wherePayload.AND.shift();
+  }
+
   const data = await prisma.product.findFirst({
-    where: {
-      id
-    },
+    where: wherePayload,
     include: {
       User: {
         select: {
@@ -46,7 +59,29 @@ async function controller(req, res, next) {
           Category: true
         }
       },
-      Transaction: true,
+      Transaction: {
+        include: {
+          Users: {
+            select: {
+              accepted: true,
+              offeredPrice: true,
+              description: true,
+              User: {
+                select: {
+                  id: true,
+                  phoneNo: true,
+                  fullname: true,
+                  email: true,
+                  city: true,
+                  address: true,
+                  Photos: true,
+                }
+              },
+              createdAt: true
+            }
+          }
+        }
+      }
     }
   }).catch((err) => {
     return {

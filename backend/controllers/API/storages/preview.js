@@ -3,6 +3,7 @@ const prisma = require(process.env.ROOT_PATH + "/models/instance");
 const path = require("path");
 const storagePATH = path.join(process.env.ROOT_PATH, "storage");
 const fs = require("fs");
+const { pipeline } = require("stream");
 
 /**
  *
@@ -48,7 +49,12 @@ async function controller(req, res, next) {
   // set contenttype of response
   res.contentType(data.mimetype || "application/octet-stream");
   // read file from data.filename, then stream to response
-  fs.createReadStream(path.join(storagePATH, data.filename)).pipe(res);
+  var sourceStream = fs.createReadStream(path.join(storagePATH, data.filename));
+  pipeline(sourceStream, res, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
 }
 
 module.exports = controller;

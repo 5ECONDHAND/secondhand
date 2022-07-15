@@ -41,10 +41,15 @@ async function controller(req, res, next) {
     return res.json(existingData);
   }
 
-  if (
-    req.userId != existingData.userId
-    && !req.isAdmin
-  ) {
+  if (!existingData) {
+    return res.json({
+      error: true,
+      message: "Product not found",
+      data: [],
+    });
+  }
+
+  if (req.userId != existingData.userId) {
     return res.json({
       error: true,
       message: "Unauthorized access",
