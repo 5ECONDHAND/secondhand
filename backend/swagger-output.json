@@ -55,31 +55,50 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
                   "type": "string"
                 },
-                "fullname": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "phoneNo": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "accessToken": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             },
@@ -122,14 +141,25 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
                   "type": "string"
                 },
-                "fullname": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "fullname": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -147,54 +177,34 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "email": {
+                "message": {
                   "type": "string"
                 },
-                "fullname": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "phoneNo": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Products": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "userId": {
-                      "type": "integer"
-                    },
-                    "description": {
+                    "email": {
                       "type": "string"
                     },
-                    "name": {
+                    "fullname": {
                       "type": "string"
                     },
-                    "price": {
-                      "type": "number"
+                    "password": {
+                      "type": "string"
                     },
-                    "status": {
+                    "phoneNo": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "city": {
                       "type": "string"
                     },
                     "createdAt": {
@@ -204,53 +214,84 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
-                    }
-                  }
-                },
-                "Notifications": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
                     },
-                    "data": {
-                      "type": "string"
+                    "Products": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     },
-                    "userId": {
-                      "type": "integer"
+                    "Notifications": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "read": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     },
-                    "read": {
-                      "type": "boolean"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transactions": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
+                    "Transactions": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -288,54 +329,34 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "email": {
+                "message": {
                   "type": "string"
                 },
-                "fullname": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "phoneNo": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Products": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "userId": {
-                      "type": "integer"
-                    },
-                    "description": {
+                    "email": {
                       "type": "string"
                     },
-                    "name": {
+                    "fullname": {
                       "type": "string"
                     },
-                    "price": {
-                      "type": "number"
+                    "password": {
+                      "type": "string"
                     },
-                    "status": {
+                    "phoneNo": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "city": {
                       "type": "string"
                     },
                     "createdAt": {
@@ -345,53 +366,84 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
-                    }
-                  }
-                },
-                "Notifications": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
                     },
-                    "data": {
-                      "type": "string"
+                    "Products": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     },
-                    "userId": {
-                      "type": "integer"
+                    "Notifications": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "read": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     },
-                    "read": {
-                      "type": "boolean"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transactions": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
+                    "Transactions": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -417,54 +469,34 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "email": {
+                "message": {
                   "type": "string"
                 },
-                "fullname": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "phoneNo": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Products": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "userId": {
-                      "type": "integer"
-                    },
-                    "description": {
+                    "email": {
                       "type": "string"
                     },
-                    "name": {
+                    "fullname": {
                       "type": "string"
                     },
-                    "price": {
-                      "type": "number"
+                    "password": {
+                      "type": "string"
                     },
-                    "status": {
+                    "phoneNo": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "city": {
                       "type": "string"
                     },
                     "createdAt": {
@@ -474,53 +506,84 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
-                    }
-                  }
-                },
-                "Notifications": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
                     },
-                    "data": {
-                      "type": "string"
+                    "Products": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     },
-                    "userId": {
-                      "type": "integer"
+                    "Notifications": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "read": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     },
-                    "read": {
-                      "type": "boolean"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transactions": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
+                    "Transactions": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -572,175 +635,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "email": {
-                  "type": "string"
-                },
-                "fullname": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "phoneNo": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Products": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "userId": {
-                      "type": "integer"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "price": {
-                      "type": "number"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Notifications": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "data": {
-                      "type": "string"
-                    },
-                    "userId": {
-                      "type": "integer"
-                    },
-                    "read": {
-                      "type": "boolean"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transactions": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
-      "delete": {
-        "description": "to delete user by id",
-        "parameters": [
-          {
-            "type": "integer",
-            "in": "header",
-            "name": "id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
                 "message": {
                   "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/notifications": {
-      "get": {
-        "description": "to get all notifications",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
                 },
                 "data": {
-                  "type": "string"
-                },
-                "userId": {
-                  "type": "integer"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
                   "type": "object",
                   "properties": {
                     "id": {
@@ -771,6 +672,199 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "Products": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Notifications": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "read": {
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Transactions": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "to delete user by id",
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "get": {
+        "description": "to get all notifications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -805,46 +899,20 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "data": {
+                "message": {
                   "type": "string"
                 },
-                "userId": {
-                  "type": "integer"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "email": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "password": {
-                      "type": "string"
-                    },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
+                    "userId": {
+                      "type": "integer"
                     },
                     "createdAt": {
                       "type": "string",
@@ -853,6 +921,40 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -878,46 +980,20 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "data": {
+                "message": {
                   "type": "string"
                 },
-                "userId": {
-                  "type": "integer"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "email": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "password": {
-                      "type": "string"
-                    },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
+                    "userId": {
+                      "type": "integer"
                     },
                     "createdAt": {
                       "type": "string",
@@ -926,6 +1002,40 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -965,46 +1075,20 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "data": {
+                "message": {
                   "type": "string"
                 },
-                "userId": {
-                  "type": "integer"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "email": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "password": {
-                      "type": "string"
-                    },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
+                    "userId": {
+                      "type": "integer"
                     },
                     "createdAt": {
                       "type": "string",
@@ -1013,6 +1097,40 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -1023,8 +1141,82 @@
       },
       "patch": {
         "description": "",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
         "description": "to delte notification by id",
@@ -1041,8 +1233,64 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean"
+                },
                 "message": {
                   "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1066,19 +1314,38 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "name": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Category": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Products": {
+                      "type": "number"
+                    }
+                  }
                 }
               }
             }
@@ -1108,19 +1375,30 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "name": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -1144,19 +1422,38 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "name": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Category": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Products": {
+                      "type": "number"
+                    }
+                  }
                 }
               }
             }
@@ -1191,19 +1488,30 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "name": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -1212,8 +1520,56 @@
       },
       "patch": {
         "description": "",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Category": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Products": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
         "description": "to delete category by id",
@@ -1230,8 +1586,30 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean"
+                },
                 "message": {
                   "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -1249,36 +1627,22 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "productId": {
-                  "type": "integer"
-                },
-                "status": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Product": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "name": {
-                      "type": "string"
+                    "productId": {
+                      "type": "integer"
                     },
-                    "price": {
-                      "type": "number"
-                    },
-                    "description": {
+                    "status": {
                       "type": "string"
                     },
                     "createdAt": {
@@ -1288,34 +1652,20 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
-                    }
-                  }
-                },
-                "Users": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "type": "string"
                     },
-                    "offeredPrice": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "User": {
+                    "Product": {
                       "type": "object",
                       "properties": {
                         "id": {
                           "type": "integer"
                         },
-                        "phoneNo": {
+                        "name": {
                           "type": "string"
                         },
-                        "fullname": {
-                          "type": "string"
+                        "price": {
+                          "type": "number"
                         },
-                        "email": {
+                        "description": {
                           "type": "string"
                         },
                         "createdAt": {
@@ -1325,6 +1675,45 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time"
+                        }
+                      }
+                    },
+                    "Users": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "string"
+                        },
+                        "offeredPrice": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "User": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "phoneNo": {
+                              "type": "string"
+                            },
+                            "fullname": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
                         }
                       }
                     }
@@ -1358,36 +1747,22 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "productId": {
-                  "type": "integer"
-                },
-                "status": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Product": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "name": {
-                      "type": "string"
+                    "productId": {
+                      "type": "integer"
                     },
-                    "price": {
-                      "type": "number"
-                    },
-                    "description": {
+                    "status": {
                       "type": "string"
                     },
                     "createdAt": {
@@ -1397,34 +1772,20 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
-                    }
-                  }
-                },
-                "Users": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "type": "string"
                     },
-                    "offeredPrice": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "User": {
+                    "Product": {
                       "type": "object",
                       "properties": {
                         "id": {
                           "type": "integer"
                         },
-                        "phoneNo": {
+                        "name": {
                           "type": "string"
                         },
-                        "fullname": {
-                          "type": "string"
+                        "price": {
+                          "type": "number"
                         },
-                        "email": {
+                        "description": {
                           "type": "string"
                         },
                         "createdAt": {
@@ -1434,6 +1795,45 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time"
+                        }
+                      }
+                    },
+                    "Users": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "string"
+                        },
+                        "offeredPrice": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "User": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "phoneNo": {
+                              "type": "string"
+                            },
+                            "fullname": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
                         }
                       }
                     }
@@ -1461,36 +1861,22 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "productId": {
-                  "type": "integer"
-                },
-                "status": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Product": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "name": {
-                      "type": "string"
+                    "productId": {
+                      "type": "integer"
                     },
-                    "price": {
-                      "type": "number"
-                    },
-                    "description": {
+                    "status": {
                       "type": "string"
                     },
                     "createdAt": {
@@ -1500,34 +1886,20 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
-                    }
-                  }
-                },
-                "Users": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "type": "string"
                     },
-                    "offeredPrice": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "User": {
+                    "Product": {
                       "type": "object",
                       "properties": {
                         "id": {
                           "type": "integer"
                         },
-                        "phoneNo": {
+                        "name": {
                           "type": "string"
                         },
-                        "fullname": {
-                          "type": "string"
+                        "price": {
+                          "type": "number"
                         },
-                        "email": {
+                        "description": {
                           "type": "string"
                         },
                         "createdAt": {
@@ -1537,6 +1909,45 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time"
+                        }
+                      }
+                    },
+                    "Users": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "string"
+                        },
+                        "offeredPrice": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "User": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "phoneNo": {
+                              "type": "string"
+                            },
+                            "fullname": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
                         }
                       }
                     }
@@ -1570,184 +1981,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "productId": {
-                  "type": "integer"
-                },
-                "status": {
+                "message": {
                   "type": "string"
                 },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "Product": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "price": {
-                      "type": "number"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Users": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "type": "string"
-                    },
-                    "offeredPrice": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "User": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "phoneNo": {
-                          "type": "string"
-                        },
-                        "fullname": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "updatedAt": {
-                          "type": "string",
-                          "format": "date-time"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
-      "delete": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/products": {
-      "get": {
-        "description": "to get all products",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
-                },
-                "userId": {
-                  "type": "integer"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Categories": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transaction": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
@@ -1766,6 +2006,407 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "Product": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Users": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "string"
+                        },
+                        "offeredPrice": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "User": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "phoneNo": {
+                              "type": "string"
+                            },
+                            "fullname": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "productId": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "Product": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Users": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "string"
+                        },
+                        "offeredPrice": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "User": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "phoneNo": {
+                              "type": "string"
+                            },
+                            "fullname": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "productId": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "Product": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Users": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "type": "string"
+                        },
+                        "offeredPrice": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "User": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "phoneNo": {
+                              "type": "string"
+                            },
+                            "fullname": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "description": "to get all products",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Categories": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -1806,87 +2447,29 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "userId": {
-                  "type": "integer"
-                },
-                "description": {
+                "message": {
                   "type": "string"
                 },
-                "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Categories": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
+                    "userId": {
                       "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
                     },
                     "name": {
                       "type": "string"
                     },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transaction": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
+                    "price": {
+                      "type": "number"
                     },
                     "createdAt": {
                       "type": "string",
@@ -1895,6 +2478,75 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Categories": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -1920,87 +2572,29 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "userId": {
-                  "type": "integer"
-                },
-                "description": {
+                "message": {
                   "type": "string"
                 },
-                "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Categories": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
+                    "userId": {
                       "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
                     },
                     "name": {
                       "type": "string"
                     },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transaction": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
+                    "price": {
+                      "type": "number"
                     },
                     "createdAt": {
                       "type": "string",
@@ -2009,6 +2603,75 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Categories": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -2054,87 +2717,29 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "userId": {
-                  "type": "integer"
-                },
-                "description": {
+                "message": {
                   "type": "string"
                 },
-                "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "User": {
+                "data": {
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "integer"
                     },
-                    "phoneNo": {
-                      "type": "string"
-                    },
-                    "fullname": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "city": {
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Categories": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
+                    "userId": {
                       "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
                     },
                     "name": {
                       "type": "string"
                     },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
-                },
-                "Transaction": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "productId": {
-                      "type": "integer"
-                    },
-                    "status": {
-                      "type": "string"
+                    "price": {
+                      "type": "number"
                     },
                     "createdAt": {
                       "type": "string",
@@ -2143,6 +2748,75 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Categories": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
                     }
                   }
                 }
@@ -2153,8 +2827,126 @@
       },
       "patch": {
         "description": "",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Categories": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "Transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
         "description": "to delete product by id",
@@ -2171,8 +2963,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean"
+                },
                 "message": {
                   "type": "string"
+                },
+                "data": {
+                  "type": "object"
                 }
               }
             }
@@ -2190,25 +2988,36 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "filename": {
+                "message": {
                   "type": "string"
                 },
-                "size": {
-                  "type": "integer"
-                },
-                "mimetype": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -2238,25 +3047,36 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "filename": {
+                "message": {
                   "type": "string"
                 },
-                "size": {
-                  "type": "integer"
-                },
-                "mimetype": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -2280,25 +3100,36 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "filename": {
+                "message": {
                   "type": "string"
                 },
-                "size": {
-                  "type": "integer"
-                },
-                "mimetype": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -2333,25 +3164,36 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer"
+                "error": {
+                  "type": "boolean"
                 },
-                "filename": {
+                "message": {
                   "type": "string"
                 },
-                "size": {
-                  "type": "integer"
-                },
-                "mimetype": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -2360,8 +3202,54 @@
       },
       "patch": {
         "description": "",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
         "description": "to delete storage by id",
@@ -2378,8 +3266,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean"
+                },
                 "message": {
                   "type": "string"
+                },
+                "data": {
+                  "type": "object"
                 }
               }
             }
@@ -2462,8 +3356,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "error": {
+                  "type": "boolean"
+                },
                 "message": {
                   "type": "string"
+                },
+                "data": {
+                  "type": "object"
                 }
               }
             }
