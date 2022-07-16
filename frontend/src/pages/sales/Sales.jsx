@@ -10,12 +10,15 @@ import { productActions, selectProduct } from '../../redux/slices/productSlice'
 import { useGetDataQuery, useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
+import { isProductMaxed } from '../../utils/functions'
 
 const Sales = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
-  const { data: productData, isSuccess: isProductSuccess } = useGetProductsSellerQuery(user.accessToken)
+  const { data: productData, isSuccess: isProductSuccess } = useGetProductsSellerQuery(
+    user.accessToken
+  )
   const products = useSelector(selectProduct) // get from redux
   const [displayData, setDisplayData] = useState()
   const [dataCategory, setDataCategory] = useState('Semua Produk')
@@ -64,14 +67,15 @@ const Sales = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCategory, products])
 
-  console.log(productData)
+  const sellerProductCount = products?.filter((item) => item.User.fullname === user.fullname).length
 
-  const userProductLength = products?.filter((item) => item.User.fullname === user.fullname).length
-  // console.log(userProductLength)
-
-  const handleAdd = () => {
-    if (userProductLength >= 4) {
-      enqueueSnackbar('Maximum Product Stock', { variant: 'error', autoHideDuration: 3000 })
+  const handleAddProduct = () => {
+    if (isProductMaxed(sellerProductCount)) {
+      enqueueSnackbar('Maximum Product Stock', {
+        variant: 'error',
+        autoHideDuration: 3000,
+        preventDuplicate: true,
+      })
     } else {
       navigate('/add')
     }
@@ -96,7 +100,7 @@ const Sales = () => {
               color: '#8A8A8A',
               cursor: 'pointer',
             }}
-            onClick={handleAdd}
+            onClick={handleAddProduct}
           >
             <FiPlus size={24} />
             <Typography variant="body2" sx={{ mt: 1 }}>
@@ -139,7 +143,7 @@ const Sales = () => {
       if (dataCategory === 'Semua Produk' || dataCategory === 'Terjual') {
         return displayData.map((item, index) => (
           <Grid item xs={6} sm={4} md={4} key={index}>
-            <Box onClick={() => navigate(`/product/${item.id}`)}>
+            <Box onClick={() => navigate(`/preview/${item.id}`)}>
               <ProductCard product={item} />
             </Box>
           </Grid>

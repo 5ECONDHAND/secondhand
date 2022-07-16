@@ -10,14 +10,14 @@ import { useSnackbar } from 'notistack'
 import { selectUser } from '../../../redux/slices/userSlice'
 import { validateProduct } from '../../../utils/validators'
 
-const ProductItem = (props) => {
-  const { productName, productCategory, productPrice, type, productId, storageId, productDesc } =
-    props
+const ProductItem = ({ product, type }) => {
+  // const { productName, productCategory, productPrice, type, productId, storageId, productDesc } =
+  //   props
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const navigate = useNavigate()
-  const [categoryNumber, setCategoryNumber] = useState('')
+  // const [categoryNumber, setCategoryNumber] = useState('')
   const category = ['Hobi', 'Kendaraan', 'Baju', 'Elektronik', 'Kesehatan']
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
@@ -32,13 +32,13 @@ const ProductItem = (props) => {
     token: productPreview?.token,
   }
 
-  useEffect(() => {
-    if (typeof productCategory === 'number') setCategoryNumber(category[productCategory])
-  })
+  // useEffect(() => {
+  //   if (typeof productCategory === 'number') setCategoryNumber(category[product?.cate])
+  // })
 
   const handleBack = () => {
-    if (productId !== '') {
-      return navigate(`/add/${productId}`)
+    if (product?.id !== '') {
+      return navigate(`/add/${product?.id}`)
     }
     return navigate(`/add/`)
   }
@@ -49,13 +49,13 @@ const ProductItem = (props) => {
     console.log('adding product...')
     axios
       .put(
-        `https://febesh5-dev.herokuapp.com/api/products/${productId}`,
+        `https://febesh5-dev.herokuapp.com/api/products/${product?.id}`,
         {
-          id: productId,
-          name: productName,
-          price: productPrice,
-          description: productDesc,
-          categoryId: productCategory,
+          id: product?.id,
+          name: product?.name,
+          price: product?.price,
+          description: product?.description,
+          categoryId: product?.Categories?.categoryId,
           status: 'PUBLISH',
         },
         {
@@ -128,13 +128,14 @@ const ProductItem = (props) => {
         <Stack direction="column" justifyContent="flex-start" spacing={2} padding={2}>
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {productName ? productName : 'productName'}
+              {product ? product?.name : 'product_name'}
             </Typography>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-              {typeof productCategory !== 'number' ? productCategory : categoryNumber}
+              {product ? product?.Categories[0]?.Category?.name : 'product_category'}
+              {/* {typeof productCategory !== 'number' ? productCategory : categoryNumber} */}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
-              {toRupiah(productPrice) || toRupiah(250000)}
+              {product ? toRupiah(product?.price) : 'product_price'}
             </Typography>
             {type === 'seller' ? (
               <>
@@ -206,9 +207,9 @@ const ProductItem = (props) => {
         <NegotiateModal
           open={open}
           handleClose={handleClose}
-          productName={productName}
-          productPrice={productPrice}
-          storageId={storageId}
+          productName={product?.name}
+          productPrice={product?.price}
+          storageId={product?.Photos[0]?.storageId}
         />
       </Paper>
     </>

@@ -6,3 +6,11 @@ export const toRupiah = (number) => {
     .format(number)
     .split(',')[0]
 }
+
+export const isProductMaxed = (productCount) => {
+  if (productCount >= 4) {
+    return true
+  } else {
+    return false
+  }
+}

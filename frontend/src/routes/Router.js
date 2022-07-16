@@ -1,5 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
-import { Home, Auth, Product, AddProduct, Edit, Sales, Offers, NotFound } from '../pages'
+import {
+  Home,
+  Auth,
+  Product,
+  AddProduct,
+  Edit,
+  Sales,
+  Offers,
+  NotFound,
+  ProductPreview,
+} from '../pages'
 import { useSelector } from 'react-redux'
 import ScrollToTop from '../components/atoms/global/ScrollToTop'
 import { selectUser } from '../redux/slices/userSlice'
@@ -54,7 +64,7 @@ const Router = () => {
                 />
               }
             >
-              <Route path="/preview/:productId" element={<Product />} />
+              <Route path="/preview/:productId" element={<ProductPreview />} />
               <Route path="/add" element={<AddProduct />} />
               <Route path="/add/:productId" element={<AddProduct />} />
               <Route path="/offers/:id" element={<Offers />} />

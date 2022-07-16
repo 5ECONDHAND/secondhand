@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
@@ -27,6 +28,7 @@ import { selectAuth } from '../../../redux/slices/authSlice'
 import { productActions, selectProduct } from '../../../redux/slices/productSlice'
 import axios from 'axios'
 import { selectUser } from '../../../redux/slices'
+import { isProductMaxed } from '../../../utils/functions'
 
 const styles = {
   '&.MuiButton-root': {
@@ -74,15 +76,25 @@ const AddProductForm = (props) => {
   })
   const [files, setFiles] = useState([])
   const user = useSelector(selectAuth)
-  const userLogin = useSelector(selectUser)
-  let token = userLogin.accessToken
+  const userActive = useSelector(selectUser)
+  let token = userActive.accessToken
   const productsData = useSelector(selectProduct)
   const { productId } = useParams()
   const dispatch = useDispatch()
-  const userProductLength = productsData?.filter(
-    (item) => item.User.fullname === userLogin.fullname
+  const sellerProductCount = productsData?.filter(
+    (item) => item.User.fullname === userActive.fullname
   ).length
-  console.log(userProductLength)
+
+  useEffect(() => {
+    if (isProductMaxed(sellerProductCount)) {
+      enqueueSnackbar('Maximum Product Stock', {
+        variant: 'error',
+        autoHideDuration: 1000,
+        preventDuplicate: true,
+      })
+      return navigate('/sales')
+    }
+  }, [sellerProductCount])
 
   const [
     postProduct,
@@ -122,11 +134,6 @@ const AddProductForm = (props) => {
 
   const handleAdd = async (event) => {
     event.preventDefault()
-    if (userProductLength >= 4) {
-      enqueueSnackbar('Maximum Product Stock', { variant: 'error', autoHideDuration: 1000 })
-      return navigate('/sales')
-    }
-    // const formData = new FormData()
 
     if (validateProduct(values, setError)) {
       axios
@@ -234,7 +241,7 @@ const AddProductForm = (props) => {
         })
         .catch((e) => {
           console.log(e)
-          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+          enqueueSnackbar('Preview error', { variant: 'error', autoHideDuration: 1000 })
         })
     } else if (validateProduct(values, setError)) {
       axios
@@ -265,6 +272,7 @@ const AddProductForm = (props) => {
         })
         .catch((e) => {
           console.log(e)
+          enqueueSnackbar('Preview error', { variant: 'error', autoHideDuration: 1000 })
         })
     }
   }
