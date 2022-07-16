@@ -23,6 +23,9 @@ export const productSlice = createSlice({
     setProductPreview: (state, action) => {
       state.productPreview = action.payload
     },
+    clearProductPreview: (state) => {
+      state.productPreview = initialState.productPreview
+    },
     setProductNotifications: (state, action) => {
       state.productNotifications = action.payload
     },

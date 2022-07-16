@@ -4,24 +4,31 @@ import { Navbar, ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
-import { useSelector } from 'react-redux'
-import { selectProductPreview } from '../../redux/slices'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, selectProductPreview } from '../../redux/slices'
+import { useParams } from 'react-router-dom'
 
 const ProductPreview = () => {
-  // const { id } = useParams()
-  // const dispatch = useDispatch()
+  const { productId } = useParams()
+  console.log(productId)
+  const dispatch = useDispatch()
   const previewProduct = useSelector(selectProductPreview)
-  const user = useSelector(selectUser)
-  let previewId = previewProduct?.data?.id
-  let userToken = user?.accessToken
+  const userActive = useSelector(selectUser)
 
   const { data: previewProductData, isSuccess } = useGetDataByIdQuery({
-    id: previewId,
-    token: userToken,
+    id: productId,
+    token: userActive.accessToken,
   })
 
   useEffect(() => {
-    console.log('from preview page: ', previewProductData)
+    dispatch(productActions.clearProductPreview()) // clears persist data
+    console.log('from preview page FIRST TIME: ', previewProduct)
+    if (isSuccess) {
+      dispatch(productActions.setProductPreview(previewProductData)) // sets persist data
+    }
+    if (previewProduct !== null) {
+      console.log('from preview page SECOND TIME: ', previewProduct)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewProductData, isSuccess])
 
@@ -30,10 +37,10 @@ const ProductPreview = () => {
       <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
-          {isSuccess && previewProductData !== null ? (
+          {previewProduct !== null ? (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
-                <ProductSlider productPhoto={previewProductData?.data[0]?.Photos} />
+                <ProductSlider productPhoto={previewProduct?.data[0]?.Photos} />
               </Grid>
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
@@ -41,13 +48,13 @@ const ProductPreview = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <ProfileCard
-                    sellerName={previewProductData?.data[0]?.User.fullname}
-                    sellerCity={previewProductData?.data[0]?.User.city}
+                    sellerName={previewProduct?.data[0]?.User.fullname}
+                    sellerCity={previewProduct?.data[0]?.User.city}
                   />
                 </Grid>
               </Grid>
               <Grid item xs={12} sm={12} md={10}>
-                <ProductDesc productDesc={previewProductData?.data[0]?.description} />
+                <ProductDesc productDesc={previewProduct?.data[0]?.description} />
               </Grid>
             </>
           ) : (
