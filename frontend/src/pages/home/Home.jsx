@@ -4,11 +4,16 @@ import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecule
 import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { authActions } from '../../redux/slices/authSlice'
-import { productActions, selectProduct, selectProductSearch } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
-import { selectUser, userActions } from '../../redux/slices/userSlice'
+import {
+  authActions,
+  productActions,
+  selectProduct,
+  selectProductSearch,
+  selectUser,
+  userActions,
+} from '../../redux/slices'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -22,7 +27,6 @@ const Home = () => {
   const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
-  // console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {

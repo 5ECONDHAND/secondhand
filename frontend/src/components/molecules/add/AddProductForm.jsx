@@ -205,7 +205,7 @@ const AddProductForm = (props) => {
   const handlePreview = (event) => {
     event.preventDefault()
     console.log(files)
-    if (productId) {
+    if (productId && validateProduct(values, setError)) {
       axios
         .put(
           `https://febesh5-dev.herokuapp.com/api/products/${productId}`,
@@ -236,7 +236,7 @@ const AddProductForm = (props) => {
           console.log(e)
           enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
         })
-    } else {
+    } else if (validateProduct(values, setError)) {
       axios
         .post(
           'https://febesh5-dev.herokuapp.com/api/products',
@@ -261,7 +261,7 @@ const AddProductForm = (props) => {
               data: response.data.data[0],
             })
           )
-          navigate(`/preview/${response.data.data[0].id}`)
+          navigate(`/preview/${response.data.data[0]?.id}`)
         })
         .catch((e) => {
           console.log(e)
@@ -269,12 +269,12 @@ const AddProductForm = (props) => {
     }
   }
 
-  // foto
+  // Dropzone settings
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
-    maxFiles: 4,
-    maxSize: 250000,
+    maxFiles: 4, // max number of files for upload
+    maxSize: 5242880, // 5 mb
     accept: {
-      'image/*': [],
+      'image/*': ['.png', '.jpg', '.jpeg'], // Allow only images with this extension
     },
     onDrop: (acceptedFiles) => {
       setFiles(
