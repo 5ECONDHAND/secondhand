@@ -4,10 +4,9 @@ import {
   Button,
   FormControl,
   Typography,
-  OutlinedInput,
-  InputAdornment,
   IconButton,
   Grid,
+  InputBase,
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import {
@@ -21,9 +20,7 @@ import {
   FiSettings,
   FiShoppingCart,
 } from 'react-icons/fi'
-import casio1 from '../../../assets/images/dummy-image.jpg'
 import { useNavigate, useLocation } from 'react-router-dom'
-// import { selectUser } from '../../redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
@@ -40,38 +37,54 @@ const SearchField = () => {
     {},
     { refetchOnMountOrArgChange: true }
   )
-  // console.log(productData)
+
   const handleSearch = async () => {
     if (search === '') {
       dispatch(productActions.setProductSearch(null))
       dispatch(productActions.setProducts(productData?.data))
     } else {
-      // console.log(search)
-      axios.get(`https://febesh5-dev.herokuapp.com/api/products?search=${search}`)
-        .then(response => {
+      axios
+        .get(`https://febesh5-dev.herokuapp.com/api/products?search=${search}`)
+        .then((response) => {
           // console.log({ error: false, message: 'Success', data: response.data.data })
           dispatch(productActions.setProductSearch(response?.data.data))
         })
-        .catch(e => console.log(e))
+        .catch((e) => console.log(e))
     }
   }
 
   return (
-    <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }} >
-      <OutlinedInput
-        onChange={(e) => setSearch(e.target.value)}
-        disabled={pathname !== '/' ? true : false}
-        placeholder="Cari di sini..."
-        // onChange={handleChange("nama")}
-        sx={{ borderRadius: '16px', height: '48px', backgroundColor: '#EEEEEE', border: 'gray' }}
-        endAdornment={
-          <InputAdornment onClick={handleSearch} position="end" sx={{ mr: '0.5rem' }}>
-            <IconButton edge="end">
-              <FiSearch />
-            </IconButton>
-          </InputAdornment>
-        }
-      />
+    <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+      <Box
+        component="form"
+        sx={{
+          p: '2px 8px',
+          display: 'flex',
+          alignItems: 'center',
+          width: 400,
+          borderRadius: '1rem',
+          backgroundColor: '#EEEEEE',
+        }}
+      >
+        <InputBase
+          disabled={pathname !== '/' ? true : false}
+          onChange={(e) => {
+            setSearch(e.target.value)
+          }}
+          onKeyPress={(e) => {
+            e.key === 'Enter' && e.preventDefault()
+          }}
+          placeholder="Cari di sini ..."
+          sx={{ ml: 1, flex: 1 }}
+        />
+        <IconButton
+          disabled={pathname !== '/' ? true : false}
+          onClick={handleSearch}
+          sx={{ p: '10px' }}
+        >
+          <FiSearch />
+        </IconButton>
+      </Box>
     </FormControl>
   )
 }
@@ -108,13 +121,10 @@ const UserButton = ({ userId }) => {
   const { pathname } = useLocation()
   const dispatch = useDispatch()
   const notificationProductAdd = useSelector(selectProductNotifications)
-  // console.log(notificationProductAdd)
   const user = useSelector(selectUser)
   let notifId = notificationProductAdd?.id
   let userToken = user.accessToken
-  // console.log(notifId)
   const notifData = useGetDataByIdQuery({ id: notifId, token: userToken })
-  // console.log(userToken)
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
@@ -129,7 +139,6 @@ const UserButton = ({ userId }) => {
   }, [pathname])
 
   const handleActive = (name) => {
-    // console.log(name)
     setActive(name)
     switch (name) {
       case 'Menu':
@@ -198,42 +207,57 @@ const UserButton = ({ userId }) => {
                           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                        {notifData.data.error ? 'kosong' : [notifData].map((item, index) => (
-                          <Grid
-                            key={index}
-                            container
-                            sx={{
-                              gap: '10px',
-                              ':hover': { backgroundColor: '#f7f7f7' },
-                              padding: '10px',
-                              borderRadius: '12px',
-                            }}
-                            onClick={handleNotifClick}
-                          >
-                            <Grid>
-                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0]?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" />
-                            </Grid>
-                            <Grid>
-                              <Typography variant="body2">Berhasil Ditambahkan</Typography>
-                              <Typography variant="subtitle1">{item.data.data[0].name}</Typography>
-                              <Typography variant="subtitle1">Rp. {item.data.data[0].price}</Typography>
-                              {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
-                            </Grid>
-                            <Grid sx={{ marginLeft: 'auto' }}>
-                              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <Typography variant="body2">{new Date(item.data.data[0].createdAt).toISOString().substring(0, 10)}</Typography>
-                                <Box
-                                  sx={{
-                                    width: '10px',
-                                    height: '10px',
-                                    backgroundColor: 'red',
-                                    borderRadius: '50px',
-                                  }}
-                                />
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        ))}
+                        {notifData.data.error
+                          ? 'kosong'
+                          : [notifData].map((item, index) => (
+                              <Grid
+                                key={index}
+                                container
+                                sx={{
+                                  gap: '10px',
+                                  ':hover': { backgroundColor: '#f7f7f7' },
+                                  padding: '10px',
+                                  borderRadius: '12px',
+                                }}
+                                onClick={handleNotifClick}
+                              >
+                                <Grid>
+                                  <img
+                                    src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0]?.Photos[0]?.storageId}/preview`}
+                                    alt="product-img"
+                                    width="80px"
+                                    height="80px"
+                                  />
+                                </Grid>
+                                <Grid>
+                                  <Typography variant="body2">Berhasil Ditambahkan</Typography>
+                                  <Typography variant="subtitle1">
+                                    {item.data.data[0].name}
+                                  </Typography>
+                                  <Typography variant="subtitle1">
+                                    {toRupiah(item.data.data[0].price)}
+                                  </Typography>
+                                  {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
+                                </Grid>
+                                <Grid sx={{ marginLeft: 'auto' }}>
+                                  <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <Typography variant="body2">
+                                      {new Date(item.data.data[0].createdAt)
+                                        .toISOString()
+                                        .substring(0, 10)}
+                                    </Typography>
+                                    <Box
+                                      sx={{
+                                        width: '10px',
+                                        height: '10px',
+                                        backgroundColor: 'red',
+                                        borderRadius: '50px',
+                                      }}
+                                    />
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            ))}
                       </Box>
                     </Box>
                   )}
@@ -281,9 +305,10 @@ const UserButton = ({ userId }) => {
                             color: '#7126B5',
                           },
                         }}
+                        onClick={() => navigate(`/wishlist`)}
                       >
                         <FiShoppingCart />
-                        <Typography>Whishlist</Typography>
+                        <Typography>Wishlist</Typography>
                       </Box>
                       <Box
                         sx={{
@@ -346,7 +371,14 @@ const Navbar = () => {
 
   return (
     <>
-      <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '80px',
+          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
+        }}
+      >
         <Container
           maxWidth="xl"
           sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
@@ -354,7 +386,7 @@ const Navbar = () => {
           <Box
             sx={{
               display: 'flex',
-              gap: '16px',
+              gap: '1rem',
               alignItems: 'center',
               width: '100%',
               position: 'relative',
@@ -371,7 +403,17 @@ const Navbar = () => {
               onClick={() => navigate('/')}
             />
             {pathname === '/add' ? (
-              ''
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  margin: 'auto',
+                }}
+              >
+                <Typography variant="subtitle2">Lengkapi Detail Produk</Typography>
+              </Box>
             ) : pathname === `/edit/${user?.id}` ? (
               <Box
                 sx={{
