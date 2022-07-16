@@ -1,40 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { productActions, selectProductPreview } from '../../../redux/slices'
+import { productActions } from '../../../redux/slices'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { selectUser } from '../../../redux/slices/userSlice'
-import { validateProduct } from '../../../utils/validators'
+import { useDeleteProductMutation } from '../../../redux/services'
 
 const ProductItem = ({ product, type }) => {
-  // const { productName, productCategory, productPrice, type, productId, storageId, productDesc } =
-  //   props
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const navigate = useNavigate()
-  // const [categoryNumber, setCategoryNumber] = useState('')
-  const category = ['Hobi', 'Kendaraan', 'Baju', 'Elektronik', 'Kesehatan']
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
-  const userLogin = useSelector(selectUser)
+  const userActive = useSelector(selectUser)
 
-  const productPreview = useSelector(selectProductPreview)
-  const data = {
-    nama: productPreview?.name,
-    harga: parseInt(productPreview?.price),
-    deskripsi: productPreview?.description,
-    kategori: parseInt(productPreview?.categoryId),
-    token: productPreview?.token,
-  }
-
-  // useEffect(() => {
-  //   if (typeof productCategory === 'number') setCategoryNumber(category[product?.cate])
-  // })
+  // const [categoryNumber, setCategoryNumber] = useState('')
+  // const productPreview = useSelector(selectProductPreview)
+  // const data = {
+  //   nama: productPreview?.name,
+  //   harga: parseInt(productPreview?.price),
+  //   deskripsi: productPreview?.description,
+  //   kategori: parseInt(productPreview?.categoryId),
+  //   token: productPreview?.token,
+  // }
 
   const handleBack = () => {
     if (product?.id !== '') {
@@ -42,8 +36,6 @@ const ProductItem = ({ product, type }) => {
     }
     return navigate(`/add/`)
   }
-
-  // console.log(typeof data.price)
 
   const handleAdd = async () => {
     console.log('adding product...')
@@ -60,7 +52,7 @@ const ProductItem = ({ product, type }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${userLogin.accessToken}`,
+            Authorization: `Bearer ${userActive.accessToken}`,
             'Content-Type': 'multipart/form-data',
           },
         }
@@ -116,6 +108,26 @@ const ProductItem = ({ product, type }) => {
   }
   // console.log(error)
 
+  const [deleteProduct, { data: deleteProductData, isSuccess: isDeleteProductSuccess }] =
+    useDeleteProductMutation()
+
+  const handleDelete = async () => {
+    deleteProduct({
+      id: product?.id,
+      token: userActive?.accessToken,
+    })
+  }
+
+  useEffect(() => {
+    if (isDeleteProductSuccess) {
+      enqueueSnackbar(`${deleteProductData?.message}`, {
+        variant: 'warning',
+        autoHideDuration: 1000,
+      })
+      navigate('/sales')
+    }
+  }, [isDeleteProductSuccess, deleteProductData])
+
   return (
     <>
       <Paper
@@ -138,46 +150,69 @@ const ProductItem = ({ product, type }) => {
               {product ? toRupiah(product?.price) : 'product_price'}
             </Typography>
             {type === 'seller' ? (
-              <>
-                <Button
-                  onClick={() => handleAdd()}
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disableElevation
-                  sx={{
-                    borderRadius: '1rem',
-                    textTransform: 'none',
-                    background: '#7126B5',
-                    border: '1px solid #7126B5',
-                    py: '10px',
-                    mb: '10px',
-                    '&:hover': {
-                      background: '#631fa1',
-                    },
-                  }}
-                >
-                  Terbitkan
-                </Button>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disableElevation
-                  sx={{
-                    borderRadius: '1rem',
-                    textTransform: 'none',
-                    background: '#ffffff',
-                    color: '#000000',
-                    border: '1px solid #7126B5',
-                    py: '10px',
-                    '&:hover': { color: '#ffffff', background: '#631fa1' },
-                  }}
-                  onClick={() => handleBack()}
-                >
-                  Edit
-                </Button>
-              </>
+              product?.status === 'DRAFT' ? (
+                <>
+                  <Button
+                    onClick={() => handleAdd()}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disableElevation
+                    sx={{
+                      borderRadius: '1rem',
+                      textTransform: 'none',
+                      background: '#7126B5',
+                      border: '1px solid #7126B5',
+                      py: '10px',
+                      mb: '10px',
+                      '&:hover': {
+                        background: '#631fa1',
+                      },
+                    }}
+                  >
+                    Terbitkan
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disableElevation
+                    sx={{
+                      borderRadius: '1rem',
+                      textTransform: 'none',
+                      background: '#ffffff',
+                      color: '#000000',
+                      border: '1px solid #7126B5',
+                      py: '10px',
+                      '&:hover': { color: '#ffffff', background: '#631fa1' },
+                    }}
+                    onClick={() => handleBack()}
+                  >
+                    Edit
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disableElevation
+                    sx={{
+                      borderRadius: '1rem',
+                      textTransform: 'none',
+                      background: '#ffffff',
+                      color: '#FF0000',
+                      border: '1px solid #FF0000',
+                      py: '10px',
+                      '&:hover': { color: '#ffffff', background: '#FF0000' },
+                    }}
+                    onClick={() => handleDelete(product?.id)}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )
             ) : (
               <>
                 <Button

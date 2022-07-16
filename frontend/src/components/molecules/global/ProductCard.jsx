@@ -1,11 +1,19 @@
-import { Box, Fade, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Chip, Fade, Skeleton, Stack, Typography } from '@mui/material'
 import { toRupiah } from '../../../utils/functions'
 import empty_image from '../../../assets/images/empty-product-image.png'
 import { useState } from 'react'
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, status }) => {
   const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`
   const [loading, setLoading] = useState(true)
+
+  const isStatusPublished = (status) => {
+    if (status === 'PUBLISH') {
+      return true
+    } else if (status === 'DRAFT') {
+      return false
+    }
+  }
 
   return (
     <>
@@ -21,28 +29,46 @@ const ProductCard = ({ product }) => {
       >
         <Stack direction="column" padding={1}>
           <Fade in={!loading}>
-            <Box
-              component={'img'}
-              src={product?.Photos?.length !== 0 ? image_storage_url : empty_image}
-              onLoad={() => setLoading(false)}
-              alt=""
-              sx={{
-                display: loading ? 'none' : 'block',
-                width: '100%',
-                height: { xs: 100, md: 120, lg: 132 },
-                borderRadius: '0.25rem',
-                objectFit: 'cover',
-              }}
-            />
+            <Box sx={{ position: 'relative' }}>
+              <Box
+                component={'img'}
+                src={product?.Photos?.length !== 0 ? image_storage_url : empty_image}
+                onLoad={() => setLoading(false)}
+                alt=""
+                sx={{
+                  display: loading ? 'none' : 'block',
+                  position: 'relative',
+                  width: '100%',
+                  height: { xs: 100, md: 120, lg: 132 },
+                  borderRadius: '0.25rem',
+                  objectFit: 'cover',
+                }}
+              />
+              {isStatusPublished(status) ? null : (
+                <Chip
+                  label="Unpublished"
+                  color="secondary"
+                  variant="filled"
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    zIndex: 1,
+                    margin: '0.5rem',
+                  }}
+                />
+              )}
+            </Box>
           </Fade>
 
-          <Skeleton variant="rect" animation="wave">
+          <Skeleton variant="rect" animation="wave" height="100%" width="100%">
             <Box
               sx={{
                 display: loading ? 'block' : 'none',
                 width: '100%',
                 height: { xs: 100, md: 120, lg: 132 },
                 borderRadius: '0.25rem',
+                objectFit: 'cover',
               }}
             />
           </Skeleton>

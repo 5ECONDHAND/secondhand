@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { Container, Grid, Skeleton } from '@mui/material'
 import { useParams } from 'react-router-dom'
@@ -7,46 +8,26 @@ import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProductPreview } from '../../redux/slices'
-// import { validateProduct } from '../../utils/validators'
-// import { useSnackbar } from 'notistack'
-// import axios from 'axios'
 
 const Product = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
   const previewProduct = useSelector(selectProductPreview)
-  // const { data: productData, isSuccess } = useGetDataByIdQuery(id)
-  const user = useSelector(selectUser)
-  // let previewId = previewProduct?.data?.id
-  let userToken = user?.accessToken
+  const userActive = useSelector(selectUser)
 
-  const { data: productData, isSuccess } = useGetDataByIdQuery({ id: id, token: userToken }) //id from url
-  // const previewProductData = useGetDataByIdQuery({ id: previewId, token: userToken }) // id from product
-  // console.log(productData)
-
-  // function checkType() {
-  //   if (productData.error) {
-  //     return 'seller'
-  //   } else {
-  //     if (productData?.data[0]?.User.fullname === user.fullname) {
-  //       return 'seller'
-  //     } else {
-  //       return 'buyer'
-  //     }
-  //   }
-  // }
-  // const productActive = useSelector(selectProductActive)
+  const { data: productData, isSuccess } = useGetDataByIdQuery({
+    id: id,
+    token: userActive.accessToken,
+  }) //id from url params
 
   const fillProductActive = () => {
     dispatch(productActions.setProductActive(productData?.data[0]))
   }
 
   useEffect(() => {
-    console.log('from product page: ', productData)
     if (isSuccess) {
       fillProductActive()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData, isSuccess])
 
   return (
@@ -93,9 +74,13 @@ const Product = () => {
                 <Grid item xs={12}>
                   <ProfileCard
                     sellerName={
-                      productData?.error ? user.fullname : productData?.data[0]?.User.fullname
+                      productData?.error
+                        ? userActive?.fullname
+                        : productData?.data[0]?.User?.fullname
                     }
-                    sellerCity={productData?.error ? user.city : productData?.data[0]?.User.city}
+                    sellerCity={
+                      productData?.error ? userActive?.city : productData?.data[0]?.User?.city
+                    }
                   />
                 </Grid>
               </Grid>

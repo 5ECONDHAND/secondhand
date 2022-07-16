@@ -17,6 +17,9 @@ export const productSlice = createSlice({
     setProducts: (state, action) => {
       state.products = action.payload
     },
+    clearProducts: (state) => {
+      state.products = initialState.products
+    },
     setProductActive: (state, action) => {
       state.productActive = { ...state.productActive, ...action.payload }
     },

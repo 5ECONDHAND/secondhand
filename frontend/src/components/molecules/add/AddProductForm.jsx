@@ -97,7 +97,6 @@ const AddProductForm = (props) => {
   }, [sellerProductCount])
 
   const [
-    postProduct,
     {
       data: postProductData,
       isLoading: isPostProductLoading,
@@ -107,7 +106,6 @@ const AddProductForm = (props) => {
   ] = usePostProductMutation()
 
   const [
-    putProduct,
     {
       data: putProductData,
       isLoading: isPutProductLoading,
@@ -116,11 +114,10 @@ const AddProductForm = (props) => {
     },
   ] = usePutProductMutation()
 
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery({
+  const { data: productData, isSuccess: isProductDataSuccess } = useGetDataByIdQuery({
     id: productId,
     token: token,
   })
-  // console.log(productData)
 
   const handleSubmit = (event, name = '') => {
     if (productId && name === '') {
@@ -210,8 +207,8 @@ const AddProductForm = (props) => {
   }
 
   const handlePreview = (event) => {
+    // console.log(files)
     event.preventDefault()
-    console.log(files)
     if (productId && validateProduct(values, setError)) {
       axios
         .put(
@@ -317,13 +314,15 @@ const AddProductForm = (props) => {
   ))
 
   useEffect(() => {
-    setValues({
-      nama: productData?.data[0] ? productData.data[0].name : '',
-      harga: productData?.data[0] ? productData.data[0].price : '',
-      kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.id : '',
-      deskripsi: productData?.data[0] ? productData.data[0].description : '',
-    })
-  }, [productData])
+    if (isProductDataSuccess) {
+      setValues({
+        nama: productData?.data[0] ? productData.data[0].name : '',
+        harga: productData?.data[0] ? productData.data[0].price : '',
+        kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.id : '',
+        deskripsi: productData?.data[0] ? productData.data[0].description : '',
+      })
+    }
+  }, [productData, isProductDataSuccess])
 
   useEffect(() => {
     if (isPostProductSuccess || isPutProductSuccess) {

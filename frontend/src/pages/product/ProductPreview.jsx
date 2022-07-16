@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom'
 
 const ProductPreview = () => {
   const { productId } = useParams()
-  console.log(productId)
   const dispatch = useDispatch()
   const previewProduct = useSelector(selectProductPreview)
   const userActive = useSelector(selectUser)
@@ -21,13 +20,9 @@ const ProductPreview = () => {
   })
 
   useEffect(() => {
-    dispatch(productActions.clearProductPreview()) // clears persist data
-    console.log('from preview page FIRST TIME: ', previewProduct)
+    dispatch(productActions.clearProductPreview()) // clear previous preview product
     if (isSuccess) {
-      dispatch(productActions.setProductPreview(previewProductData)) // sets persist data
-    }
-    if (previewProduct !== null) {
-      console.log('from preview page SECOND TIME: ', previewProduct)
+      dispatch(productActions.setProductPreview(previewProductData)) // set new preview product
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewProductData, isSuccess])

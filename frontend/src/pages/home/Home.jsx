@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
 import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
 import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
@@ -7,18 +7,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import empty from '../../assets/images/empty-product.png'
 import {
-  authActions,
   productActions,
   selectProduct,
   selectProductSearch,
-  selectUser,
-  userActions,
+  // selectUser,
 } from '../../redux/slices'
 
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const userActive = useSelector(selectUser)
+  // const userActive = useSelector(selectUser)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
@@ -43,32 +41,32 @@ const Home = () => {
     }
   }
 
-  const displayLogin = () => {
-    if (userActive) {
-      return (
-        <Button variant="contained" onClick={logout}>
-          Logout
-        </Button>
-      )
-    } else {
-      return (
-        <Button variant="contained" onClick={login}>
-          Login
-        </Button>
-      )
-    }
-  }
+  // const displayLogin = () => {
+  //   if (userActive) {
+  //     return (
+  //       <Button variant="contained" onClick={logout}>
+  //         Logout
+  //       </Button>
+  //     )
+  //   } else {
+  //     return (
+  //       <Button variant="contained" onClick={login}>
+  //         Login
+  //       </Button>
+  //     )
+  //   }
+  // }
 
-  const login = () => {
-    navigate('/login')
-  }
+  // const login = () => {
+  //   navigate('/login')
+  // }
 
-  const logout = () => {
-    dispatch(authActions.clearCredentials())
-    dispatch(userActions.clearCredentials())
-    dispatch(productActions.clearProductWishlist())
-    navigate('/login')
-  }
+  // const logout = () => {
+  //   dispatch(authActions.clearCredentials())
+  //   dispatch(userActions.clearCredentials())
+  //   dispatch(productActions.clearProductWishlist())
+  //   navigate('/login')
+  // }
 
   const fillProducts = () => {
     dispatch(productActions.setProducts(productData?.data))
@@ -147,7 +145,7 @@ const Home = () => {
               displayData?.map((item, index) => (
                 <Grid item xs={1} key={index}>
                   <Box onClick={() => navigate(`/product/${item.id}`)}>
-                    <ProductCard product={item} />
+                    <ProductCard product={item} status={item.status} />
                   </Box>
                 </Grid>
               ))

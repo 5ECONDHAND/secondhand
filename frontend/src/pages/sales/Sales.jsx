@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { Box, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { FiPlus } from 'react-icons/fi'
@@ -7,7 +8,7 @@ import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
-import { useGetDataQuery, useGetProductsSellerQuery } from '../../redux/services/productApi'
+import { useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 import { isProductMaxed } from '../../utils/functions'
@@ -15,11 +16,12 @@ import { isProductMaxed } from '../../utils/functions'
 const Sales = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const user = useSelector(selectUser)
-  const { data: productData, isSuccess: isProductSuccess } = useGetProductsSellerQuery(
-    user.accessToken
+  const userActive = useSelector(selectUser)
+  const { data: productSellerData, isSuccess: isProductSellerSuccess } = useGetProductsSellerQuery(
+    userActive.accessToken,
+    { refetchOnMountOrArgChange: true }
   )
-  const products = useSelector(selectProduct) // get from redux
+  const products = useSelector(selectProduct)
   const [displayData, setDisplayData] = useState()
   const [dataCategory, setDataCategory] = useState('Semua Produk')
   const { enqueueSnackbar } = useSnackbar()
@@ -27,47 +29,71 @@ const Sales = () => {
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
       case 'Semua Produk':
-        setDisplayData(products?.filter((item) => item.User.fullname === user.fullname))
+        setDisplayData(products?.filter((item) => item.User.fullname === userActive.fullname))
         break
       case 'Diminati':
         setDisplayData(
           products?.filter(
-            (item) => item.User.fullname === user.fullname && item.Transaction.status === 'DECIDING'
+            (item) =>
+              item.User.fullname === userActive.fullname && item.Transaction.status === 'DECIDING'
           )
         )
         break
       case 'Terjual':
         setDisplayData(
           products?.filter(
-            (item) => item.User.fullname === user.fullname && item.Transaction.status === 'ACCEPTED'
+            (item) =>
+              item.User.fullname === userActive.fullname && item.Transaction.status === 'ACCEPTED'
           )
         )
         break
       default:
-        setDisplayData(products?.filter((item) => item.User.fullname === user.name))
+        setDisplayData(products?.filter((item) => item.User.fullname === userActive.name))
         break
     }
   }
 
-  const fillProducts = () => {
-    dispatch(productActions.setProducts(productData?.data))
+  const checkRender = (displayData) => {
+    if (displayData.length === 0) {
+      return <Empty dataCategory={dataCategory} />
+    }
+    if (displayData.length >= 1) {
+      if (dataCategory === 'Semua Produk' || dataCategory === 'Terjual') {
+        return displayData.map((item, index) => (
+          <Grid item xs={6} sm={4} md={4} key={index}>
+            <Box onClick={() => navigate(`/preview/${item.id}`)}>
+              <ProductCard product={item} status={item?.status} />
+            </Box>
+          </Grid>
+        ))
+      } else if (dataCategory === 'Diminati') {
+        return displayData.map((item, index) => (
+          <Grid item xs={12} key={index}>
+            <Box onClick={() => navigate(`/offers/${item.id}`)}>
+              <OfferCardMini product={item} />
+            </Box>
+          </Grid>
+        ))
+      }
+    }
   }
 
   useEffect(() => {
-    if (isProductSuccess) {
-      fillProducts()
+    dispatch(productActions.clearProducts())
+    if (isProductSellerSuccess) {
+      dispatch(productActions.setProducts(productSellerData?.data))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, productData])
+  }, [products, productSellerData, isProductSellerSuccess])
 
   useEffect(() => {
     if (products) {
       dataSwitch(dataCategory)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCategory, products])
 
-  const sellerProductCount = products?.filter((item) => item.User.fullname === user.fullname).length
+  const sellerProductCount = products?.filter(
+    (item) => item.User.fullname === userActive.fullname
+  ).length
 
   const handleAddProduct = () => {
     if (isProductMaxed(sellerProductCount)) {
@@ -99,6 +125,9 @@ const Sales = () => {
               justifyContent: 'center',
               color: '#8A8A8A',
               cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: '#f2f2f2',
+              },
             }}
             onClick={handleAddProduct}
           >
@@ -135,31 +164,6 @@ const Sales = () => {
     )
   }
 
-  const checkRender = (displayData) => {
-    if (displayData.length === 0) {
-      return <Empty dataCategory={dataCategory} />
-    }
-    if (displayData.length >= 1) {
-      if (dataCategory === 'Semua Produk' || dataCategory === 'Terjual') {
-        return displayData.map((item, index) => (
-          <Grid item xs={6} sm={4} md={4} key={index}>
-            <Box onClick={() => navigate(`/preview/${item.id}`)}>
-              <ProductCard product={item} />
-            </Box>
-          </Grid>
-        ))
-      } else if (dataCategory === 'Diminati') {
-        return displayData.map((item, index) => (
-          <Grid item xs={12} key={index}>
-            <Box onClick={() => navigate(`/offers/${item.id}`)}>
-              <OfferCardMini product={item} />
-            </Box>
-          </Grid>
-        ))
-      }
-    }
-  }
-
   return (
     <>
       <Navbar />
@@ -167,7 +171,11 @@ const Sales = () => {
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Daftar Jual Saya
         </Typography>
-        <ProfileCard display="sales" sellerName={user?.fullname} sellerCity={user?.city} />
+        <ProfileCard
+          display="sales"
+          sellerName={userActive?.fullname}
+          sellerCity={userActive?.city}
+        />
         <Grid
           container
           spacing={2}
@@ -186,11 +194,9 @@ const Sales = () => {
                 checkRender(displayData)
               ) : (
                 <Grid item xs={6} sm={4} md={4}>
-                  <Skeleton animation="wave" variant="rectangular" width={210} height={140} />
-                  <Box sx={{ pt: 1 }}>
-                    <Skeleton animation="wave" width={210} height={20} />
-                    <Skeleton animation="wave" width="70%" height={20} />
-                  </Box>
+                  <Skeleton animation="wave" variant="rectangular" width="100%" height="100%">
+                    <ProductCard />
+                  </Skeleton>
                 </Grid>
               )}
             </Grid>
