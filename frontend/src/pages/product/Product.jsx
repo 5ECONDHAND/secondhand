@@ -57,13 +57,14 @@ const Product = () => {
           {isSuccess && productData !== null ? (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
-                <ProductSlider
+                <ProductSlider productPhoto={productData?.data[0]?.Photos} />
+                {/* <ProductSlider
                   productPhoto={
                     productData?.error
                       ? previewProductData?.data?.data[0]?.Photos
                       : productData?.data[0].Photos
                   }
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
