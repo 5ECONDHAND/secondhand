@@ -12,6 +12,7 @@ import { useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 import { isProductMaxed } from '../../utils/functions'
+import Loader from '../../components/atoms/global/Loader'
 
 const Sales = () => {
   const navigate = useNavigate()
@@ -166,6 +167,7 @@ const Sales = () => {
 
   return (
     <>
+      <Loader />
       <Navbar />
       <Container maxWidth="lg" sx={{ pt: '2rem', pb: '1rem' }}>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>

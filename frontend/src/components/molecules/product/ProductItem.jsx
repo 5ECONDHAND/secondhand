@@ -60,10 +60,6 @@ const ProductItem = ({ product, type }) => {
     }
   }
 
-  useEffect(() => {
-    checkWishlist()
-  }, [wishlist])
-
   const handleBack = () => {
     if (product?.id !== '') {
       return navigate(`/add/${product?.id}`)
@@ -152,6 +148,7 @@ const ProductItem = ({ product, type }) => {
     })
   }
 
+  // check if product is deleted
   useEffect(() => {
     if (isDeleteProductSuccess) {
       enqueueSnackbar(`${deleteProductData?.message}`, {
@@ -161,6 +158,18 @@ const ProductItem = ({ product, type }) => {
       navigate('/sales')
     }
   }, [isDeleteProductSuccess, deleteProductData])
+
+  // check current wishlist state
+  useEffect(() => {
+    checkWishlist()
+  }, [wishlist])
+
+  // check if user is not logged in & tries to offer products
+  useEffect(() => {
+    if (open && userActive === null) {
+      navigate('/login')
+    }
+  }, [open])
 
   return (
     <>

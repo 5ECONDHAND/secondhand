@@ -8,6 +8,7 @@ import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProductPreview } from '../../redux/slices'
+import Loader from '../../components/atoms/global/Loader'
 
 const Product = () => {
   const { id } = useParams()
@@ -17,7 +18,6 @@ const Product = () => {
 
   const { data: productData, isSuccess } = useGetDataByIdQuery({
     id: id,
-    token: userActive.accessToken,
   }) //id from url params
 
   const fillProductActive = () => {
@@ -32,6 +32,7 @@ const Product = () => {
 
   return (
     <>
+      <Loader />
       <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>

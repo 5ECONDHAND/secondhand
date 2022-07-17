@@ -12,6 +12,7 @@ import {
   selectProductSearch,
   // selectUser,
 } from '../../redux/slices'
+import Loader from '../../components/atoms/global/Loader'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -90,6 +91,7 @@ const Home = () => {
 
   return (
     <>
+      <Loader />
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
