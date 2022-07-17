@@ -1,34 +1,68 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import { Button, Paper, Stack, Typography } from '@mui/material'
+import { Button, IconButton, Paper, Stack, Typography } from '@mui/material'
 import NegotiateModal from './NegotiateModal'
 import { toRupiah } from '../../../utils/functions'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { productActions } from '../../../redux/slices'
+import { productActions, selectProductWishlist, selectUser } from '../../../redux/slices'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { selectUser } from '../../../redux/slices/userSlice'
 import { useDeleteProductMutation } from '../../../redux/services'
+import { FaHeart } from 'react-icons/fa'
 
 const ProductItem = ({ product, type }) => {
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  // hook calls
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
+  // redux state
   const userActive = useSelector(selectUser)
+  const productWishlist = useSelector(selectProductWishlist)
+  // local state
+  const [open, setOpen] = useState(false)
+  const [wishlist, setWishlist] = useState(false)
+  // handlers
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-  // const [categoryNumber, setCategoryNumber] = useState('')
-  // const productPreview = useSelector(selectProductPreview)
-  // const data = {
-  //   nama: productPreview?.name,
-  //   harga: parseInt(productPreview?.price),
-  //   deskripsi: productPreview?.description,
-  //   kategori: parseInt(productPreview?.categoryId),
-  //   token: productPreview?.token,
-  // }
+  const checkWishlist = () => {
+    if (productWishlist.length > 0) {
+      for (const x of productWishlist) {
+        if (x.wish.id === product?.id) {
+          setWishlist(true)
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  const addWishlist = () => {
+    setWishlist(true)
+    if (userActive && product !== null) {
+      dispatch(productActions.addProductWishlist({ wish: product }))
+      enqueueSnackbar('Wishlist Added', {
+        variant: 'success',
+        autoHideDuration: 1000,
+      })
+    }
+  }
+
+  const removeWishlist = () => {
+    setWishlist(false)
+    if (userActive && product !== null) {
+      dispatch(productActions.removeProductWishlist({ id: product?.id }))
+      enqueueSnackbar('Wishlist Removed', {
+        variant: 'warning',
+        autoHideDuration: 1000,
+      })
+    }
+  }
+
+  useEffect(() => {
+    checkWishlist()
+  }, [wishlist])
 
   const handleBack = () => {
     if (product?.id !== '') {
@@ -139,12 +173,24 @@ const ProductItem = ({ product, type }) => {
       >
         <Stack direction="column" justifyContent="flex-start" spacing={2} padding={2}>
           <Stack direction="column">
-            <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {product ? product?.name : 'product_name'}
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="body1" sx={{ fontWeight: '500' }}>
+                {product ? product?.name : 'product_name'}
+              </Typography>
+              {type === 'buyer' && userActive && userActive?.fullname !== product?.User.fullname ? (
+                wishlist ? (
+                  <IconButton onClick={removeWishlist} sx={{ color: '#FF5050' }}>
+                    <FaHeart size={20} />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={addWishlist}>
+                    <FaHeart size={20} />
+                  </IconButton>
+                )
+              ) : null}
+            </Stack>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
               {product ? product?.Categories[0]?.Category?.name : 'product_category'}
-              {/* {typeof productCategory !== 'number' ? productCategory : categoryNumber} */}
             </Typography>
             <Typography variant="body1" sx={{ my: '1rem' }}>
               {product ? toRupiah(product?.price) : 'product_price'}
