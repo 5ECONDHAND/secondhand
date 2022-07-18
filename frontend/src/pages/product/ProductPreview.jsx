@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { Container, Grid, Skeleton } from '@mui/material'
 import { Navbar, ProfileCard } from '../../components/molecules/global'
@@ -25,7 +26,6 @@ const ProductPreview = () => {
     if (isSuccess) {
       dispatch(productActions.setProductPreview(previewProductData)) // set new preview product
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewProductData, isSuccess])
 
   return (
@@ -37,7 +37,7 @@ const ProductPreview = () => {
           {previewProduct !== null ? (
             <>
               <Grid item xs={12} sm={6} md={6.4}>
-                <ProductSlider productPhoto={previewProduct?.data[0]?.Photos} />
+                <ProductSlider product={previewProduct?.data[0]} />
               </Grid>
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
