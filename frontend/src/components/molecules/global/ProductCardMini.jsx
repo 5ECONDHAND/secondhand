@@ -1,8 +1,10 @@
-import { Avatar, Box, Grid, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, Grid, Stack, Typography } from '@mui/material'
 import { toRupiah } from '../../../utils/functions'
+import { useNavigate } from 'react-router-dom'
 import dummy from '../../../assets/images/dummy-image.jpg'
 
-const OfferCardMini = ({ product }) => {
+const ProductCardMini = ({ product, index }) => {
+  const navigate = useNavigate()
   return (
     <>
       <Box
@@ -25,22 +27,35 @@ const OfferCardMini = ({ product }) => {
                 <Avatar alt="" src={dummy} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
                 <Stack direction="column">
                   <Typography variant="body2" sx={{ color: '#8A8A8A', mb: 0.5 }}>
-                    Penawaran Produk
+                    Product wishlist {index + 1}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500', mb: 0.5 }}>
-                    {product ? product.name : 'product_name'}
+                    {product ? product?.name : 'product_name'}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500', mb: 0.5 }}>
-                    {product ? toRupiah(product.price) : 'product_price'}
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: '500' }}>
-                    Ditawar {toRupiah(200000)}
+                    {product ? toRupiah(product?.price) : 'product_price'}
                   </Typography>
                 </Stack>
               </Stack>
-              <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-                {'20 Apr, 14:04'}
-              </Typography>
+              <Button
+                variant="contained"
+                disableElevation
+                size="small"
+                sx={{
+                  borderRadius: '0.75rem',
+                  textTransform: 'none',
+                  border: '1px solid #7126B5',
+                  background: '#ffffff',
+                  color: '#000000',
+                  '&:hover': {
+                    background: '#7126B5',
+                    color: '#ffffff',
+                  },
+                }}
+                onClick={() => navigate(`/product/${product.id}`)}
+              >
+                View
+              </Button>
             </Stack>
           </Grid>
         </Grid>
@@ -49,4 +64,4 @@ const OfferCardMini = ({ product }) => {
   )
 }
 
-export default OfferCardMini
+export default ProductCardMini

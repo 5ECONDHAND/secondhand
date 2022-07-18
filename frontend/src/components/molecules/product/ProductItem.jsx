@@ -16,13 +16,20 @@ const ProductItem = ({ product, type }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
-  // redux state
+
+  // redux state selectors
   const userActive = useSelector(selectUser)
   const productWishlist = useSelector(selectProductWishlist)
+
   // local state
   const [open, setOpen] = useState(false)
   const [wishlist, setWishlist] = useState(false)
-  // handlers
+
+  // rtk queries
+  const [deleteProduct, { data: deleteProductData, isSuccess: isDeleteProductSuccess }] =
+    useDeleteProductMutation()
+
+  // local handlers
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
@@ -67,8 +74,22 @@ const ProductItem = ({ product, type }) => {
     return navigate(`/add/`)
   }
 
+  const handleEdit = () => {
+    if (product?.id !== '') {
+      return navigate(`/product/edit/${product?.id}`)
+    }
+    return console.log('no product id found')
+  }
+
+  const handleDelete = async () => {
+    deleteProduct({
+      id: product?.id,
+      token: userActive?.accessToken,
+    })
+  }
+
   const handleAdd = async () => {
-    console.log('adding product...')
+    console.log('publishing product...')
     axios
       .put(
         `https://febesh5-dev.herokuapp.com/api/products/${product?.id}`,
@@ -136,18 +157,9 @@ const ProductItem = ({ product, type }) => {
     //   console.log('product created')
     // }
   }
-  // console.log(error)
+  // console.log(error)publishing
 
-  const [deleteProduct, { data: deleteProductData, isSuccess: isDeleteProductSuccess }] =
-    useDeleteProductMutation()
-
-  const handleDelete = async () => {
-    deleteProduct({
-      id: product?.id,
-      token: userActive?.accessToken,
-    })
-  }
-
+  // useEffect calls when component mounts
   // check if product is deleted
   useEffect(() => {
     if (isDeleteProductSuccess) {
@@ -158,12 +170,10 @@ const ProductItem = ({ product, type }) => {
       navigate('/sales')
     }
   }, [isDeleteProductSuccess, deleteProductData])
-
   // check current wishlist state
   useEffect(() => {
     checkWishlist()
   }, [wishlist])
-
   // check if user is not logged in & tries to offer products
   useEffect(() => {
     if (open && userActive === null) {
@@ -257,7 +267,26 @@ const ProductItem = ({ product, type }) => {
                       borderRadius: '1rem',
                       textTransform: 'none',
                       background: '#ffffff',
-                      color: '#FF0000',
+                      color: '#000000',
+                      border: '1px solid #7126B5',
+                      py: '10px',
+                      mb: '10px',
+                      '&:hover': { color: '#ffffff', background: '#631fa1' },
+                    }}
+                    onClick={() => handleEdit(product?.id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disableElevation
+                    sx={{
+                      borderRadius: '1rem',
+                      textTransform: 'none',
+                      background: '#ffffff',
+                      color: '#000000',
                       border: '1px solid #FF0000',
                       py: '10px',
                       '&:hover': { color: '#ffffff', background: '#FF0000' },

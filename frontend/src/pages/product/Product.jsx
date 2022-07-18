@@ -11,14 +11,14 @@ import { productActions, selectProductPreview } from '../../redux/slices'
 import Loader from '../../components/atoms/global/Loader'
 
 const Product = () => {
-  const { id } = useParams()
+  const { productId } = useParams()
   const dispatch = useDispatch()
   const previewProduct = useSelector(selectProductPreview)
   const userActive = useSelector(selectUser)
 
   const { data: productData, isSuccess } = useGetDataByIdQuery({
-    id: id,
-  }) //id from url params
+    id: productId,
+  })
 
   const fillProductActive = () => {
     dispatch(productActions.setProductActive(productData?.data[0]))

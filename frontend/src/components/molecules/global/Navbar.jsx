@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Container,
   Box,
@@ -33,7 +34,7 @@ const SearchField = () => {
   const { pathname } = useLocation()
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
+  const { data: productData, isSuccess: isProductDataSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
   )

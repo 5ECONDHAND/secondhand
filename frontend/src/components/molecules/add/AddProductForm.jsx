@@ -65,8 +65,18 @@ const img = {
 }
 
 const AddProductForm = (props) => {
-  const { enqueueSnackbar } = useSnackbar()
+  // hook calls
+  const { productId } = useParams()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+
+  // redux state selectors
+  const user = useSelector(selectAuth)
+  const userActive = useSelector(selectUser)
+  const productsData = useSelector(selectProduct)
+
+  // local state
   const [error, setError] = useState({})
   const [values, setValues] = useState({
     nama: '',
@@ -75,27 +85,11 @@ const AddProductForm = (props) => {
     deskripsi: '',
   })
   const [files, setFiles] = useState([])
-  const user = useSelector(selectAuth)
-  const userActive = useSelector(selectUser)
-  let token = userActive.accessToken
-  const productsData = useSelector(selectProduct)
-  const { productId } = useParams()
-  const dispatch = useDispatch()
   const sellerProductCount = productsData?.filter(
-    (item) => item.User.fullname === userActive.fullname
+    (item) => item.User?.fullname === userActive?.fullname
   ).length
 
-  useEffect(() => {
-    if (isProductMaxed(sellerProductCount)) {
-      enqueueSnackbar('Maximum Product Stock', {
-        variant: 'error',
-        autoHideDuration: 1000,
-        preventDuplicate: true,
-      })
-      return navigate('/sales')
-    }
-  }, [sellerProductCount])
-
+  // rtk queries
   const [
     {
       data: postProductData,
@@ -116,8 +110,13 @@ const AddProductForm = (props) => {
 
   const { data: productData, isSuccess: isProductDataSuccess } = useGetDataByIdQuery({
     id: productId,
-    token: token,
+    token: userActive?.accessToken,
   })
+
+  // local handlers
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
   const handleSubmit = (event, name = '') => {
     if (productId && name === '') {
@@ -131,7 +130,7 @@ const AddProductForm = (props) => {
 
   const handleAdd = async (event) => {
     event.preventDefault()
-
+    console.log('adding product...')
     if (validateProduct(values, setError)) {
       axios
         .post(
@@ -145,7 +144,7 @@ const AddProductForm = (props) => {
           },
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${userActive.accessToken}`,
               'Content-Type': 'multipart/form-data',
             },
           }
@@ -202,13 +201,9 @@ const AddProductForm = (props) => {
     }
   }
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
   const handlePreview = (event) => {
-    // console.log(files)
     event.preventDefault()
+    console.log('previewing product...')
     if (productId && validateProduct(values, setError)) {
       axios
         .put(
@@ -313,6 +308,18 @@ const AddProductForm = (props) => {
     </div>
   ))
 
+  // useEffect calls when component mounts
+  useEffect(() => {
+    if (isProductMaxed(sellerProductCount)) {
+      enqueueSnackbar('Maximum Product Stock', {
+        variant: 'error',
+        autoHideDuration: 1000,
+        preventDuplicate: true,
+      })
+      return navigate('/sales')
+    }
+  }, [sellerProductCount])
+
   useEffect(() => {
     if (isProductDataSuccess) {
       setValues({
@@ -344,7 +351,6 @@ const AddProductForm = (props) => {
       console.log('Response', isPostProductError)
       enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPostProductSuccess, isPutProductSuccess, isPostProductError, isPutProductError])
 
   useEffect(() => {
@@ -400,13 +406,13 @@ const AddProductForm = (props) => {
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
-                {/* <MenuItem disabled value="">
+                <MenuItem disabled value="">
                   <em>
-                    {isProductSuccess && productId
+                    {isProductDataSuccess && productId
                       ? productData?.data[0].Categories[0].Category.id
                       : 'Pilih Kategori'}
                   </em>
-                </MenuItem> */}
+                </MenuItem>
                 <MenuItem value={1}>Hobi</MenuItem>
                 <MenuItem value={2}>Kendaraan</MenuItem>
                 <MenuItem value={3}>Baju</MenuItem>
