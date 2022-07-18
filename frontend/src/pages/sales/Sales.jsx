@@ -64,7 +64,7 @@ const Sales = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCategory, products])
 
-  console.log(productData)
+  // console.log(productData)
 
   const userProductLength = products?.filter((item) => item.User.fullname === user.fullname).length
   // console.log(userProductLength)

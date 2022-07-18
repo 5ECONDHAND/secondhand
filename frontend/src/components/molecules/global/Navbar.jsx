@@ -28,7 +28,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
 import { productActions, selectProductNotifications } from '../../../redux/slices/productSlice'
-import { useGetDataByIdQuery, useGetDataQuery } from '../../../redux/services/productApi'
+import { useGetDataByIdQuery, useGetDataQuery, useGetProductsSellerQuery } from '../../../redux/services/productApi'
 import { toRupiah } from '../../../utils/functions'
 import axios from 'axios'
 
@@ -104,17 +104,38 @@ const UserButton = ({ userId }) => {
   const [popup, setPopup] = useState(false)
   const [notif, setNotif] = useState(true)
   const [showProfile, setShowProfile] = useState(false)
+  const [transaction, setTransaction] = useState()
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const dispatch = useDispatch()
+
+  // from redux
   const notificationProductAdd = useSelector(selectProductNotifications)
-  // console.log(notificationProductAdd)
+  // get user for token
   const user = useSelector(selectUser)
-  let notifId = notificationProductAdd?.id
+  let notifId = notificationProductAdd?.data?.id
   let userToken = user.accessToken
-  // console.log(notifId)
+  // fetch to get photo
   const notifData = useGetDataByIdQuery({ id: notifId, token: userToken })
-  // console.log(userToken)
+  // fetch data get user transaction
+  const userTransaction = useGetProductsSellerQuery(userToken)
+  // if (userTransaction?.data?.data?.Transaction.Users.length !== 0) {
+  //   setTransaction(userTransaction.data)
+  // }
+
+  useEffect(() => {
+    // .filter((item) => item.Users.length !== 0)
+    for (let i = 0; i < userTransaction?.data?.data.length; i++) {
+      if (userTransaction?.data?.data[i]?.Transaction.Users.length !== 0) {
+        // console.log(userTransaction.data.data[i].Transaction.Users)
+        setTransaction(userTransaction.data.data[i])
+        break
+      } else {
+        continue
+      }
+    }
+  }, [userTransaction])
+  console.log(transaction)
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
@@ -198,7 +219,43 @@ const UserButton = ({ userId }) => {
                           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                        {notifData.data.error ? 'kosong' : [notifData].map((item, index) => (
+                        {transaction ? [transaction].map((item, index) => (
+                          <Grid
+                            key={index}
+                            container
+                            sx={{
+                              gap: '10px',
+                              ':hover': { backgroundColor: '#f7f7f7' },
+                              padding: '10px',
+                              borderRadius: '12px',
+                            }}
+                            onClick={handleNotifClick}
+                          >
+                            <Grid>
+                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.Photos[0].storageId}/preview`} alt="product-img" width="80px" height="80px" />
+                            </Grid>
+                            <Grid>
+                              <Typography variant="body2">Produk ditawar!</Typography>
+                              <Typography variant="subtitle1">{item.name}</Typography>
+                              <Typography variant="subtitle1">Ditawar {item.Transaction.Users[0].offeredPrice}</Typography>
+                              {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
+                            </Grid>
+                            <Grid sx={{ marginLeft: 'auto' }}>
+                              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <Typography variant="body2">{new Date(item.createdAt).toISOString().substring(0, 10)}</Typography>
+                                <Box
+                                  sx={{
+                                    width: '10px',
+                                    height: '10px',
+                                    backgroundColor: 'red',
+                                    borderRadius: '50px',
+                                  }}
+                                />
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        )) : ''}
+                        {notifData.data.error ? 'No Product Add Yet' : [notifData].map((item, index) => (
                           <Grid
                             key={index}
                             container
@@ -214,9 +271,9 @@ const UserButton = ({ userId }) => {
                               <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0]?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" />
                             </Grid>
                             <Grid>
-                              <Typography variant="body2">Berhasil Ditambahkan</Typography>
+                              <Typography variant="body2">Berhasil {notificationProductAdd.message === 'Product Created' ? 'Ditambahkan' : 'Ditawar'}</Typography>
                               <Typography variant="subtitle1">{item.data.data[0].name}</Typography>
-                              <Typography variant="subtitle1">Rp. {item.data.data[0].price}</Typography>
+                              <Typography variant="subtitle1">{notificationProductAdd.message === 'Product Created' ? `Rp. ${item.data.data[0].price}` : ''}</Typography>
                               {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
                             </Grid>
                             <Grid sx={{ marginLeft: 'auto' }}>

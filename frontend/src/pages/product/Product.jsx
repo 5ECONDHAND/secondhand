@@ -22,7 +22,7 @@ const Product = () => {
 
   const { data: productData, isSuccess } = useGetDataByIdQuery({ id: id, token: userToken }) //id from url
   const previewProductData = useGetDataByIdQuery({ id: previewId, token: userToken }) // id from product
-  console.log(productData)
+  // console.log(productData)
 
   function checkType() {
     if (productData.error) {
@@ -97,16 +97,16 @@ const Product = () => {
                     //   productData?.data[0].User.fullname === user?.fullname ? 'seller' : 'buyer'
                     // }
                     product={productData?.data[0]}
-                    // type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
-                    // productName={productData?.data[0].name}
-                    // productCategory={productData?.data[0].Categories[0].Category.name}
-                    // productPrice={productData?.data[0].price}
-                    // productId={productData?.data[0].id}
-                    // storageId={productData?.data[0]?.Photos[0]?.storageId}
-                    // product={productData?.data[0]}
-                    // productName={productData?.data[0].name}
-                    // productCategory={productData?.data[0].Categories[0].Category.name}
-                    // productPrice={productData?.data[0].price}
+                  // type={productData?.data[0].User.fullname === user.fullname ? 'seller' : 'buyer'}
+                  // productName={productData?.data[0].name}
+                  // productCategory={productData?.data[0].Categories[0].Category.name}
+                  // productPrice={productData?.data[0].price}
+                  // productId={productData?.data[0].id}
+                  // storageId={productData?.data[0]?.Photos[0]?.storageId}
+                  // product={productData?.data[0]}
+                  // productName={productData?.data[0].name}
+                  // productCategory={productData?.data[0].Categories[0].Category.name}
+                  // productPrice={productData?.data[0].price}
                   />
                 </Grid>
                 <Grid item xs={12}>

@@ -137,6 +137,7 @@ const AddProductForm = (props) => {
             price: values.harga,
             description: values.deskripsi,
             categoryId: values.kategori,
+            files: files[0],
             status: 'PUBLISH',
           },
           {
@@ -148,7 +149,11 @@ const AddProductForm = (props) => {
         )
         .then(function (response) {
           enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
-          dispatch(productActions.setProductNotifications(response.data.data[0]))
+          dispatch(productActions.setProductNotifications({
+            error: false,
+            message: 'Product Created',
+            data: response.data.data[0]
+          }))
           setTimeout(() => {
             navigate('/sales')
           }, 2000)
@@ -185,7 +190,11 @@ const AddProductForm = (props) => {
         )
         .then(function (response) {
           enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
-          dispatch(productActions.setProductNotifications(response.data.data[0]))
+          dispatch(productActions.setProductNotifications({
+            error: false,
+            message: 'Product Created',
+            data: response.data.data[0]
+          }))
           setTimeout(() => {
             navigate('/sales')
           }, 2000)

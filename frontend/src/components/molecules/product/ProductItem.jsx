@@ -209,6 +209,8 @@ const ProductItem = (props) => {
           productName={productName}
           productPrice={productPrice}
           storageId={storageId}
+          token={userLogin.accessToken}
+          productId={productId}
         />
       </Paper>
     </>

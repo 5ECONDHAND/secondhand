@@ -16,8 +16,8 @@ import { validateNegotiateAmount } from '../../../utils/validators'
 import { useSnackbar } from 'notistack'
 import { toRupiah } from '../../../utils/functions'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../../redux/slices'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, selectUser } from '../../../redux/slices'
 
 const ModalStyle = {
   position: 'absolute',
@@ -71,8 +71,10 @@ const NegotiateInput = (props) => {
   const [values, setValues] = useState({
     amount: 0,
   })
+  const dispatch = useDispatch()
 
   const { handleClose, productId, token } = props
+  // console.log(productId, token)
   const { enqueueSnackbar } = useSnackbar()
 
   const fireAlert = (msg = 'Success', variant) => {
@@ -90,7 +92,14 @@ const NegotiateInput = (props) => {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    })
+    }).then(response => {
+      // console.log(response.data.data[0])
+      dispatch(productActions.setProductNotifications({
+        error: false,
+        message: 'Bid Created',
+        data: response.data.data[0]
+      }))
+    }).catch((e) => console.log(e))
   }
 
   const handleChange = (prop) => (event) => {

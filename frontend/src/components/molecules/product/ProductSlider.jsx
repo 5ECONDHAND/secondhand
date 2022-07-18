@@ -28,7 +28,7 @@ const BoxImg = ({ image, alt }) => {
 }
 
 const ProductSlider = ({ productPhoto }) => {
-  console.log(productPhoto)
+  // console.log(productPhoto)
   return (
     <>
       <Box
@@ -60,7 +60,7 @@ const ProductSlider = ({ productPhoto }) => {
               />}
             </SwiperSlide>
           ))}
-           {/* {productPhoto?.length !== 0 ? (
+          {/* {productPhoto?.length !== 0 ? (
             productPhoto?.map((item, index) => (
               <SwiperSlide key={index}>
                 <BoxImg
@@ -73,7 +73,7 @@ const ProductSlider = ({ productPhoto }) => {
               <BoxImg image={dummy} />
             </SwiperSlide>
           )} */}
-  
+
           {/* <SwiperSlide>
             <BoxImg image={dummy} />
           </SwiperSlide>
