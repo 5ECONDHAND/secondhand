@@ -1,19 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
 import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
 import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { authActions } from '../../redux/slices/authSlice'
-import { productActions, selectProduct, selectProductSearch } from '../../redux/slices/productSlice'
 import { useGetDataQuery } from '../../redux/services/productApi'
-import empty from '../../assets/images/empty-product.png'
-import { selectUser, userActions } from '../../redux/slices/userSlice'
+import { productActions, selectProduct, selectProductSearch } from '../../redux/slices'
+import { GiCardboardBox } from 'react-icons/gi'
+import Loader from '../../components/atoms/global/Loader'
 
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const userActive = useSelector(selectUser)
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
@@ -22,7 +21,6 @@ const Home = () => {
   const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
-  // console.log(productData)
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -39,33 +37,6 @@ const Home = () => {
     }
   }
 
-  const displayLogin = () => {
-    if (userActive) {
-      return (
-        <Button variant="contained" onClick={logout}>
-          Logout
-        </Button>
-      )
-    } else {
-      return (
-        <Button variant="contained" onClick={login}>
-          Login
-        </Button>
-      )
-    }
-  }
-
-  const login = () => {
-    navigate('/login')
-  }
-
-  const logout = () => {
-    dispatch(authActions.clearCredentials())
-    dispatch(userActions.clearCredentials())
-    dispatch(productActions.clearProductWishlist())
-    navigate('/login')
-  }
-
   const fillProducts = () => {
     dispatch(productActions.setProducts(productData?.data))
   }
@@ -74,7 +45,6 @@ const Home = () => {
     if (products) {
       dataSwitch(dataCategory)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCategory, products])
 
   useEffect(() => {
@@ -83,19 +53,14 @@ const Home = () => {
     } else {
       fillProducts()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData, isProductSuccess, products, searchResult])
 
   return (
     <>
+      <Loader />
       <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
-        {/* <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-          {displayLogin()}
-          {userActive ? <>{<h5>'Name',{userActive.fullname || 'null'}</h5>}</> : null}
-        </div> */}
-
         {isProductSuccess ? (
           products?.length > 0 ? (
             <>
@@ -126,24 +91,19 @@ const Home = () => {
           {isProductSuccess ? (
             displayData?.length === 0 ? (
               <Grid item xs={12} sx={{ mx: 'auto', textAlign: 'center' }}>
-                <Box
-                  component={'img'}
-                  src={empty}
-                  alt=""
-                  sx={{ mx: 'auto', mb: '1rem', width: '180px', height: 'auto' }}
-                />
+                <GiCardboardBox size={48} style={{ margin: '1rem auto' }} />
                 <Typography variant="body1" sx={{ fontWeight: '500' }}>
-                  Looks like no one posted any products yet.
+                  Produk tidak ditemukan.
                 </Typography>
                 <Typography variant="body2">
-                  Why don't you post one now? Click the button below.
+                  Ingin menjual barang? Klik tombol di bawah ini.
                 </Typography>
               </Grid>
             ) : (
               displayData?.map((item, index) => (
                 <Grid item xs={1} key={index}>
                   <Box onClick={() => navigate(`/product/${item.id}`)}>
-                    <ProductCard product={item} />
+                    <ProductCard product={item} status={item.status} />
                   </Box>
                 </Grid>
               ))

@@ -72,10 +72,9 @@ const NegotiateInput = (props) => {
     amount: 0,
   })
   const dispatch = useDispatch()
-
-  const { handleClose, productId, token } = props
-  // console.log(productId, token)
+  const { handleClose, productId } = props
   const { enqueueSnackbar } = useSnackbar()
+  const userActive = useSelector(selectUser)
 
   const fireAlert = (msg = 'Success', variant) => {
     enqueueSnackbar(msg, { variant })
@@ -90,10 +89,10 @@ const NegotiateInput = (props) => {
       offeredPrice: values.amount
     }, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${userActive.accessToken}`
       }
     }).then(response => {
-      // console.log(response.data.data[0])
+      console.log(response.data.data[0])
       dispatch(productActions.setProductNotifications({
         error: false,
         message: 'Bid Created',
@@ -162,7 +161,8 @@ const NegotiateInput = (props) => {
 }
 
 const NegotiateModal = (props) => {
-  const { open, handleClose, productName, productPrice, storageId, productId, token } = props
+  const { open, handleClose, productName, productPrice, storageId, productId } = props
+  console.log(productId)
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -178,7 +178,7 @@ const NegotiateModal = (props) => {
             penjual.
           </Typography>
           <ProductMiniCard name={productName} price={productPrice} storageId={storageId} />
-          <NegotiateInput handleClose={handleClose} productId={productId} token={token} />
+          <NegotiateInput handleClose={handleClose} productId={productId} />
         </Box>
       </Modal>
     </>

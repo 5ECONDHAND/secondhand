@@ -1,6 +1,6 @@
-import { Box } from '@mui/material'
+import { Box, Paper } from '@mui/material'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import dummy from '../../../assets/images/dummy-image.jpg'
+import empty_image from '../../../assets/images/empty-product-image.png'
 
 // import swiper required modules
 import { Navigation, Pagination } from 'swiper'
@@ -9,36 +9,46 @@ import { Navigation, Pagination } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import { useState } from 'react'
 
-const BoxImg = ({ image, alt }) => {
+const ProductSlider = ({ product }) => {
+  const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`
+  const [loading, setLoading] = useState(true)
+
+  const loadImage = () => {
+    setLoading(false)
+  }
+
+  const BoxImg = ({ src, alt }) => {
+    return (
+      <>
+        <Box
+          component="img"
+          src={src}
+          alt={alt}
+          sx={{
+            display: loading ? 'none' : 'block',
+            width: '100%',
+            height: '100%',
+            objectPosition: 'center',
+            objectFit: 'cover',
+          }}
+          onLoad={loadImage}
+        />
+      </>
+    )
+  }
+
   return (
     <>
-      <Box
-        component="img"
-        src={image}
-        alt={alt}
-        sx={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
-      />
-    </>
-  )
-}
-
-const ProductSlider = ({ productPhoto }) => {
-  // console.log(productPhoto)
-  return (
-    <>
-      <Box
+      <Paper
         sx={{
           display: 'flex',
           maxWidth: 600,
           maxHeight: 436,
-          objectFit: 'cover',
           borderRadius: '1rem',
           overflow: 'hidden',
+          boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.15)',
         }}
       >
         <Swiper
@@ -48,40 +58,35 @@ const ProductSlider = ({ productPhoto }) => {
           }}
           spaceBetween={10}
           modules={[Navigation, Pagination]}
+          style={{ objectFit: 'cover', width: '100%' }}
         >
-          {productPhoto?.map((item, index) => (
-            <SwiperSlide key={index}>
-              {item.storageId ? <BoxImg image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`} /> : <img
-                src={item.preview}
-                onLoad={() => {
-                  URL.revokeObjectURL(item.preview)
-                }}
-                alt=""
-              />}
-            </SwiperSlide>
-          ))}
-          {/* {productPhoto?.length !== 0 ? (
-            productPhoto?.map((item, index) => (
-              <SwiperSlide key={index}>
-                <BoxImg
-                  image={`https://febesh5-dev.herokuapp.com/api/storages/${item.storageId}/preview`}
-                />
-              </SwiperSlide>
-            ))
+          {product?.Photos?.length !== 0 ? (
+            product?.Photos?.map((item, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  {item.storageId ? (
+                    <>
+                      <BoxImg src={image_storage_url} alt={item.storageId} />
+                    </>
+                  ) : (
+                    <img
+                      src={item.preview}
+                      onLoad={() => {
+                        URL.revokeObjectURL(item.preview)
+                      }}
+                      alt={item.storageId}
+                    />
+                  )}
+                </SwiperSlide>
+              )
+            })
           ) : (
             <SwiperSlide>
-              <BoxImg image={dummy} />
+              <BoxImg src={empty_image} />
             </SwiperSlide>
-          )} */}
-
-          {/* <SwiperSlide>
-            <BoxImg image={dummy} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <BoxImg image={dummy} />
-          </SwiperSlide> */}
+          )}
         </Swiper>
-      </Box>
+      </Paper>
     </>
   )
 }

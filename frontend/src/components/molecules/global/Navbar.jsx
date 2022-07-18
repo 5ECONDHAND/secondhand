@@ -1,13 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Container,
   Box,
   Button,
   FormControl,
   Typography,
-  OutlinedInput,
-  InputAdornment,
   IconButton,
   Grid,
+  InputBase,
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import {
@@ -21,9 +21,7 @@ import {
   FiSettings,
   FiShoppingCart,
 } from 'react-icons/fi'
-import casio1 from '../../../assets/images/dummy-image.jpg'
 import { useNavigate, useLocation } from 'react-router-dom'
-// import { selectUser } from '../../redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
@@ -31,47 +29,64 @@ import { productActions, selectProductNotifications } from '../../../redux/slice
 import { useGetDataByIdQuery, useGetDataQuery, useGetProductsSellerQuery } from '../../../redux/services/productApi'
 import { toRupiah } from '../../../utils/functions'
 import axios from 'axios'
+import empty_image from '../../../assets/images/empty-product-image.png'
 
 const SearchField = () => {
   const { pathname } = useLocation()
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
+  const { data: productData, isSuccess: isProductDataSuccess } = useGetDataQuery(
     {},
     { refetchOnMountOrArgChange: true }
   )
-  // console.log(productData)
+
   const handleSearch = async () => {
     if (search === '') {
       dispatch(productActions.setProductSearch(null))
       dispatch(productActions.setProducts(productData?.data))
     } else {
-      // console.log(search)
-      axios.get(`https://febesh5-dev.herokuapp.com/api/products?search=${search}`)
-        .then(response => {
+      axios
+        .get(`https://febesh5-dev.herokuapp.com/api/products?search=${search}`)
+        .then((response) => {
           // console.log({ error: false, message: 'Success', data: response.data.data })
           dispatch(productActions.setProductSearch(response?.data.data))
         })
-        .catch(e => console.log(e))
+        .catch((e) => console.log(e))
     }
   }
 
   return (
-    <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }} >
-      <OutlinedInput
-        onChange={(e) => setSearch(e.target.value)}
-        disabled={pathname !== '/' ? true : false}
-        placeholder="Cari di sini..."
-        // onChange={handleChange("nama")}
-        sx={{ borderRadius: '16px', height: '48px', backgroundColor: '#EEEEEE', border: 'gray' }}
-        endAdornment={
-          <InputAdornment onClick={handleSearch} position="end" sx={{ mr: '0.5rem' }}>
-            <IconButton edge="end">
-              <FiSearch />
-            </IconButton>
-          </InputAdornment>
-        }
-      />
+    <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' } }}>
+      <Box
+        component="form"
+        sx={{
+          p: '2px 8px',
+          display: 'flex',
+          alignItems: 'center',
+          width: 400,
+          borderRadius: '1rem',
+          backgroundColor: '#EEEEEE',
+        }}
+      >
+        <InputBase
+          disabled={pathname !== '/' ? true : false}
+          onChange={(e) => {
+            setSearch(e.target.value)
+          }}
+          onKeyPress={(e) => {
+            e.key === 'Enter' && e.preventDefault()
+          }}
+          placeholder="Cari di sini ..."
+          sx={{ ml: 1, flex: 1 }}
+        />
+        <IconButton
+          disabled={pathname !== '/' ? true : false}
+          onClick={handleSearch}
+          sx={{ p: '10px' }}
+        >
+          <FiSearch />
+        </IconButton>
+      </Box>
     </FormControl>
   )
 }
@@ -123,6 +138,7 @@ const UserButton = ({ userId }) => {
   //   setTransaction(userTransaction.data)
   // }
 
+
   useEffect(() => {
     // .filter((item) => item.Users.length !== 0)
     for (let i = 0; i < userTransaction?.data?.data.length; i++) {
@@ -150,7 +166,6 @@ const UserButton = ({ userId }) => {
   }, [pathname])
 
   const handleActive = (name) => {
-    // console.log(name)
     setActive(name)
     switch (name) {
       case 'Menu':
@@ -232,17 +247,17 @@ const UserButton = ({ userId }) => {
                             onClick={handleNotifClick}
                           >
                             <Grid>
-                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.Photos[0].storageId}/preview`} alt="product-img" width="80px" height="80px" />
+                              {item?.Photos[0] ? <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" /> : <img src={empty_image} alt='No-Image' width='85px' />}
                             </Grid>
                             <Grid>
                               <Typography variant="body2">Produk ditawar!</Typography>
-                              <Typography variant="subtitle1">{item.name}</Typography>
-                              <Typography variant="subtitle1">Ditawar {item.Transaction.Users[0].offeredPrice}</Typography>
+                              <Typography variant="subtitle1">{item?.name}</Typography>
+                              <Typography variant="subtitle1">Ditawar {item?.Transaction.Users[0].offeredPrice}</Typography>
                               {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
                             </Grid>
                             <Grid sx={{ marginLeft: 'auto' }}>
                               <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <Typography variant="body2">{new Date(item.createdAt).toISOString().substring(0, 10)}</Typography>
+                                <Typography variant="body2">{new Date(item?.createdAt).toISOString().substring(0, 10)}</Typography>
                                 <Box
                                   sx={{
                                     width: '10px',
@@ -268,17 +283,17 @@ const UserButton = ({ userId }) => {
                             onClick={handleNotifClick}
                           >
                             <Grid>
-                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item.data.data[0]?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" />
+                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.data?.data[0]?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" />
                             </Grid>
                             <Grid>
                               <Typography variant="body2">Berhasil {notificationProductAdd.message === 'Product Created' ? 'Ditambahkan' : 'Ditawar'}</Typography>
-                              <Typography variant="subtitle1">{item.data.data[0].name}</Typography>
-                              <Typography variant="subtitle1">{notificationProductAdd.message === 'Product Created' ? `Rp. ${item.data.data[0].price}` : ''}</Typography>
+                              <Typography variant="subtitle1">{item?.data?.data[0].name}</Typography>
+                              <Typography variant="subtitle1">{notificationProductAdd.message === 'Product Created' ? `Rp. ${item?.data?.data[0].price}` : ''}</Typography>
                               {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
                             </Grid>
                             <Grid sx={{ marginLeft: 'auto' }}>
                               <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <Typography variant="body2">{new Date(item.data.data[0].createdAt).toISOString().substring(0, 10)}</Typography>
+                                <Typography variant="body2">{new Date(item?.data?.data[0].createdAt).toISOString().substring(0, 10)}</Typography>
                                 <Box
                                   sx={{
                                     width: '10px',
@@ -338,9 +353,10 @@ const UserButton = ({ userId }) => {
                             color: '#7126B5',
                           },
                         }}
+                        onClick={() => navigate(`/wishlist`)}
                       >
                         <FiShoppingCart />
-                        <Typography>Whishlist</Typography>
+                        <Typography>Wishlist</Typography>
                       </Box>
                       <Box
                         sx={{
@@ -403,7 +419,14 @@ const Navbar = () => {
 
   return (
     <>
-      <Box sx={{ paddingY: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '80px',
+          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
+        }}
+      >
         <Container
           maxWidth="xl"
           sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
@@ -411,7 +434,7 @@ const Navbar = () => {
           <Box
             sx={{
               display: 'flex',
-              gap: '16px',
+              gap: '1rem',
               alignItems: 'center',
               width: '100%',
               position: 'relative',
@@ -428,7 +451,17 @@ const Navbar = () => {
               onClick={() => navigate('/')}
             />
             {pathname === '/add' ? (
-              ''
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  margin: 'auto',
+                }}
+              >
+                <Typography variant="subtitle2">Lengkapi Detail Produk</Typography>
+              </Box>
             ) : pathname === `/edit/${user?.id}` ? (
               <Box
                 sx={{
