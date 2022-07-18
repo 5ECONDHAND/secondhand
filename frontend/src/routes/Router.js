@@ -1,5 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
-import { Home, Auth, Product, AddProduct, Edit, Sales, Offers, NotFound } from '../pages'
+import {
+  Home,
+  Auth,
+  Product,
+  AddProduct,
+  Edit,
+  Sales,
+  Offers,
+  NotFound,
+  ProductPreview,
+  Wishlist,
+} from '../pages'
 import { useSelector } from 'react-redux'
 import ScrollToTop from '../components/atoms/global/ScrollToTop'
 import { selectUser } from '../redux/slices/userSlice'
@@ -38,7 +49,7 @@ const Router = () => {
         <Routes>
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
-          <Route path="/product/:id" element={<Product />} />
+          <Route path="/product/:productId" element={<Product />} />
           <Route element={<AuthRoute isAllowed={!!authenticated} />}>
             <Route path="/login" element={<Auth />} />
             <Route path="/register" element={<Auth />} />
@@ -54,10 +65,12 @@ const Router = () => {
                 />
               }
             >
-              <Route path="/preview/:productId" element={<Product />} />
+              <Route path="/preview/:productId" element={<ProductPreview />} />
               <Route path="/add" element={<AddProduct />} />
               <Route path="/add/:productId" element={<AddProduct />} />
+              <Route path="/product/edit/:productId" element={<AddProduct />} />
               <Route path="/offers/:id" element={<Offers />} />
+              <Route path="/wishlist" element={<Wishlist />} />
             </Route>
           </Route>
         </Routes>

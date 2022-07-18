@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
-import {
-  FormControl,
-  FormHelperText,
-  OutlinedInput,
-  Alert,
-  Button,
-  Box,
-  Grid,
-  CircularProgress,
-} from '@mui/material'
+import { FormControl, FormHelperText, OutlinedInput, Alert, Button, Box, Grid } from '@mui/material'
 import { validateProfile } from '../../../utils/validators'
 import gambar from '../../../assets/images/Profile.png'
 import { useDispatch } from 'react-redux'
@@ -21,7 +12,6 @@ import { selectAuth } from '../../../redux/slices/authSlice'
 import { selectUser } from '../../../redux/slices/userSlice'
 
 import axios from 'axios'
-
 
 const thumb = {
   display: 'inline-flex',
@@ -59,38 +49,43 @@ const EditProfileForm = () => {
     alamat: '',
     nomor: '',
   })
-  const {userId} = useParams()
+  const { userId } = useParams()
   const user = useSelector(selectAuth)
   const userActive = useSelector(selectUser)
 
-  
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (validateProfile(values, setError)) {
-      axios.put(`https://febesh5-dev.herokuapp.com/api/users/${userId}`, {
-        fullname: values.nama,
-        city: values.kota,
-        address: values.alamat,
-        phoneNo: values.nomor,
-        files: files[0],
-      }, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
-        dispatch(userActions.setUserActive(response.data.data[0]))
-        console.log(response.data.data[0])
-        setTimeout(() => {
-          navigate('/sales')
-        }, 2000)
-      })
+      axios
+        .put(
+          `https://febesh5-dev.herokuapp.com/api/users/${userId}`,
+          {
+            fullname: values.nama,
+            city: values.kota,
+            address: values.alamat,
+            phoneNo: values.nomor,
+            files: files[0],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        .then(function (response) {
+          enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
+          dispatch(userActions.setUserActive(response.data.data[0]))
+          console.log(response.data.data[0])
+          setTimeout(() => {
+            navigate('/sales')
+          }, 2000)
+        })
         .catch((e) => {
           console.log(e)
           enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
         })
-        
+
       // const editData = new FormData()
       // editData.append("files", files[0])
       // editData.append("fullname", values.nama)
@@ -109,7 +104,6 @@ const EditProfileForm = () => {
       //   editData
       // })
     }
-    
   }
 
   const handleChange = (prop) => (event) => {
@@ -170,7 +164,6 @@ const EditProfileForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview))
@@ -180,7 +173,7 @@ const EditProfileForm = () => {
     <div>
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
         <Grid container direction="column">
-        <Grid item>
+          <Grid item>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
               <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
                 Foto Produk
@@ -281,25 +274,25 @@ const EditProfileForm = () => {
           </Grid>
           <Grid item>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
-                {/* <Box sx={{ mx: 'auto' }}>
+              {/* <Box sx={{ mx: 'auto' }}>
                   <CircularProgress color="secondary" />
                 </Box> */}
 
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disableElevation
-                  sx={{
-                    borderRadius: '1rem',
-                    textTransform: 'none',
-                    background: '#7126B5',
-                    py: '15px',
-                  }}
-                >
-                  Simpan
-                </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                disableElevation
+                sx={{
+                  borderRadius: '1rem',
+                  textTransform: 'none',
+                  background: '#7126B5',
+                  py: '15px',
+                }}
+              >
+                Simpan
+              </Button>
             </FormControl>
           </Grid>
         </Grid>

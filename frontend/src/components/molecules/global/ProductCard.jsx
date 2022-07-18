@@ -1,9 +1,20 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Chip, Fade, Skeleton, Stack, Typography } from '@mui/material'
 import { toRupiah } from '../../../utils/functions'
-import dummy from '../../../assets/images/dummy-image.jpg'
+import empty_image from '../../../assets/images/empty-product-image.png'
+import { useState } from 'react'
 
-const ProductCard = ({ product }) => {
-  // console.log(product.Photos[0].Storage.filename);
+const ProductCard = ({ product, status }) => {
+  const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`
+  const [loading, setLoading] = useState(true)
+
+  const isStatusPublished = (status) => {
+    if (status === 'PUBLISH') {
+      return true
+    } else if (status === 'DRAFT') {
+      return false
+    }
+  }
+
   return (
     <>
       <Box
@@ -17,17 +28,51 @@ const ProductCard = ({ product }) => {
         }}
       >
         <Stack direction="column" padding={1}>
-          <Box
-            component={'img'}
-            src={`https://febesh5-dev.herokuapp.com/api/storages/${product.Photos[0]?.storageId}/preview`}
-            alt=""
-            sx={{
-              width: '100%',
-              height: { xs: 100, md: 120, lg: 132 },
-              borderRadius: '0.25rem',
-              objectFit: 'cover',
-            }}
-          />
+          <Fade in={!loading}>
+            <Box sx={{ position: 'relative' }}>
+              <Box
+                component={'img'}
+                src={product?.Photos?.length !== 0 ? image_storage_url : empty_image}
+                onLoad={() => setLoading(false)}
+                alt=""
+                sx={{
+                  display: loading ? 'none' : 'block',
+                  position: 'relative',
+                  width: '100%',
+                  height: { xs: 100, md: 120, lg: 132 },
+                  borderRadius: '0.25rem',
+                  objectFit: 'cover',
+                }}
+              />
+              {isStatusPublished(status) ? null : (
+                <Chip
+                  label="Unpublished"
+                  color="secondary"
+                  variant="filled"
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    zIndex: 1,
+                    margin: '0.5rem',
+                  }}
+                />
+              )}
+            </Box>
+          </Fade>
+
+          <Skeleton variant="rect" animation="wave" height="100%" width="100%">
+            <Box
+              sx={{
+                display: loading ? 'block' : 'none',
+                width: '100%',
+                height: { xs: 100, md: 120, lg: 132 },
+                borderRadius: '0.25rem',
+                objectFit: 'cover',
+              }}
+            />
+          </Skeleton>
+
           <Typography
             noWrap
             sx={{
@@ -38,13 +83,29 @@ const ProductCard = ({ product }) => {
               mt: '0.5rem',
             }}
           >
-            {product.name ? product.name : 'Product Name'}
+            {loading ? (
+              <Skeleton animation="wave" />
+            ) : product?.name ? (
+              product.name
+            ) : (
+              'product_name'
+            )}
           </Typography>
           <Typography sx={{ fontSize: '0.8rem', color: '#8A8A8A', mt: '0.25rem', mb: '0.5rem' }}>
-            {product.Categories ? product.Categories[0].Category.name : 'Category'}
+            {loading ? (
+              <Skeleton width="50%" animation="wave" />
+            ) : product?.Categories ? (
+              product.Categories[0].Category.name
+            ) : (
+              'product_category'
+            )}
           </Typography>
           <Typography noWrap sx={{ fontSize: '0.875rem', fontWeight: '500' }}>
-            {product.price ? toRupiah(product.price) : 'Rp. 0'}
+            {loading ? (
+              <Skeleton width="60%" animation="wave" />
+            ) : (
+              toRupiah(product?.price ? product.price : 'product_price')
+            )}
           </Typography>
         </Stack>
       </Box>

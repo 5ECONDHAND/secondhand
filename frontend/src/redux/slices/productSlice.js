@@ -17,11 +17,17 @@ export const productSlice = createSlice({
     setProducts: (state, action) => {
       state.products = action.payload
     },
+    clearProducts: (state) => {
+      state.products = initialState.products
+    },
     setProductActive: (state, action) => {
       state.productActive = { ...state.productActive, ...action.payload }
     },
     setProductPreview: (state, action) => {
       state.productPreview = action.payload
+    },
+    clearProductPreview: (state) => {
+      state.productPreview = initialState.productPreview
     },
     setProductNotifications: (state, action) => {
       state.productNotifications = action.payload
@@ -29,7 +35,6 @@ export const productSlice = createSlice({
     setProductSearch: (state, action) => {
       state.productSearch = action.payload
     },
-    clearCredentials: () => initialState,
     addProductWishlist: (state, action) => {
       state.productWishlist = [...state.productWishlist, action.payload]
     },
@@ -37,7 +42,8 @@ export const productSlice = createSlice({
       const { id } = action.payload
       state.productWishlist = state.productWishlist.filter((item) => item.wish.id !== id)
     },
-    clearProductWishlist: () => initialState,
+    clearProductWishlist: () => initialState.productWishlist,
+    clearCredentials: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addMatcher(productApi.endpoints.getData.matchFulfilled, (state, { payload }) => {
