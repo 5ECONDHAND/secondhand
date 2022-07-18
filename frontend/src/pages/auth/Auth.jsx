@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { Box, Link, Typography } from '@mui/material'
 import { LoginForm, RegisterForm } from '../../components/molecules/auth'
 import { useLocation } from 'react-router-dom'
-import splash from '../../assets/images/login-splash.png'
+import splash from '../../assets/images/login-splash.webp'
 import Loader from '../../components/atoms/global/Loader'
 
 const FormChange = ({ text, status }) => {
@@ -39,7 +40,6 @@ const Auth = () => {
 
   useEffect(() => {
     setStatus(getLocation())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
 
   return (
