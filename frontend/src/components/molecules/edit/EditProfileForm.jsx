@@ -58,7 +58,7 @@ const EditProfileForm = () => {
     if (validateProfile(values, setError)) {
       axios
         .put(
-          `https://febesh5-dev.herokuapp.com/api/users/${userId}`,
+          `https://febesh5-dev.herokuapp.com/api/users/${user.id}`,
           {
             fullname: values.nama,
             city: values.kota,

@@ -61,14 +61,14 @@ const Product = () => {
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
                   <ProductItem type="buyer" product={productData?.data[0]} />
-                </Grid>
+                </Grid >
                 <Grid item xs={12}>
                   <ProfileCard
                     sellerName={productActive?.User?.fullname}
                     sellerCity={productActive?.User?.city}
                   />
                 </Grid>
-              </Grid>
+              </Grid >
               <Grid item xs={12} sm={12} md={10}>
                 <ProductDesc productDesc={productActive?.description} />
               </Grid>
@@ -99,8 +99,8 @@ const Product = () => {
               </Grid>
             </>
           )}
-        </Grid>
-      </Container>
+        </Grid >
+      </Container >
     </>
   )
 }

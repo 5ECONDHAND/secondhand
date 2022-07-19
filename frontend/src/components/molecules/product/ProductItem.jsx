@@ -328,6 +328,7 @@ const ProductItem = ({ product, type }) => {
           handleClose={handleClose}
           productName={product?.name}
           productPrice={product?.price}
+          productId={product?.id}
           storageId={product?.Photos[0]?.storageId}
         />
       </Paper>
