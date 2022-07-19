@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import { Box, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
 import { Navbar, ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
@@ -13,14 +13,42 @@ import Loader from '../../components/atoms/global/Loader'
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState("");
   const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
-    {},
+    count,
     { refetchOnMountOrArgChange: true }
-  )
+  );
   const products = useSelector(selectProduct)
   const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
+
+  const handlePage = (event, value) => {
+    setPage(value);
+  };
+
+  const paginate = (page) => {
+    switch (page) {
+      case 1:
+        setCount("skip=0&take=12");
+        break;
+      case 2:
+        setCount("skip=12&take=12");
+        break;
+      case 3:
+        setCount("skip=24&take=12");
+        break;
+      case 4:
+        setCount("skip=36&take=12");
+        break;
+      case 5:
+        setCount("skip=48&take=12");
+        break;
+      default:
+        break;
+    }
+  };
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -43,9 +71,11 @@ const Home = () => {
 
   useEffect(() => {
     if (products) {
-      dataSwitch(dataCategory)
+      dataSwitch(dataCategory);
     }
-  }, [dataCategory, products])
+    paginate(page);
+  }, [dataCategory, products, paginate]);
+
 
   useEffect(() => {
     if (searchResult) {
@@ -128,6 +158,17 @@ const Home = () => {
         </Grid>
         <SellCtaButton />
       </Container>
+      <Pagination
+        count={5}
+        color="primary"
+        page={page}
+        onChange={handlePage}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      />
     </>
   )
 }

@@ -10,7 +10,7 @@ export const productApi = createApi({
   endpoints: (builder) => ({
     // queries
     getData: builder.query({
-      query: () => '/products',
+      query: (count) => `/products?${count}`,
     }),
     // products seller
     getProductsSeller: builder.query({
