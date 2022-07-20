@@ -25,7 +25,7 @@ const Home = () => {
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
       case 'Semua':
-        setDisplayData(products)
+        setDisplayData(products.filter(item => item.Transaction.status !== 'ACCEPTED'))
         break
       case dataCategory:
         setDisplayData(

@@ -151,7 +151,7 @@ const UserButton = ({ userId }) => {
       }
     }
   }, [userTransaction])
-  console.log(transaction)
+  // console.log(transaction)
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
