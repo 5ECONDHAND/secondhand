@@ -16,7 +16,7 @@ export const userApi = createApi({
         },
       }),
     }),
-    getUserSeller: builder.query({
+    getUser: builder.query({
       query: (token) => ({
         url: '/users',
         method: 'GET',
@@ -39,4 +39,4 @@ export const userApi = createApi({
   }),
 })
 
-export const { useGetUserByIdQuery, useEditProfileMutation, useGetUserSellerQuery } = userApi
+export const { useGetUserByIdQuery, useEditProfileMutation, useGetUserQuery } = userApi

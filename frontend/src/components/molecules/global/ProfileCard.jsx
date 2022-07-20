@@ -1,18 +1,14 @@
 import { Avatar, Button, Paper, Stack, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useGetUserSellerQuery } from '../../../redux/services/userApi'
 import { selectUser } from '../../../redux/slices/userSlice'
 
 const ProfileCard = (props) => {
-  const { display, sellerName, sellerCity } = props
+  const { display, sellerName, sellerCity, profile } = props
   const navigate = useNavigate()
   const userActive = useSelector(selectUser)
-  const { data: userData, isSuccess: isUserSuccess} = useGetUserSellerQuery(
-    userActive.accessToken,
-    { refetchOnMountOrArgChange: true }
-  )
-  const image_storage_url = userData !== undefined ? `https://febesh5-dev.herokuapp.com/api/storages/${userData?.data[0].Photos[0]?.storageId}/preview` : ''
+  console.log(profile);
+  const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${profile?.Photos[0]?.storageId}/preview`
   return (
     <>
       <Paper

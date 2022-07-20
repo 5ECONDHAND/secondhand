@@ -20,7 +20,7 @@ import { selectAuth } from "../../../redux/slices/authSlice";
 import { selectUser } from "../../../redux/slices/userSlice";
 
 import axios from "axios";
-import { useGetUserSellerQuery } from "../../../redux/services/userApi";
+import { useGetUserQuery } from "../../../redux/services/userApi";
 
 const thumb = {
   display: "inline-flex",
@@ -60,7 +60,7 @@ const EditProfileForm = () => {
   });
   const user = useSelector(selectAuth);
   const userActive = useSelector(selectUser);
-  const { data: userData, isSuccess: isUserSuccess} = useGetUserSellerQuery(
+  const { data: userData } = useGetUserQuery(
     userActive.accessToken,
     { refetchOnMountOrArgChange: true }
   )
