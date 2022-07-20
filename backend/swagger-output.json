@@ -759,8 +759,36 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "patch user by id",
         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "fullname": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "phoneNo": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Field email,fullname,password,phoneNo,city,address is required"
+          },
           {
             "type": "integer",
             "in": "header",
@@ -1140,8 +1168,24 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "patch notification by id",
         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "integer"
+                }
+              }
+            },
+            "description": "Please fill data and userId"
+          },
           {
             "type": "integer",
             "in": "header",
@@ -1519,12 +1563,25 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "patch category by id",
         "parameters": [
           {
             "type": "integer",
             "in": "header",
             "name": "id"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Please fill name"
           }
         ],
         "responses": {
@@ -1973,6 +2030,11 @@
               }
             },
             "description": "please fill status"
+          },
+          {
+            "type": "integer",
+            "in": "header",
+            "name": "id"
           }
         ],
         "responses": {
@@ -2079,8 +2141,21 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "patch transaction by id",
         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "please fill status"
+          },
           {
             "type": "integer",
             "in": "header",
@@ -2826,12 +2901,34 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "patch product by id",
         "parameters": [
           {
             "type": "integer",
             "in": "header",
             "name": "id"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "categoryId": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Please fill name, price, categoryId, and description"
           }
         ],
         "responses": {
@@ -3201,12 +3298,25 @@
         }
       },
       "patch": {
-        "description": "",
+        "description": "patch storages by id",
         "parameters": [
           {
             "type": "integer",
             "in": "header",
             "name": "id"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "files": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Please fill files"
           }
         ],
         "responses": {
