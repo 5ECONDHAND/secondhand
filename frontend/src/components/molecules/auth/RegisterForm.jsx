@@ -108,6 +108,7 @@ const RegisterForm = () => {
         <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' }, mb: '2rem' }}>
           <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>Password</FormHelperText>
           <OutlinedInput
+            autoComplete="off"
             error={error.password ? true : false}
             placeholder="Masukkan password"
             sx={{ borderRadius: '1rem' }}

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react'
 import {
   Container,
   Box,
@@ -9,7 +10,6 @@ import {
   Grid,
   InputBase,
 } from '@mui/material'
-import React, { useState, useEffect } from 'react'
 import {
   FiLogIn,
   FiSearch,
@@ -26,11 +26,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, userActions } from '../../../redux/slices/userSlice'
 import { authActions } from '../../../redux/slices/authSlice'
 import { productActions, selectProductNotifications } from '../../../redux/slices/productSlice'
-import { useGetDataByIdQuery, useGetDataQuery, useGetProductsSellerQuery } from '../../../redux/services/productApi'
+import {
+  useGetDataByIdQuery,
+  useGetDataQuery,
+  useGetProductsSellerQuery,
+} from '../../../redux/services/productApi'
 import { toRupiah } from '../../../utils/functions'
 import axios from 'axios'
 import empty_image from '../../../assets/images/empty-product-image.png'
 
+// Child component of Navbar
 const SearchField = () => {
   const { pathname } = useLocation()
   const [search, setSearch] = useState('')
@@ -138,7 +143,6 @@ const UserButton = ({ userId }) => {
   //   setTransaction(userTransaction.data)
   // }
 
-
   useEffect(() => {
     // .filter((item) => item.Users.length !== 0)
     for (let i = 0; i < userTransaction?.data?.data.length; i++) {
@@ -151,7 +155,7 @@ const UserButton = ({ userId }) => {
       }
     }
   }, [userTransaction])
-  console.log(transaction)
+  // console.log(transaction)
 
   const logout = () => {
     dispatch(authActions.clearCredentials())
@@ -234,78 +238,116 @@ const UserButton = ({ userId }) => {
                           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                        {transaction ? [transaction].map((item, index) => (
-                          <Grid
-                            key={index}
-                            container
-                            sx={{
-                              gap: '10px',
-                              ':hover': { backgroundColor: '#f7f7f7' },
-                              padding: '10px',
-                              borderRadius: '12px',
-                            }}
-                            onClick={handleNotifClick}
-                          >
-                            <Grid>
-                              {item?.Photos[0] ? <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" /> : <img src={empty_image} alt='No-Image' width='85px' />}
-                            </Grid>
-                            <Grid>
-                              <Typography variant="body2">Produk ditawar!</Typography>
-                              <Typography variant="subtitle1">{item?.name}</Typography>
-                              <Typography variant="subtitle1">Ditawar {item?.Transaction.Users[0].offeredPrice}</Typography>
-                              {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
-                            </Grid>
-                            <Grid sx={{ marginLeft: 'auto' }}>
-                              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <Typography variant="body2">{new Date(item?.createdAt).toISOString().substring(0, 10)}</Typography>
-                                <Box
-                                  sx={{
-                                    width: '10px',
-                                    height: '10px',
-                                    backgroundColor: 'red',
-                                    borderRadius: '50px',
-                                  }}
-                                />
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        )) : ''}
-                        {notifData.data.error ? 'No Product Add Yet' : [notifData].map((item, index) => (
-                          <Grid
-                            key={index}
-                            container
-                            sx={{
-                              gap: '10px',
-                              ':hover': { backgroundColor: '#f7f7f7' },
-                              padding: '10px',
-                              borderRadius: '12px',
-                            }}
-                            onClick={handleNotifClick}
-                          >
-                            <Grid>
-                              <img src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.data?.data[0]?.Photos[0]?.storageId}/preview`} alt="product-img" width="80px" height="80px" />
-                            </Grid>
-                            <Grid>
-                              <Typography variant="body2">Berhasil {notificationProductAdd.message === 'Product Created' ? 'Ditambahkan' : 'Ditawar'}</Typography>
-                              <Typography variant="subtitle1">{item?.data?.data[0].name}</Typography>
-                              <Typography variant="subtitle1">{notificationProductAdd.message === 'Product Created' ? `Rp. ${item?.data?.data[0].price}` : ''}</Typography>
-                              {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
-                            </Grid>
-                            <Grid sx={{ marginLeft: 'auto' }}>
-                              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <Typography variant="body2">{new Date(item?.data?.data[0].createdAt).toISOString().substring(0, 10)}</Typography>
-                                <Box
-                                  sx={{
-                                    width: '10px',
-                                    height: '10px',
-                                    backgroundColor: 'red',
-                                    borderRadius: '50px',
-                                  }}
-                                />
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        ))}
+                        {transaction
+                          ? [transaction].map((item, index) => (
+                              <Grid
+                                key={index}
+                                container
+                                sx={{
+                                  gap: '10px',
+                                  ':hover': { backgroundColor: '#f7f7f7' },
+                                  padding: '10px',
+                                  borderRadius: '12px',
+                                }}
+                                onClick={handleNotifClick}
+                              >
+                                <Grid>
+                                  {item?.Photos[0] ? (
+                                    <img
+                                      src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.Photos[0]?.storageId}/preview`}
+                                      alt="product-img"
+                                      width="80px"
+                                      height="80px"
+                                    />
+                                  ) : (
+                                    <img src={empty_image} alt="empty" width="85px" />
+                                  )}
+                                </Grid>
+                                <Grid>
+                                  <Typography variant="body2">Produk ditawar!</Typography>
+                                  <Typography variant="subtitle1">{item?.name}</Typography>
+                                  <Typography variant="subtitle1">
+                                    Ditawar {toRupiah(item?.Transaction.Users[0].offeredPrice)}
+                                  </Typography>
+                                  {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
+                                </Grid>
+                                <Grid sx={{ marginLeft: 'auto' }}>
+                                  <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <Typography variant="body2">
+                                      {new Date(item?.createdAt).toISOString().substring(0, 10)}
+                                    </Typography>
+                                    <Box
+                                      sx={{
+                                        width: '10px',
+                                        height: '10px',
+                                        backgroundColor: 'red',
+                                        borderRadius: '50px',
+                                      }}
+                                    />
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            ))
+                          : ''}
+                        {notifData.data.error
+                          ? 'No Product Add Yet'
+                          : [notifData].map((item, index) => (
+                              <Grid
+                                key={index}
+                                container
+                                sx={{
+                                  gap: '10px',
+                                  ':hover': { backgroundColor: '#f7f7f7' },
+                                  padding: '10px',
+                                  borderRadius: '12px',
+                                }}
+                                onClick={handleNotifClick}
+                              >
+                                <Grid>
+                                  <img
+                                    src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.data?.data[0]?.Photos[0]?.storageId}/preview`}
+                                    alt="product-img"
+                                    width="80px"
+                                    height="80px"
+                                    style={{ borderRadius: '0.5rem' }}
+                                  />
+                                </Grid>
+                                <Grid>
+                                  <Typography variant="body2">
+                                    Berhasil{' '}
+                                    {notificationProductAdd.message === 'Product Created'
+                                      ? 'Ditambahkan'
+                                      : 'Ditawar'}
+                                  </Typography>
+                                  <Typography variant="subtitle1">
+                                    {item?.data?.data[0].name}
+                                  </Typography>
+                                  <Typography variant="subtitle1">
+                                    {notificationProductAdd.message === 'Product Created'
+                                      ? `Rp. ${item?.data?.data[0].price}`
+                                      : ''}
+                                  </Typography>
+                                  {/* <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography> */}
+                                </Grid>
+                                <Grid sx={{ marginLeft: 'auto' }}>
+                                  <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <Typography variant="body2">
+                                      {new Date(item?.data?.data[0].createdAt)
+                                        .toISOString()
+                                        .substring(0, 10)}
+                                    </Typography>
+                                    <Box
+                                      sx={{
+                                        width: '10px',
+                                        height: '10px',
+                                        backgroundColor: 'red',
+                                        borderRadius: '50px',
+                                      }}
+                                    />
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            ))}
                       </Box>
                     </Box>
                   )}
