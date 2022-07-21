@@ -52,9 +52,8 @@ async function controller(req, res, next) {
     where: {
       id: productId
     },
-    select: {
-      userId: true,
-      id: true,
+    include: {
+      Photos: true
     }
   }).catch((err) => {
     return {
@@ -85,8 +84,8 @@ async function controller(req, res, next) {
   }
 
   const pivotTable = await prisma.transactionsOnUsers.findFirst({
-    'where': {
-      'userId': userId
+    where: {
+      userId
     }
   }).catch((err) => {
     return {
@@ -132,6 +131,33 @@ async function controller(req, res, next) {
       data: [],
     };
   });
+
+  const notifData = {
+    title: 'Penawaran Diterima',
+    productName: productData.name,
+    productId: productData.id,
+    realPrice: productData.price,
+    offeredPrice: pivotTable.offeredPrice,
+    imageId: productData.Photos && productData.Photos[0] && productData.Photos[0].id,
+    seller: productData.userId
+  }
+
+  const notification = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notification && notification.error){
+    return res.json(notification)
+  }
 
   res.json({
     error: false,

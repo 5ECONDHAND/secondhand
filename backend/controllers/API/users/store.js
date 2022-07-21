@@ -50,7 +50,7 @@ async function controller(req, res, next) {
       create: [{
         Storage: {
           create: {
-            filename: req.files[0].filename,
+            filename: req.files[0].filename || req.files[0].key,
             mimetype: req.files[0].mimetype,
             size: req.files[0].size
           }

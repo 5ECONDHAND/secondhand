@@ -30,7 +30,7 @@ async function controller(req, res, next) {
 
   const data = await prisma.storage.create({
     data: {
-      filename: req.files[0].filename,
+      filename: req.files[0].filename || req.files[0].key,
       size: req.files[0].size,
       mimetype: req.files[0].mimetype,
     }
