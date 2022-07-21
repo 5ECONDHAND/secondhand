@@ -54,7 +54,7 @@ const Sales = () => {
     }
   }
 
-  // console.log(displayData[0]?.Transaction.Users)
+  console.log(displayData)
 
   const checkRender = (displayData) => {
     if (displayData.length === 0) {

@@ -8,25 +8,38 @@ import dummy from '../../../assets/images/dummy-image.jpg'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../../redux/slices/userSlice'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const OfferCard = (props) => {
   const { productData, buyerData } = props
   const userActive = useSelector(selectUser)
   const [accept, setAccept] = useState(false)
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
   console.log(buyerData.user.User.id)
 
   const handleAccept = () => {
     setAccept(true)
-    axios.post('https://febesh5-dev.herokuapp.com/api/bids/accept', {
-      productId: productData.id,
-      userId: buyerData.user.User.id
-    }, {
+    // axios.post('https://febesh5-dev.herokuapp.com/api/bids/accept', {
+    //   productId: productData.id,
+    //   userId: buyerData.user.User.id
+    // }, {
+    //   headers: {
+    //     Authorization: `Bearer ${userActive.accessToken}`
+    //   }
+    // })
+  }
+
+  const handleDecline = () => {
+    axios.delete(`https://febesh5-dev.herokuapp.com/api/bids/${productData.id}`, {
       headers: {
         Authorization: `Bearer ${userActive.accessToken}`
       }
-    })
+    }).then(
+      navigate('/sales')
+    ).catch(e => console.log(e))
   }
+
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
@@ -34,6 +47,10 @@ const OfferCard = (props) => {
   const mobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   // console.log(productData)
+
+  const handleCall = () => {
+    window.open(`https://wa.me/${buyerData.user.User.phoneNo}`)
+  }
 
   useEffect(() => {
     console.log('accept', accept)
@@ -69,7 +86,7 @@ const OfferCard = (props) => {
         <Grid item xs={12} sm={12} md={12}>
           <Stack direction="row" spacing={2} justifyContent={mobile ? 'center' : 'flex-end'}>
             <Button
-              onClick={accept ? handleOpen : handleAccept}
+              onClick={accept ? handleOpen : handleDecline}
               fullWidth={mobile ? true : false}
               variant="contained"
               size="large"
@@ -88,7 +105,7 @@ const OfferCard = (props) => {
               {accept ? 'Status' : 'Tolak'}
             </Button>
             <Button
-              onClick={accept ? null : handleOpen}
+              onClick={accept ? handleCall : handleOpen}
               fullWidth={mobile ? true : false}
               variant="contained"
               size="large"
@@ -113,10 +130,10 @@ const OfferCard = (props) => {
       </Grid>
       {accept ? (
         // modification product transaction state
-        <OfferStatusModal open={open} handleClose={handleClose} />
+        <OfferStatusModal open={open} handleClose={handleClose} buyerData={buyerData} productData={productData} />
       ) : (
         // reach to customer
-        <OfferModal open={open} handleClose={handleClose} handleAccept={handleAccept} />
+        <OfferModal open={open} handleClose={handleClose} handleAccept={handleAccept} buyerData={buyerData} productData={productData} />
       )}
     </>
   )
