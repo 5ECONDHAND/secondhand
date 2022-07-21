@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "start-heroku": "npx prisma migrate reset --schema=./models/schema.prisma -f && npx prisma db pull --schema=./models/schema.prisma && npx prisma generate --schema=./models/schema.prisma && node ./bin/www",
+    "start-heroku-dev": "npx prisma migrate reset --schema=./models/schema.prisma -f && npx prisma db pull --schema=./models/schema.prisma && npx prisma generate --schema=./models/schema.prisma && node ./bin/www",
+    "start-heroku-prod": "npx prisma migrate dev --schema=./models/schema.prisma --skip-seed --skip-generate && node ./bin/www",
     "toolbox": "node ./bin/toolbox"
   },
   "engines": {
