@@ -83,6 +83,42 @@ async function controller(req, res, next) {
     });
   }
 
+  const transactionData = await prisma.transaction.findFirst({
+    where: {
+      productId,
+    },
+    select: {
+      status: true
+    }
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
+
+  if (transactionData && transactionData.error) {
+    return res.json(productData);
+  }
+
+  // this is strange condition, because a product must have transaction
+  if (!transactionData) {
+    return res.json({
+      error: true,
+      message: "Cannot accept bid, transaction not found",
+      data: [],
+    });
+  }
+
+  if (transactionData.status == 'ACCEPTED') {
+    return res.json({
+      error: true,
+      message: "Cannot accept anymore bid, this product has accepted some bid",
+      data: [],
+    });
+  }
+
   const pivotTable = await prisma.transactionsOnUsers.findFirst({
     where: {
       userId
