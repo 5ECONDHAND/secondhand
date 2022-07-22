@@ -1,9 +1,6 @@
-import Loader from '../../components/atoms/global/Loader'
-
 const NotFound = () => {
   return (
     <>
-      <Loader />
       <div
         style={{
           height: '100vh',

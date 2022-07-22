@@ -56,7 +56,6 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (isRegisterSuccess && registerData.data.length !== 0) {
-      console.log('Response', registerData)
       enqueueSnackbar('Registration success', { variant: 'success', autoHideDuration: 1000 })
       setTimeout(() => {
         navigate('/login')
@@ -69,7 +68,6 @@ const RegisterForm = () => {
           preventDuplicate: true,
         })
       }
-      console.log('Error', isRegisterError)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerData, isRegisterSuccess, isRegisterLoading, isRegisterError])
@@ -108,7 +106,7 @@ const RegisterForm = () => {
         <FormControl sx={{ minWidth: { xs: '30ch', md: '40ch', lg: '50ch' }, mb: '2rem' }}>
           <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>Password</FormHelperText>
           <OutlinedInput
-            error={error.password ? true : false}
+            autoComplete="off"
             placeholder="Masukkan password"
             sx={{ borderRadius: '1rem' }}
             type={showPassword ? 'text' : 'password'}

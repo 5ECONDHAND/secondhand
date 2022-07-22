@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Box, Container, Grid, Skeleton, Typography } from '@mui/material'
 import { FiPlus } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
-import { Navbar, ProductCard, ProfileCard } from '../../components/molecules/global'
+import { ProductCard, ProfileCard } from '../../components/molecules/global'
 import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,6 @@ import { useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 import { isProductMaxed } from '../../utils/functions'
-import Loader from '../../components/atoms/global/Loader'
 import { useGetUserQuery } from '../../redux/services/userApi'
 
 const Sales = () => {
@@ -172,8 +171,6 @@ const Sales = () => {
 
   return (
     <>
-      <Loader />
-      <Navbar />
       <Container maxWidth="lg" sx={{ pt: '2rem', pb: '1rem' }}>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Daftar Jual Saya

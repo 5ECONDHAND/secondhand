@@ -2,12 +2,11 @@
 import { useEffect } from 'react'
 import { Container, Grid, Skeleton } from '@mui/material'
 import { useParams } from 'react-router-dom'
-import { Navbar, ProfileCard } from '../../components/molecules/global'
+import { ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProductActive } from '../../redux/slices'
-import Loader from '../../components/atoms/global/Loader'
 
 const Product = () => {
   const { productId } = useParams()
@@ -50,8 +49,6 @@ const Product = () => {
 
   return (
     <>
-      <Loader />
-      <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
           {isSuccess && productData !== null && productActive !== null ? (
@@ -62,7 +59,7 @@ const Product = () => {
               <Grid item xs={12} sm={6} md={3.6}>
                 <Grid item xs={12} sx={{ mb: '1rem' }}>
                   <ProductItem type="buyer" product={productData?.data[0]} />
-                </Grid >
+                </Grid>
                 <Grid item xs={12}>
                   <ProfileCard
                     profile={productActive?.User}
@@ -70,7 +67,7 @@ const Product = () => {
                     sellerCity={productActive?.User?.city}
                   />
                 </Grid>
-              </Grid >
+              </Grid>
               <Grid item xs={12} sm={12} md={10}>
                 <ProductDesc productDesc={productActive?.description} />
               </Grid>
@@ -101,8 +98,8 @@ const Product = () => {
               </Grid>
             </>
           )}
-        </Grid >
-      </Container >
+        </Grid>
+      </Container>
     </>
   )
 }

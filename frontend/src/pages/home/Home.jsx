@@ -2,13 +2,12 @@
 import { useEffect, useState } from 'react'
 import { Box, Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
-import { Navbar, ProductCard } from '../../components/molecules/global'
+import { ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetDataQuery } from '../../redux/services/productApi'
 import { productActions, selectProduct, selectProductSearch } from '../../redux/slices'
 import { GiCardboardBox } from 'react-icons/gi'
-import Loader from '../../components/atoms/global/Loader'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -87,8 +86,6 @@ const Home = () => {
 
   return (
     <>
-      <Loader />
-      <Navbar />
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         {isProductSuccess ? (
