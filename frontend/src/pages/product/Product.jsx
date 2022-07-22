@@ -16,6 +16,7 @@ const Product = () => {
   const { data: productData, isSuccess } = useGetDataByIdQuery({
     id: productId,
   })
+  console.log(productActive?.User);
 
   const fillProductActive = () => {
     dispatch(productActions.setProductActive(productData?.data[0]))
@@ -61,6 +62,7 @@ const Product = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <ProfileCard
+                    profile={productActive?.User}
                     sellerName={productActive?.User?.fullname}
                     sellerCity={productActive?.User?.city}
                   />

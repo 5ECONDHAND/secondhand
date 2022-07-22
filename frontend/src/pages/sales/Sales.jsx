@@ -12,12 +12,17 @@ import { useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 import { isProductMaxed } from '../../utils/functions'
+import { useGetUserQuery } from '../../redux/services/userApi'
 
 const Sales = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const userActive = useSelector(selectUser)
   const { data: productSellerData, isSuccess: isProductSellerSuccess } = useGetProductsSellerQuery(
+    userActive.accessToken,
+    { refetchOnMountOrArgChange: true }
+  )
+  const { data: userData } = useGetUserQuery(
     userActive.accessToken,
     { refetchOnMountOrArgChange: true }
   )
@@ -171,6 +176,7 @@ const Sales = () => {
           Daftar Jual Saya
         </Typography>
         <ProfileCard
+        profile={userData?.data[0]}
           display="sales"
           sellerName={userActive?.fullname}
           sellerCity={userActive?.city}
