@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import Navbar from '../Navbar'
-import { store } from '../../../../redux/store'
+import Navbar from '../components/molecules/global/Navbar'
+import { store } from '../redux/store'
 
 const MockNavbar = () => {
   return (

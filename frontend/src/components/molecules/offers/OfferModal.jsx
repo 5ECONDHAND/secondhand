@@ -69,7 +69,7 @@ const ProductMiniCard = (props) => {
           spacing={2}
           padding={2}
         >
-          <Avatar alt="" src={dummy} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+          <Avatar alt="" src={`https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500', mb: 0.5 }}>
               {product.name}

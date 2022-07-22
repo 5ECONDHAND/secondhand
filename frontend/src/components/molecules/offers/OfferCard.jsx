@@ -62,7 +62,7 @@ const OfferCard = (props) => {
         <Grid item xs={12} sm={12} md={12}>
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={2}>
             <Stack direction="row" spacing={2} alignItems="flex-start">
-              <Avatar alt="" src={`https://febesh5-dev.herokuapp.com/api/storages/${productData.Photos[0].storageId}/preview`} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+              <Avatar alt="" src={`https://febesh5-dev.herokuapp.com/api/storages/${productData?.Photos[0]?.storageId}/preview`} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
               <Stack direction="column">
                 <Typography variant="body2" sx={{ color: '#8A8A8A', mb: 0.5 }}>
                   Penawaran Produk

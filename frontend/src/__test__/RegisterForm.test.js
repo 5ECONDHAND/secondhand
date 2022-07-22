@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import RegisterForm from '../RegisterForm'
-import { store } from '../../../../redux/store'
+import RegisterForm from '../components/molecules/auth/RegisterForm'
+import { store } from '../redux/store'
 import { SnackbarProvider } from "notistack"
 
 const MockRegisterForm = () => {

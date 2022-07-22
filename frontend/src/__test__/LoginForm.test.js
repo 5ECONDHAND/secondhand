@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import LoginForm from '../LoginForm'
-import { store } from '../../../../redux/store'
+import LoginForm from '../components/molecules/auth/LoginForm'
+import { store } from '../redux/store'
 import { SnackbarProvider } from "notistack"
 
 const MockLoginForm = () => {
@@ -33,7 +33,7 @@ test('input login', () => {
   const passwordElement = screen.getByPlaceholderText('Masukkan password')
   const btnLogin = screen.getByRole('button', { name: 'Masuk' })
   fireEvent.click(emailElement)
-  fireEvent.change(emailElement, { target: { value: 'ivan@gmail.com' } })
+  fireEvent.change(emailElement, { target: { value: 'test@gmail.com' } })
   fireEvent.click(passwordElement)
   fireEvent.change(passwordElement, { target: { value: '123123123' } })
   fireEvent.click(btnLogin)
