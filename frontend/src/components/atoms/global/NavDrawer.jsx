@@ -68,7 +68,7 @@ const NavDrawer = ({ user }) => {
       ],
     },
   ]
-  console.log('user', user)
+
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -125,8 +125,13 @@ const NavDrawer = ({ user }) => {
               p: 1.5,
               mr: 1,
               display: { xs: 'block', md: 'none' },
+              color: 'black',
               backgroundColor: { xs: '#EEEEEE', sm: 'inherit' },
               borderRadius: '12px',
+              '&:hover': {
+                color: 'white',
+                backgroundColor: '#7126B5',
+              },
             }}
           >
             <FiMenu />

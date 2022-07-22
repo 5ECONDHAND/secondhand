@@ -134,7 +134,7 @@ const UserButton = ({ userId }) => {
   // get user for token
   const user = useSelector(selectUser)
   let notifId = notificationProductAdd?.data?.id
-  let userToken = user.accessToken
+  let userToken = user?.accessToken
   // fetch to get photo
   const notifData = useGetDataByIdQuery({ id: notifId, token: userToken })
   // fetch data get user transaction

@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react'
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Container,
+  Divider,
   FormControl,
+  Grid,
   IconButton,
   InputBase,
   Menu,
@@ -22,7 +26,9 @@ import {
   FiLogOut,
   FiSettings,
   FiShoppingCart,
+  FiArrowLeft,
 } from 'react-icons/fi'
+import logo from '../../../assets/svg/logo.svg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetDataQuery } from '../../../redux/services/productApi'
@@ -36,6 +42,8 @@ import {
 import axios from 'axios'
 import NavDrawer from './NavDrawer'
 import { useEffect } from 'react'
+import { useSnackbar } from 'notistack'
+import { toRupiah } from '../../../utils/functions'
 
 const SearchField = () => {
   const { pathname } = useLocation()
@@ -62,14 +70,14 @@ const SearchField = () => {
   }
 
   return (
-    <FormControl sx={{ display: 'flex' }}>
+    <FormControl>
       <Box
         component="form"
         sx={{
           p: '2px 8px',
           display: 'flex',
           width: { xs: '100%', md: 400 },
-          maxWidth: { xs: 'none', md: 400 },
+          maxWidth: { xs: 'auto', md: 400 },
           borderRadius: '1rem',
           backgroundColor: '#EEEEEE',
         }}
@@ -83,7 +91,12 @@ const SearchField = () => {
             e.key === 'Enter' && e.preventDefault()
           }}
           placeholder="Cari di sini ..."
-          sx={{ ml: 1, flex: 1 }}
+          sx={{
+            ml: 1,
+            flex: 1,
+            display: 'flex',
+            width: 'auto',
+          }}
         />
         <IconButton
           disabled={pathname !== '/' ? true : false}
@@ -101,6 +114,7 @@ const NavbarRemake = () => {
   // hook calls
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
   const { pathname } = useLocation()
   // local states
   // const [anchorEl, setAnchorEl] = useState(null)
@@ -118,6 +132,7 @@ const NavbarRemake = () => {
     dispatch(authActions.clearCredentials())
     dispatch(userActions.clearCredentials())
     dispatch(productActions.clearCredentials())
+    enqueueSnackbar('Logout success', { variant: 'warning', autoHideDuration: 1000 })
     navigate('/login')
   }
 
@@ -130,9 +145,6 @@ const NavbarRemake = () => {
     switch (page) {
       case `/edit/${userActive?.id}`:
         setPageTitle('Lengkapi Info Akun')
-        break
-      case '/wishlist':
-        setPageTitle('Wishlist')
         break
       case '/add':
         setPageTitle('Lengkapi Detail Produk')
@@ -151,7 +163,6 @@ const NavbarRemake = () => {
 
   useEffect(() => {
     handlePageTitle(pathname)
-    console.log('pagetitle', pageTitle)
   }, [pathname])
 
   return (
@@ -173,18 +184,24 @@ const NavbarRemake = () => {
             <Toolbar sx={{ p: '0 !important', my: 1, justifyContent: 'space-between' }}>
               <Stack direction="row" spacing={0} alignItems="center">
                 <Box
-                  sx={{
-                    display: { xs: 'none', md: 'block' },
-                    width: 100,
-                    height: 34,
-                    backgroundColor: '#4B1979',
-                    cursor: 'pointer',
-                    mr: 2,
-                  }}
+                  component="img"
+                  src={logo}
+                  sx={{ display: { xs: 'none', md: 'block' }, pr: 2, cursor: 'pointer' }}
                   onClick={() => navigate('/')}
                 />
-                <NavDrawer user={userActive} />
-                {pageTitle ? null : <SearchField />}
+                {pageTitle ? (
+                  <IconButton
+                    sx={{ display: { xs: 'block', md: 'none' }, color: 'black', zIndex: 1 }}
+                    onClick={() => navigate(-1)}
+                  >
+                    <FiArrowLeft />
+                  </IconButton>
+                ) : (
+                  <>
+                    <NavDrawer user={userActive} />
+                    <SearchField />
+                  </>
+                )}
               </Stack>
               {pageTitle ? (
                 <Box
@@ -220,7 +237,9 @@ const NavbarRemake = () => {
                       setPopMenuNotif(e.currentTarget)
                     }}
                   >
-                    <FiBell />
+                    <Badge variant="dot" color="warning">
+                      <FiBell />
+                    </Badge>
                   </IconButton>
                   <Menu
                     id="notification-menu"
@@ -232,9 +251,69 @@ const NavbarRemake = () => {
                     }}
                   >
                     <MenuItem>
-                      <Typography variant="subtitle2" sx={{ color: 'black' }}>
+                      {/* <Typography variant="subtitle2" sx={{ color: 'black' }}>
                         Notifikasi kosong
-                      </Typography>
+                      </Typography> */}
+                      <Grid
+                        container
+                        sx={{
+                          gap: '0.5rem',
+                          ':hover': { backgroundColor: '#f7f7f7' },
+                          // padding: '10px',
+                          borderRadius: '12px',
+                        }}
+                      >
+                        <Grid>
+                          <img
+                            src={logo}
+                            // src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.data?.data[0]?.Photos[0]?.storageId}/preview`}
+                            alt="product-img"
+                            width="64px"
+                            height="64px"
+                            style={{ borderRadius: '0.5rem' }}
+                          />
+                        </Grid>
+                        <Grid>
+                          <Typography variant="body2" sx={{ color: 'gray' }}>
+                            Berhasil diterbitkan
+                            <br />
+                            Penarawan produk
+                            {/* {notificationProductAdd.message === 'Product Created'
+                                      ? 'Ditambahkan'
+                                      : 'Ditawar'} */}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            Jam casio
+                            {/* {item?.data?.data[0].name} */}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            {toRupiah(10000)}
+                            {/* {notificationProductAdd.message === 'Product Created'
+                                      ? `Rp. ${item?.data?.data[0].price}`
+                                      : ''} */}
+                          </Typography>
+                          <Typography variant="subtitle1">Ditawar Rp. 200.000</Typography>
+                        </Grid>
+                        <Grid sx={{ marginLeft: 'auto' }}>
+                          <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <Typography variant="body2" sx={{ ml: 1 }}>
+                              20 Apr, 14:04
+                              {/* {new Date(item?.data?.data[0].createdAt)
+                                        .toISOString()
+                                        .substring(0, 10)} */}
+                            </Typography>
+                            <Box
+                              sx={{
+                                width: '10px',
+                                height: '10px',
+                                backgroundColor: 'red',
+                                borderRadius: '50px',
+                              }}
+                            />
+                          </Box>
+                        </Grid>
+                        <Divider />
+                      </Grid>
                     </MenuItem>
                   </Menu>
 
