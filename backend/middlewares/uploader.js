@@ -54,7 +54,16 @@ const uploader = multer({
 
     cb(null, true);
   }
-}).array('files', 3);
+}).fields([
+  {
+    name: 'files',
+    maxCount: 3
+  },
+  {
+    name: 'files[]',
+    maxCount: 3
+  }
+]);
 
 /**
  *

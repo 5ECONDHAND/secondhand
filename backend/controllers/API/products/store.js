@@ -39,6 +39,47 @@ async function controller(req, res, next){
     });
   }
 
+  const userData = await prisma.user.findFirst({
+    where: {
+      id: req.userId
+    },
+    select: {
+      city: true,
+      phoneNo: true,
+      address: true
+    }
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
+
+  if (userData && userData.error) {
+    return res.json(userData);
+  }
+
+  if (!userData) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
+  if (
+    !userData.address
+    || !userData.phoneNo
+    || !userData.city
+  ) {
+    return res.json({
+      error: true,
+      message: 'Please complete your profile first',
+      data: [],
+    })
+  }
+
   const countProduct = await prisma.product.count({
     where: {
       userId: req.userId,
