@@ -131,10 +131,16 @@ const NavbarRemake = () => {
       case `/edit/${userActive?.id}`:
         setPageTitle('Lengkapi Info Akun')
         break
-      case `/add/${productActive?.id}` || '/add':
+      case '/wishlist':
+        setPageTitle('Wishlist')
+        break
+      case '/add':
         setPageTitle('Lengkapi Detail Produk')
         break
-      case `/offers`:
+      case `/add/${productActive?.id}`:
+        setPageTitle('Lengkapi Detail Produk')
+        break
+      case `/offers/${productActive?.id}`:
         setPageTitle('Info Penawar')
         break
       default:
@@ -145,15 +151,21 @@ const NavbarRemake = () => {
 
   useEffect(() => {
     handlePageTitle(pathname)
-  }, [])
+    console.log('pagetitle', pageTitle)
+  }, [pathname])
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: pathname === '/login' || pathname === '/register' ? 'none' : 'block',
+        }}
+      >
         <AppBar
           position="static"
           sx={{
-            backgroundColor: { xs: '#FFE9CA', sm: 'white' },
+            backgroundColor: { xs: pathname === '/' ? '#FFE9CA' : 'white', sm: 'white' },
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.15)',
           }}
         >
@@ -171,7 +183,7 @@ const NavbarRemake = () => {
                   }}
                   onClick={() => navigate('/')}
                 />
-                <NavDrawer />
+                <NavDrawer user={userActive} />
                 {pageTitle ? null : <SearchField />}
               </Stack>
               {pageTitle ? (
@@ -244,15 +256,30 @@ const NavbarRemake = () => {
                       'aria-labelledby': 'user-btn',
                     }}
                   >
-                    <MenuItem onClick={() => navigate(`/edit/${userActive?.id}`)}>
+                    <MenuItem
+                      onClick={() => {
+                        navigate(`/edit/${userActive?.id}`)
+                        handleCloseTooltip()
+                      }}
+                    >
                       <FiSettings />
                       <Box sx={{ pl: 1 }}>Edit Profile</Box>
                     </MenuItem>
-                    <MenuItem onClick={() => navigate('/wishlist')}>
+                    <MenuItem
+                      onClick={() => {
+                        navigate('/wishlist')
+                        handleCloseTooltip()
+                      }}
+                    >
                       <FiShoppingCart />
                       <Box sx={{ pl: 1 }}>Wishlist</Box>
                     </MenuItem>
-                    <MenuItem onClick={handleLogout}>
+                    <MenuItem
+                      onClick={() => {
+                        handleLogout()
+                        handleCloseTooltip()
+                      }}
+                    >
                       <FiLogOut />
                       <Box sx={{ pl: 1 }}>Logout</Box>
                     </MenuItem>
