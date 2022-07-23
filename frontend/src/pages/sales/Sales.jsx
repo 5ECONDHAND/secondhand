@@ -39,8 +39,7 @@ const Sales = () => {
         setDisplayData(
           products?.filter(
             (item) =>
-              item.User?.fullname === userActive?.fullname &&
-              item.Transaction?.status === 'DECIDING'
+              item.User.fullname === userActive.fullname && item.Transaction.status === 'DECIDING' && item.Transaction.Users.length > 0
           )
         )
         break
@@ -59,6 +58,8 @@ const Sales = () => {
     }
   }
 
+  console.log(displayData)
+
   const checkRender = (displayData) => {
     if (displayData.length === 0) {
       return <Empty dataCategory={dataCategory} />
@@ -73,10 +74,15 @@ const Sales = () => {
           </Grid>
         ))
       } else if (dataCategory === 'Diminati') {
-        return displayData.map((item, index) => (
+        // go to offer page
+        const handleOffer = (item) => {
+          dispatch(productActions.setProductActive(displayData[0]))
+          navigate(`/offers/${displayData[0].id}`, { state: { user: item } })
+        }
+        return displayData[0]?.Transaction?.Users.map((item, index) => (
           <Grid item xs={12} key={index}>
-            <Box onClick={() => navigate(`/offers/${item.id}`)}>
-              <OfferCardMini product={item} />
+            <Box onClick={() => handleOffer(item)}>
+              <OfferCardMini product={displayData} user={item} />
             </Box>
           </Grid>
         ))
