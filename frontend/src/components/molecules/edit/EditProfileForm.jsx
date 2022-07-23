@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { FormControl, FormHelperText, OutlinedInput, Alert, Button, Box, Grid } from '@mui/material'
@@ -5,13 +6,14 @@ import { validateProfile } from '../../../utils/validators'
 import gambar from '../../../assets/images/Profile.png'
 import { useDispatch } from 'react-redux'
 import { useSnackbar } from 'notistack'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { userActions } from '../../../redux/slices/userSlice'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../../../redux/slices/authSlice'
 import { selectUser } from '../../../redux/slices/userSlice'
 
 import axios from 'axios'
+import { useGetUserQuery } from '../../../redux/services/userApi'
 
 const thumb = {
   display: 'inline-flex',
@@ -49,9 +51,15 @@ const EditProfileForm = () => {
     alamat: '',
     nomor: '',
   })
-  const { userId } = useParams()
   const user = useSelector(selectAuth)
   const userActive = useSelector(selectUser)
+  const { data: userData } = useGetUserQuery(userActive.accessToken, {
+    refetchOnMountOrArgChange: true,
+  })
+  const image_storage_url =
+    userData !== undefined
+      ? `https://febesh5-dev.herokuapp.com/api/storages/${userData?.data[0]?.Photos[0]?.storageId}/preview`
+      : ''
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -74,35 +82,22 @@ const EditProfileForm = () => {
           }
         )
         .then(function (response) {
-          enqueueSnackbar('Profile updated', { variant: 'success', autoHideDuration: 1000 })
+          enqueueSnackbar('Profile updated', {
+            variant: 'success',
+            autoHideDuration: 1000,
+          })
           dispatch(userActions.setUserActive(response.data.data[0]))
-          console.log(response.data.data[0])
           setTimeout(() => {
             navigate('/sales')
           }, 2000)
         })
         .catch((e) => {
           console.log(e)
-          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+          enqueueSnackbar('Error occurred', {
+            variant: 'error',
+            autoHideDuration: 1000,
+          })
         })
-
-      // const editData = new FormData()
-      // editData.append("files", files[0])
-      // editData.append("fullname", values.nama)
-      // editData.append("city", values.kota)
-      // editData.append("address", values.alamat)
-      // editData.append("phoneNo", values.nomor)
-      // for (var t of editData.entries()){
-      //   console.log(t[0] + ', ' + t[1]);
-      // }
-      // dispatch(updateUser({editData, userId}))
-      // console.log(userId);
-
-      // await editProfile({
-      //   id: user.id,
-      //   token: user.token,
-      //   editData
-      // })
     }
   }
 
@@ -112,6 +107,7 @@ const EditProfileForm = () => {
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
+    maxSize: 5242880,
     accept: {
       'image/*': [],
     },
@@ -123,12 +119,8 @@ const EditProfileForm = () => {
           })
         )
       )
-      console.log(acceptedFiles)
+      // console.log(acceptedFiles)
     },
-  })
-
-  const fileRejectionItems = fileRejections.map(() => {
-    return <div></div>
   })
 
   const thumbs = files.map((file) => (
@@ -161,7 +153,6 @@ const EditProfileForm = () => {
       alamat: userActive.address ? userActive.address : '',
       nomor: userActive.phoneNo ? userActive.phoneNo : '',
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -174,20 +165,43 @@ const EditProfileForm = () => {
       <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
         <Grid container direction="column">
           <Grid item>
-            <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>
-              <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
-                Foto Produk
-              </FormHelperText>
-              <Box
-                {...getRootProps()}
+            {files.length === 0 ? (
+              <FormControl
                 sx={{
-                  mb: '1rem',
-                  maxWidth: { xs: '9ch', md: '9ch', lg: '9ch' },
-                  cursor: 'pointer',
+                  minWidth: { xs: '30ch', sm: '50ch' },
+                  alignItems: 'center',
                 }}
               >
-                <input {...getInputProps()} />
-                {files.length !== 0 ? (
+                <Box
+                  {...getRootProps()}
+                  sx={{
+                    mb: '1rem',
+                    maxWidth: { xs: '9ch', md: '9ch', lg: '9ch' },
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input {...getInputProps()} />
+                  <img
+                    src={userData?.data[0]?.Photos[0]?.storageId ? image_storage_url : gambar}
+                    alt=""
+                  />
+                </Box>
+              </FormControl>
+            ) : (
+              <FormControl
+                sx={{
+                  minWidth: { xs: '30ch', sm: '50ch' },
+                }}
+              >
+                <Box
+                  {...getRootProps()}
+                  sx={{
+                    mb: '1rem',
+                    maxWidth: { xs: '9ch', md: '9ch', lg: '9ch' },
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input {...getInputProps()} />
                   <Box
                     sx={{
                       border: '1px dashed #D0D0D0',
@@ -199,16 +213,14 @@ const EditProfileForm = () => {
                   >
                     {thumbs}
                   </Box>
-                ) : (
-                  <img src={gambar} alt="" />
-                )}
-              </Box>
-              {fileRejectionItems[0] && (
-                <Box sx={{ mb: '1rem' }}>
-                  <Alert severity="error">Maksimal 1 Gambar dan Ukuran 5MB</Alert>
                 </Box>
-              )}
-            </FormControl>
+              </FormControl>
+            )}
+            {fileRejections.length > 0 && (
+              <Box sx={{ mb: '1rem' }}>
+                <Alert severity="error">Maksimal 1 Gambar dan Ukuran 5MB</Alert>
+              </Box>
+            )}
           </Grid>
           <Grid item>
             <FormControl sx={{ minWidth: { xs: '30ch', sm: '50ch' } }}>

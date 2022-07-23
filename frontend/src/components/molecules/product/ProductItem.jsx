@@ -34,7 +34,7 @@ const ProductItem = ({ product, type }) => {
   const handleClose = () => setOpen(false)
 
   const checkWishlist = () => {
-    if (productWishlist.length > 0) {
+    if (productWishlist?.length > 0) {
       for (const x of productWishlist) {
         if (x.wish.id === product?.id) {
           setWishlist(true)
@@ -178,6 +178,8 @@ const ProductItem = ({ product, type }) => {
   useEffect(() => {
     if (open && userActive === null) {
       navigate('/login')
+    } else if (open && userActive?.phoneNo === null) {
+      navigate(`/edit/${userActive?.id}`)
     }
   }, [open])
 
@@ -299,26 +301,28 @@ const ProductItem = ({ product, type }) => {
               )
             ) : (
               <>
-                <Button
-                  onClick={handleOpen}
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disableElevation
-                  sx={{
-                    borderRadius: '1rem',
-                    textTransform: 'none',
-                    background: '#7126B5',
-                    border: '1px solid #7126B5',
-                    py: '10px',
-                    mb: '10px',
-                    '&:hover': {
-                      background: '#631fa1',
-                    },
-                  }}
-                >
-                  Saya tertarik dan ingin nego
-                </Button>
+                {product?.User?.id === userActive?.id || userActive === null ? null : (
+                  <Button
+                    onClick={handleOpen}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disableElevation
+                    sx={{
+                      borderRadius: '1rem',
+                      textTransform: 'none',
+                      background: '#7126B5',
+                      border: '1px solid #7126B5',
+                      py: '10px',
+                      mb: '10px',
+                      '&:hover': {
+                        background: '#631fa1',
+                      },
+                    }}
+                  >
+                    Saya tertarik dan ingin nego
+                  </Button>
+                )}
               </>
             )}
           </Stack>

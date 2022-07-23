@@ -1,8 +1,7 @@
 import { Container, Grid, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import Loader from '../../components/atoms/global/Loader'
-import { BackButton, Navbar, ProfileCard } from '../../components/molecules/global'
+import { BackButton, ProfileCard } from '../../components/molecules/global'
 import OfferCard from '../../components/molecules/offers/OfferCard'
 import { selectProductActive } from '../../redux/slices/productSlice'
 import { selectUser } from '../../redux/slices/userSlice'
@@ -13,8 +12,6 @@ const Offers = () => {
   console.log(productData)
   return (
     <>
-      <Loader />
-      <Navbar />
       <Container maxWidth="lg" sx={{ pt: { xs: '1rem', md: '2rem' }, pb: '1rem' }}>
         <BackButton />
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>

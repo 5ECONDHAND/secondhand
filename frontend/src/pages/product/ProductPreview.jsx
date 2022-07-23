@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { Container, Grid, Skeleton } from '@mui/material'
-import { Navbar, ProfileCard } from '../../components/molecules/global'
+import { ProfileCard } from '../../components/molecules/global'
 import { ProductDesc, ProductItem, ProductSlider } from '../../components/molecules/product'
 import { useGetDataByIdQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProductPreview } from '../../redux/slices'
 import { useParams } from 'react-router-dom'
-import Loader from '../../components/atoms/global/Loader'
 
 const ProductPreview = () => {
   const { productId } = useParams()
@@ -30,8 +29,6 @@ const ProductPreview = () => {
 
   return (
     <>
-      <Loader />
-      <Navbar />
       <Container maxWidth="lg" sx={{ py: '1rem' }}>
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
           {previewProduct !== null ? (
