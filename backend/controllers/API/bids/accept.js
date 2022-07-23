@@ -83,42 +83,6 @@ async function controller(req, res, next) {
     });
   }
 
-  const transactionData = await prisma.transaction.findFirst({
-    where: {
-      productId,
-    },
-    select: {
-      status: true
-    }
-  }).catch((err) => {
-    return {
-      error: true,
-      message: err.message,
-      data: [],
-    };
-  });
-
-  if (transactionData && transactionData.error) {
-    return res.json(productData);
-  }
-
-  // this is strange condition, because a product must have transaction
-  if (!transactionData) {
-    return res.json({
-      error: true,
-      message: "Cannot accept bid, transaction not found",
-      data: [],
-    });
-  }
-
-  if (transactionData.status == 'ACCEPTED') {
-    return res.json({
-      error: true,
-      message: "Cannot accept anymore bid, this product has accepted some bid",
-      data: [],
-    });
-  }
-
   const pivotTable = await prisma.transactionsOnUsers.findFirst({
     where: {
       userId
@@ -149,14 +113,24 @@ async function controller(req, res, next) {
     },
     data: {
       Users: {
-        updateMany: {
-          where: {
-            userId
+        updateMany: [
+          {
+            where: {
+              accepted: true
+            },
+            data: {
+              accepted: false
+            }
           },
-          data: {
-            accepted: true
+          {
+            where: {
+              userId
+            },
+            data: {
+              accepted: true
+            }
           }
-        }
+        ]
       },
       status: 'ACCEPTED'
     }
@@ -169,7 +143,7 @@ async function controller(req, res, next) {
   });
 
   const notifData = {
-    title: 'Penawaran Diterima',
+    title: 'Penawaran diterima',
     productName: productData.name,
     productId: productData.id,
     realPrice: productData.price,
@@ -178,7 +152,7 @@ async function controller(req, res, next) {
     seller: productData.userId
   }
 
-  const notification = await prisma.notification.create({
+  const notificationBuyer = await prisma.notification.create({
     data: {
       data: JSON.stringify(notifData),
       userId,
@@ -191,8 +165,29 @@ async function controller(req, res, next) {
     }
   });
 
-  if(notification && notification.error){
-    return res.json(notification)
+  if(notificationBuyer && notificationBuyer.error){
+    return res.json(notificationBuyer)
+  }
+
+  delete notifData.seller;
+  notifData.title = 'Berhasil menerima penawaran';
+  notifData.bidder = userId;
+
+  const notificationSeller = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId: productData.userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notificationSeller && notificationSeller.error){
+    return res.json(notificationSeller)
   }
 
   res.json({
