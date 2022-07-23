@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import dummy from '../../../assets/images/dummy-image.jpg'
 
 const ProductCardMini = ({ product, index }) => {
+  const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`
   const navigate = useNavigate()
   return (
     <>
@@ -24,7 +25,11 @@ const ProductCardMini = ({ product, index }) => {
               spacing={2}
             >
               <Stack direction="row" spacing={2} alignItems="flex-start">
-                <Avatar alt="" src={dummy} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+                <Avatar
+                  alt=""
+                  src={image_storage_url}
+                  sx={{ width: 56, height: 56, borderRadius: '12px' }}
+                />
                 <Stack direction="column">
                   <Typography variant="body2" sx={{ color: '#8A8A8A', mb: 0.5 }}>
                     Product wishlist {index + 1}

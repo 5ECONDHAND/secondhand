@@ -22,10 +22,9 @@ const Sales = () => {
     userActive.accessToken,
     { refetchOnMountOrArgChange: true }
   )
-  const { data: userData } = useGetUserQuery(
-    userActive.accessToken,
-    { refetchOnMountOrArgChange: true }
-  )
+  const { data: userData } = useGetUserQuery(userActive.accessToken, {
+    refetchOnMountOrArgChange: true,
+  })
   const products = useSelector(selectProduct)
   const [displayData, setDisplayData] = useState()
   const [dataCategory, setDataCategory] = useState('Semua Produk')
@@ -34,13 +33,14 @@ const Sales = () => {
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
       case 'Semua Produk':
-        setDisplayData(products?.filter((item) => item.User.fullname === userActive.fullname))
+        setDisplayData(products?.filter((item) => item.User?.fullname === userActive?.fullname))
         break
       case 'Diminati':
         setDisplayData(
           products?.filter(
             (item) =>
-              item.User.fullname === userActive.fullname && item.Transaction.status === 'DECIDING'
+              item.User?.fullname === userActive?.fullname &&
+              item.Transaction?.status === 'DECIDING'
           )
         )
         break
@@ -48,12 +48,13 @@ const Sales = () => {
         setDisplayData(
           products?.filter(
             (item) =>
-              item.User.fullname === userActive.fullname && item.Transaction.status === 'ACCEPTED'
+              item.User?.fullname === userActive?.fullname &&
+              item.Transaction?.status === 'ACCEPTED'
           )
         )
         break
       default:
-        setDisplayData(products?.filter((item) => item.User.fullname === userActive.name))
+        setDisplayData(products?.filter((item) => item.User?.fullname === userActive?.name))
         break
     }
   }
@@ -176,7 +177,7 @@ const Sales = () => {
           Daftar Jual Saya
         </Typography>
         <ProfileCard
-        profile={userData?.data[0]}
+          profile={userData?.data[0]}
           display="sales"
           sellerName={userActive?.fullname}
           sellerCity={userActive?.city}

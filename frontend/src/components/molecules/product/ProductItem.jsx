@@ -34,7 +34,7 @@ const ProductItem = ({ product, type }) => {
   const handleClose = () => setOpen(false)
 
   const checkWishlist = () => {
-    if (productWishlist.length > 0) {
+    if (productWishlist?.length > 0) {
       for (const x of productWishlist) {
         if (x.wish.id === product?.id) {
           setWishlist(true)

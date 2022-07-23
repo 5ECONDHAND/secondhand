@@ -6,48 +6,48 @@ import { ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetDataQuery } from '../../redux/services/productApi'
-import { productActions, selectProduct, selectProductSearch } from '../../redux/slices'
+import { productActions, selectProduct, selectProductSearch, selectUser } from '../../redux/slices'
 import { GiCardboardBox } from 'react-icons/gi'
 
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [page, setPage] = useState(1);
-  const [count, setCount] = useState("");
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
-    count,
-    { refetchOnMountOrArgChange: true }
-  );
+  // const [page, setPage] = useState(1)
+  // const [count, setCount] = useState('')
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery({
+    refetchOnMountOrArgChange: true,
+  })
+  const userActive = useSelector(selectUser)
   const products = useSelector(selectProduct)
   const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
 
-  const handlePage = (event, value) => {
-    setPage(value);
-  };
+  // const handlePage = (event, value) => {
+  //   setPage(value)
+  // }
 
-  const paginate = (page) => {
-    switch (page) {
-      case 1:
-        setCount("skip=0&take=12");
-        break;
-      case 2:
-        setCount("skip=12&take=12");
-        break;
-      case 3:
-        setCount("skip=24&take=12");
-        break;
-      case 4:
-        setCount("skip=36&take=12");
-        break;
-      case 5:
-        setCount("skip=48&take=12");
-        break;
-      default:
-        break;
-    }
-  };
+  // const paginate = (page) => {
+  //   switch (page) {
+  //     case 1:
+  //       setCount('skip=0&take=12')
+  //       break
+  //     case 2:
+  //       setCount('skip=12&take=12')
+  //       break
+  //     case 3:
+  //       setCount('skip=24&take=12')
+  //       break
+  //     case 4:
+  //       setCount('skip=36&take=12')
+  //       break
+  //     case 5:
+  //       setCount('skip=48&take=12')
+  //       break
+  //     default:
+  //       break
+  //   }
+  // }
 
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
@@ -68,13 +68,18 @@ const Home = () => {
     dispatch(productActions.setProducts(productData?.data))
   }
 
+  // useEffect(() => {
+  //   if (products) {
+  //     dataSwitch(dataCategory)
+  //   }
+  //   paginate(page)
+  // }, [dataCategory, products, paginate])
+
   useEffect(() => {
     if (products) {
-      dataSwitch(dataCategory);
+      dataSwitch(dataCategory)
     }
-    paginate(page);
-  }, [dataCategory, products, paginate]);
-
+  }, [dataCategory, products])
 
   useEffect(() => {
     if (searchResult) {
@@ -86,6 +91,19 @@ const Home = () => {
 
   return (
     <>
+      {/* <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: 2,
+        }}
+      >
+        <Typography variant="base1">
+          {userActive ? `Logged in as: ${userActive?.fullname}` : 'userNotActive'}
+        </Typography>
+      </Box> */}
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         {isProductSuccess ? (
@@ -155,7 +173,7 @@ const Home = () => {
         </Grid>
         <SellCtaButton />
       </Container>
-      <Pagination
+      {/* <Pagination
         count={5}
         color="primary"
         page={page}
@@ -165,7 +183,7 @@ const Home = () => {
           alignItems: "center",
           justifyContent: "space-around",
         }}
-      />
+      /> */}
     </>
   )
 }

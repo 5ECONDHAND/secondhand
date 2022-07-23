@@ -16,7 +16,7 @@ const Product = () => {
   const { data: productData, isSuccess } = useGetDataByIdQuery({
     id: productId,
   })
-  console.log(productActive?.User);
+  // console.log(productActive?.User);
 
   const fillProductActive = () => {
     dispatch(productActions.setProductActive(productData?.data[0]))

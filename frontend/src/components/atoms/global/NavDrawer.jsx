@@ -82,7 +82,6 @@ const NavDrawer = ({ user }) => {
             <div key={item.name}>
               <ListItem>
                 <ListItemText primary={item.name} primaryTypographyProps={{ fontWeight: '700' }} />
-                <ListItemButton onClick={() => navigate(item.navigate)}></ListItemButton>
               </ListItem>
               <Divider />
               {item.menus.map((menu, index) => (

@@ -7,7 +7,7 @@ const ProfileCard = (props) => {
   const { display, sellerName, sellerCity, profile } = props
   const navigate = useNavigate()
   const userActive = useSelector(selectUser)
-  console.log(profile);
+  // console.log(profile)
   const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${profile?.Photos[0]?.storageId}/preview`
   return (
     <>
@@ -26,7 +26,11 @@ const ProfileCard = (props) => {
           padding={2}
         >
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar alt="A" src={image_storage_url} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+            <Avatar
+              alt="A"
+              src={image_storage_url}
+              sx={{ width: 56, height: 56, borderRadius: '12px' }}
+            />
             <Stack direction="column">
               <Typography variant="body1" sx={{ fontWeight: '500' }}>
                 {sellerName ? sellerName : 'sellerName'}
