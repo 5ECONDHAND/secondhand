@@ -91,12 +91,6 @@ async function controller(req, res, next){
     where: {
       id: productId
     },
-    select: {
-      userId: true,
-      name: true,
-      id: true,
-      price: true
-    },
     include: {
       Photos: true
     }
