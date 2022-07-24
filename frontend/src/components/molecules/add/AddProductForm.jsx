@@ -131,6 +131,15 @@ const AddProductForm = (props) => {
   const handleAdd = async (event) => {
     event.preventDefault()
     console.log('adding product...')
+    const fd = new FormData()
+    // fd.append('name', values.nama)
+    // fd.append('price', values.harga)
+    // fd.append('description', values.deskripsi)
+    // fd.append('categoryId', values.kategori)
+    for (let i = 0; i < files.length; i++) {
+      fd.append('fileItems', files[i])
+    }
+    // fd.append('status', 'PUBLISH')
     if (validateProduct(values, setError)) {
       axios
         .post(

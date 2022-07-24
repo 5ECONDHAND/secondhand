@@ -10,9 +10,13 @@ import {
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/system'
+import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { FiX } from 'react-icons/fi'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectUser } from '../../../redux/slices/userSlice'
 
 const ModalStyle = {
   position: 'absolute',
@@ -27,7 +31,9 @@ const ModalStyle = {
 }
 
 const OfferStatusInput = (props) => {
-  // const [error, setError] = useState({})
+  const { buyerData, productData } = props
+  const userActive = useSelector(selectUser)
+  const navigate = useNavigate()
   const [values, setValues] = useState('sold')
 
   const { handleClose } = props
@@ -40,7 +46,37 @@ const OfferStatusInput = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     handleClose()
-    fireAlert('Status produk berhasil diperbarui', 'success')
+    switch (values) {
+      case 'sold':
+        axios
+          .post(
+            'https://febesh5-dev.herokuapp.com/api/bids/accept',
+            {
+              productId: productData.id,
+              userId: buyerData?.User?.id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${userActive.accessToken}`,
+              },
+            }
+          )
+          .then(fireAlert('Status produk berhasil diperbarui', 'success'), navigate('/sales'))
+          .catch((e) => console.log(e))
+        break
+      case 'cancelled':
+        axios
+          .delete(`https://febesh5-dev.herokuapp.com/api/bids/${productData.id}`, {
+            headers: {
+              Authorization: `Bearer ${userActive.accessToken}`,
+            },
+          })
+          .then(fireAlert('Status produk berhasil diperbarui', 'success'), navigate('/sales'))
+          .catch((e) => console.log(e))
+        break
+      default:
+        break
+    }
 
     console.log('FORM VALUES', values)
   }
@@ -48,14 +84,6 @@ const OfferStatusInput = (props) => {
   const handleChange = (event) => {
     setValues(event.target.value)
   }
-
-  // useEffect(() => {
-  //   if (error?.amount === '' && values.amount > 0) {
-  //     handleClose()
-  //     fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [error])
 
   return (
     <>
@@ -122,7 +150,11 @@ const OfferStatusModal = (props) => {
           <Typography variant="body1" sx={{ fontWeight: '500', mb: 2 }}>
             Perbarui status penjualan produkmu
           </Typography>
-          <OfferStatusInput handleClose={handleClose} />
+          <OfferStatusInput
+            handleClose={handleClose}
+            productData={props.productData}
+            buyerData={props.buyerData}
+          />
         </Box>
       </Modal>
     </>

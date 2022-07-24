@@ -42,6 +42,7 @@ const ProductCard = ({ product, status }) => {
                   height: { xs: 100, md: 120, lg: 132 },
                   borderRadius: '0.25rem',
                   objectFit: 'cover',
+                  border: '1px groove rgba(0, 0, 0, 0.15)',
                 }}
               />
               {isStatusPublished(status) ? null : (
@@ -58,6 +59,20 @@ const ProductCard = ({ product, status }) => {
                   }}
                 />
               )}
+              {product?.Transaction?.status === 'ACCEPTED' ? (
+                <Chip
+                  label="Sold"
+                  color="secondary"
+                  variant="filled"
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    zIndex: 1,
+                    margin: '0.5rem',
+                  }}
+                />
+              ) : null}
             </Box>
           </Fade>
 

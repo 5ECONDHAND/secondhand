@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { useEffect, useState } from 'react'
 import {
   Avatar,
@@ -18,6 +19,7 @@ import { toRupiah } from '../../../utils/functions'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectUser } from '../../../redux/slices'
+import { useNavigate } from 'react-router-dom'
 
 const ModalStyle = {
   position: 'absolute',
@@ -72,33 +74,47 @@ const NegotiateInput = (props) => {
     amount: 0,
   })
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { handleClose, productId } = props
   const { enqueueSnackbar } = useSnackbar()
   const userActive = useSelector(selectUser)
 
-  const fireAlert = (msg = 'Success', variant) => {
-    enqueueSnackbar(msg, { variant })
-  }
-
   const handleSubmit = (event) => {
     event.preventDefault()
-    validateNegotiateAmount(values, setError)
-
-    axios.post('https://febesh5-dev.herokuapp.com/api/bids', {
-      productId: productId,
-      offeredPrice: values.amount
-    }, {
-      headers: {
-        Authorization: `Bearer ${userActive.accessToken}`
-      }
-    }).then(response => {
-      console.log(response.data.data[0])
-      dispatch(productActions.setProductNotifications({
-        error: false,
-        message: 'Bid Created',
-        data: response.data.data[0]
-      }))
-    }).catch((e) => console.log(e))
+    if (validateNegotiateAmount(values, setError)) {
+      axios
+        .post(
+          'https://febesh5-dev.herokuapp.com/api/bids',
+          {
+            productId: productId,
+            offeredPrice: values.amount,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${userActive.accessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log('from negotiate modal', response.data.data[0])
+          enqueueSnackbar('Product offered', {
+            variant: 'success',
+            autoHideDuration: 1000,
+          })
+          navigate('/')
+          // dispatch(productActions.setProductNotifs(response.data.data[0]))
+          // dispatch(productActions.setProductNotifs({ notif: response.data.data[0] }))
+          // dispatch(productActions.resetProductNotifs())
+          // dispatch(
+          //   productActions.setProductNotifications({
+          //     error: false,
+          //     message: 'Bid Created',
+          //     data: response.data.data[0],
+          //   })
+          // )
+        })
+        .catch((e) => console.log(e))
+    }
   }
 
   const handleChange = (prop) => (event) => {
@@ -108,7 +124,6 @@ const NegotiateInput = (props) => {
   useEffect(() => {
     if (error?.amount === '' && values.amount > 0) {
       handleClose()
-      fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
@@ -162,7 +177,7 @@ const NegotiateInput = (props) => {
 
 const NegotiateModal = (props) => {
   const { open, handleClose, productName, productPrice, storageId, productId } = props
-  console.log(productId)
+  // console.log(productId)
   return (
     <>
       <Modal open={open} onClose={handleClose}>

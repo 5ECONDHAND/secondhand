@@ -1,12 +1,15 @@
 export { authApi, useLoginUserMutation, useRegisterUserMutation } from './authApi'
 export {
   productApi,
-  useGetDataByIdQuery,
   useGetDataQuery,
-  usePostProductMutation,
-  usePutProductMutation,
-  UseSearchMutation,
   useGetProductsSellerQuery,
+  useGetDataByIdQuery,
+  useGetNotificationsQuery,
+  useGetNotificationByIdQuery,
+  usePutProductMutation,
+  usePostProductMutation,
   useDeleteProductMutation,
+  useGetTransactionsQuery,
+  useGetTransactionByIdQuery,
 } from './productApi'
 export { userApi, useEditProfileMutation, useGetUserByIdQuery } from './userApi'

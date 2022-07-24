@@ -1,35 +1,66 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import { Box, Container, Grid, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import { Banner, CategoryFilter, SellCtaButton } from '../../components/molecules/home'
-import { Navbar, ProductCard } from '../../components/molecules/global'
+import { ProductCard } from '../../components/molecules/global'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetDataQuery } from '../../redux/services/productApi'
-import { productActions, selectProduct, selectProductSearch } from '../../redux/slices'
+import { productActions, selectProduct, selectProductSearch, selectUser } from '../../redux/slices'
 import { GiCardboardBox } from 'react-icons/gi'
-import Loader from '../../components/atoms/global/Loader'
 
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery(
-    {},
-    { refetchOnMountOrArgChange: true }
-  )
+  // const [page, setPage] = useState(1)
+  // const [count, setCount] = useState('')
+  const { data: productData, isSuccess: isProductSuccess } = useGetDataQuery({
+    refetchOnMountOrArgChange: true,
+  })
+  const userActive = useSelector(selectUser)
   const products = useSelector(selectProduct)
   const searchResult = useSelector(selectProductSearch)
   const [displayData, setDisplayData] = useState(products)
   const [dataCategory, setDataCategory] = useState('Semua')
 
+  // const handlePage = (event, value) => {
+  //   setPage(value)
+  // }
+
+  // const paginate = (page) => {
+  //   switch (page) {
+  //     case 1:
+  //       setCount('skip=0&take=12')
+  //       break
+  //     case 2:
+  //       setCount('skip=12&take=12')
+  //       break
+  //     case 3:
+  //       setCount('skip=24&take=12')
+  //       break
+  //     case 4:
+  //       setCount('skip=36&take=12')
+  //       break
+  //     case 5:
+  //       setCount('skip=48&take=12')
+  //       break
+  //     default:
+  //       break
+  //   }
+  // }
+
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
       case 'Semua':
-        setDisplayData(products)
+        setDisplayData(products.filter((item) => item.Transaction.status !== 'ACCEPTED'))
         break
       case dataCategory:
         setDisplayData(
-          products?.filter((item) => item.Categories[0].Category.name === dataCategory)
+          products?.filter(
+            (item) =>
+              item.Categories[0].Category.name === dataCategory &&
+              item.Transaction.status !== 'ACCEPTED'
+          )
         )
         break
       default:
@@ -40,6 +71,13 @@ const Home = () => {
   const fillProducts = () => {
     dispatch(productActions.setProducts(productData?.data))
   }
+
+  // useEffect(() => {
+  //   if (products) {
+  //     dataSwitch(dataCategory)
+  //   }
+  //   paginate(page)
+  // }, [dataCategory, products, paginate])
 
   useEffect(() => {
     if (products) {
@@ -57,8 +95,19 @@ const Home = () => {
 
   return (
     <>
-      <Loader />
-      <Navbar />
+      {/* <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: 2,
+        }}
+      >
+        <Typography variant="base1">
+          {userActive ? `Logged in as: ${userActive?.fullname}` : 'userNotActive'}
+        </Typography>
+      </Box> */}
       <Banner />
       <Container maxWidth="xl" sx={{ my: 0, pb: '6rem', position: 'relative' }}>
         {isProductSuccess ? (
@@ -128,6 +177,17 @@ const Home = () => {
         </Grid>
         <SellCtaButton />
       </Container>
+      {/* <Pagination
+        count={5}
+        color="primary"
+        page={page}
+        onChange={handlePage}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      /> */}
     </>
   )
 }

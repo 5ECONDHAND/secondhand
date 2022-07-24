@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack'
 import { FiX } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { toRupiah } from '../../../utils/functions'
-import dummy from '../../../assets/images/dummy-image.jpg'
+// import dummy from '../../../assets/images/dummy-image.jpg'
 
 const ModalStyle = {
   position: 'absolute',
@@ -30,6 +30,7 @@ const ModalStyle = {
 }
 
 const ProductMiniCard = (props) => {
+  const { product, buyer } = props
   return (
     <>
       <Paper
@@ -51,13 +52,17 @@ const ProductMiniCard = (props) => {
           padding={2}
           pb={0}
         >
-          <Avatar alt="" src={''} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+          <Avatar
+            alt=""
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${buyer?.user?.User?.Photos[0]?.storageId}/preview`}
+            sx={{ width: 56, height: 56, borderRadius: '12px' }}
+          />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {'Nama Pembeli'}
+              {buyer?.User?.fullname}
             </Typography>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-              {'kota'}
+              {buyer?.User?.city}
             </Typography>
           </Stack>
         </Stack>
@@ -68,15 +73,19 @@ const ProductMiniCard = (props) => {
           spacing={2}
           padding={2}
         >
-          <Avatar alt="" src={dummy} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+          <Avatar
+            alt=""
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`}
+            sx={{ width: 56, height: 56, borderRadius: '12px' }}
+          />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500', mb: 0.5 }}>
-              {'Nama produk'}
+              {product.name}
             </Typography>
             <Typography variant="body2" sx={{ textDecoration: 'line-through', mb: 0.5 }}>
-              {toRupiah(250000)}
+              {toRupiah(product.price)}
             </Typography>
-            <Typography variant="body2">Ditawar {toRupiah(200000)}</Typography>
+            <Typography variant="body2">Ditawar {toRupiah(buyer?.offeredPrice)}</Typography>
           </Stack>
         </Stack>
       </Paper>
@@ -85,37 +94,13 @@ const ProductMiniCard = (props) => {
 }
 
 const OfferInput = (props) => {
-  // const [error, setError] = useState({})
-  // const [values, setValues] = useState({
-  //   amount: 0,
-  // })
-
-  const { handleClose, handleAccept } = props
-  // const { enqueueSnackbar } = useSnackbar()
-
-  // const fireAlert = (msg = 'Success', variant) => {
-  //   enqueueSnackbar(msg, { variant })
-  // }
-
+  const { handleClose, handleAccept, phoneNum } = props
   const handleSubmit = (event) => {
     event.preventDefault()
+    window.open(`https://wa.me/${phoneNum}`)
     handleAccept()
     handleClose()
-    // console.log('FORM VALUES', values)
-    // console.log('ERROR STATE', error)
   }
-
-  // const handleChange = (prop) => (event) => {
-  //   setValues({ ...values, [prop]: event.target.value })
-  // }
-
-  // useEffect(() => {
-  //   if (error?.amount === '' && values.amount > 0) {
-  //     handleClose()
-  //     fireAlert('Harga tawarmu berhasil dikirim ke penjual', 'success')
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [error])
 
   return (
     <>
@@ -125,20 +110,6 @@ const OfferInput = (props) => {
         onSubmit={(event) => handleSubmit(event)}
         sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}
       >
-        {/* <FormControl sx={{ maxWidth: 'auto' }}>
-          <FormHelperText sx={{ fontSize: '1rem', color: 'black', m: 0 }}>
-            Harga Tawar
-          </FormHelperText>
-          <OutlinedInput
-            error={error?.amount ? true : false}
-            placeholder="Rp 0,00"
-            type="number"
-            value={values.amount === 0 ? '' : values.amount}
-            onChange={handleChange('amount')}
-            sx={{ borderRadius: '1rem' }}
-          />
-          <FormHelperText sx={{ m: 0 }}>{error?.amount}</FormHelperText>
-        </FormControl> */}
         <Button
           type="submit"
           fullWidth
@@ -166,7 +137,7 @@ const OfferInput = (props) => {
 }
 
 const OfferModal = (props) => {
-  const { open, handleClose, handleAccept } = props
+  const { open, handleClose, handleAccept, productData, buyerData } = props
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -180,8 +151,14 @@ const OfferModal = (props) => {
           <Typography variant="body2" sx={{ color: '#8A8A8A', mb: 2 }}>
             Segera hubungi pembeli melalui whatsapp untuk transaksi selanjutnya
           </Typography>
-          <ProductMiniCard />
-          <OfferInput handleClose={handleClose} handleAccept={handleAccept} />
+          {/* top modal with data */}
+          <ProductMiniCard product={productData} buyer={buyerData} />
+          {/* bottom modal button*/}
+          <OfferInput
+            handleClose={handleClose}
+            handleAccept={handleAccept}
+            phoneNum={buyerData?.User?.phoneNo}
+          />
         </Box>
       </Modal>
     </>
