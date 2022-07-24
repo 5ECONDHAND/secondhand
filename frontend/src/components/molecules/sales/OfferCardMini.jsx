@@ -28,10 +28,10 @@ const OfferCardMini = ({ product }) => {
                     Penawaran Produk
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500', mb: 0.5 }}>
-                    {product.name ? product.name : 'Product Name'}
+                    {product ? product.name : 'product_name'}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500', mb: 0.5 }}>
-                    {product.price ? toRupiah(product.price) : 'Rp. 0'}
+                    {product ? toRupiah(product.price) : 'product_price'}
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: '500' }}>
                     Ditawar {toRupiah(200000)}

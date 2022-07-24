@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
@@ -27,6 +28,7 @@ import { selectAuth } from '../../../redux/slices/authSlice'
 import { productActions, selectProduct } from '../../../redux/slices/productSlice'
 import axios from 'axios'
 import { selectUser } from '../../../redux/slices'
+import { isProductMaxed } from '../../../utils/functions'
 
 const styles = {
   '&.MuiButton-root': {
@@ -63,8 +65,18 @@ const img = {
 }
 
 const AddProductForm = (props) => {
-  const { enqueueSnackbar } = useSnackbar()
+  // hook calls
+  const { productId } = useParams()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+
+  // redux state selectors
+  const user = useSelector(selectAuth)
+  const userActive = useSelector(selectUser)
+  const productsData = useSelector(selectProduct)
+
+  // local state
   const [error, setError] = useState({})
   const [values, setValues] = useState({
     nama: '',
@@ -73,19 +85,12 @@ const AddProductForm = (props) => {
     deskripsi: '',
   })
   const [files, setFiles] = useState([])
-  const user = useSelector(selectAuth)
-  const userLogin = useSelector(selectUser)
-  let token = userLogin.accessToken
-  const productsData = useSelector(selectProduct)
-  const { productId } = useParams()
-  const dispatch = useDispatch()
-  const userProductLength = productsData?.filter(
-    (item) => item.User.fullname === userLogin.fullname
+  const sellerProductCount = productsData?.filter(
+    (item) => item.User?.fullname === userActive?.fullname
   ).length
-  console.log(userProductLength)
 
+  // rtk queries
   const [
-    postProduct,
     {
       data: postProductData,
       isLoading: isPostProductLoading,
@@ -95,7 +100,6 @@ const AddProductForm = (props) => {
   ] = usePostProductMutation()
 
   const [
-    putProduct,
     {
       data: putProductData,
       isLoading: isPutProductLoading,
@@ -104,11 +108,15 @@ const AddProductForm = (props) => {
     },
   ] = usePutProductMutation()
 
-  const { data: productData, isSuccess: isProductSuccess } = useGetDataByIdQuery({
+  const { data: productData, isSuccess: isProductDataSuccess } = useGetDataByIdQuery({
     id: productId,
-    token: token,
+    token: userActive?.accessToken,
   })
-  // console.log(productData)
+
+  // local handlers
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
   const handleSubmit = (event, name = '') => {
     if (productId && name === '') {
@@ -122,12 +130,7 @@ const AddProductForm = (props) => {
 
   const handleAdd = async (event) => {
     event.preventDefault()
-    if (userProductLength >= 4) {
-      enqueueSnackbar('Maximum Product Stock', { variant: 'error', autoHideDuration: 1000 })
-      return navigate('/sales')
-    }
-    // const formData = new FormData()
-
+    console.log('adding product...')
     if (validateProduct(values, setError)) {
       axios
         .post(
@@ -137,18 +140,23 @@ const AddProductForm = (props) => {
             price: values.harga,
             description: values.deskripsi,
             categoryId: values.kategori,
+            files: files[0],
             status: 'PUBLISH',
           },
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${userActive.accessToken}`,
               'Content-Type': 'multipart/form-data',
             },
           }
         )
         .then(function (response) {
           enqueueSnackbar('Product added', { variant: 'success', autoHideDuration: 1000 })
-          dispatch(productActions.setProductNotifications(response.data.data[0]))
+          dispatch(productActions.setProductNotifications({
+            error: false,
+            message: 'Product Created',
+            data: response.data.data[0]
+          }))
           setTimeout(() => {
             navigate('/sales')
           }, 2000)
@@ -185,7 +193,11 @@ const AddProductForm = (props) => {
         )
         .then(function (response) {
           enqueueSnackbar('Product updated', { variant: 'success', autoHideDuration: 1000 })
-          dispatch(productActions.setProductNotifications(response.data.data[0]))
+          dispatch(productActions.setProductNotifications({
+            error: false,
+            message: 'Product Created',
+            data: response.data.data[0]
+          }))
           setTimeout(() => {
             navigate('/sales')
           }, 2000)
@@ -198,14 +210,10 @@ const AddProductForm = (props) => {
     }
   }
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
   const handlePreview = (event) => {
     event.preventDefault()
-    console.log(files)
-    if (productId) {
+    console.log('previewing product...')
+    if (productId && validateProduct(values, setError)) {
       axios
         .put(
           `https://febesh5-dev.herokuapp.com/api/products/${productId}`,
@@ -234,9 +242,9 @@ const AddProductForm = (props) => {
         })
         .catch((e) => {
           console.log(e)
-          enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
+          enqueueSnackbar('Preview error', { variant: 'error', autoHideDuration: 1000 })
         })
-    } else {
+    } else if (validateProduct(values, setError)) {
       axios
         .post(
           'https://febesh5-dev.herokuapp.com/api/products',
@@ -261,20 +269,21 @@ const AddProductForm = (props) => {
               data: response.data.data[0],
             })
           )
-          navigate(`/preview/${response.data.data[0].id}`)
+          navigate(`/preview/${response.data.data[0]?.id}`)
         })
         .catch((e) => {
           console.log(e)
+          enqueueSnackbar('Preview error', { variant: 'error', autoHideDuration: 1000 })
         })
     }
   }
 
-  // foto
+  // Dropzone settings
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
-    maxFiles: 4,
-    maxSize: 250000,
+    maxFiles: 4, // max number of files for upload
+    maxSize: 5242880, // 5 mb
     accept: {
-      'image/*': [],
+      'image/*': ['.png', '.jpg', '.jpeg'], // Allow only images with this extension
     },
     onDrop: (acceptedFiles) => {
       setFiles(
@@ -308,14 +317,28 @@ const AddProductForm = (props) => {
     </div>
   ))
 
+  // useEffect calls when component mounts
   useEffect(() => {
-    setValues({
-      nama: productData?.data[0] ? productData.data[0].name : '',
-      harga: productData?.data[0] ? productData.data[0].price : '',
-      kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.id : '',
-      deskripsi: productData?.data[0] ? productData.data[0].description : '',
-    })
-  }, [productData])
+    if (isProductMaxed(sellerProductCount)) {
+      enqueueSnackbar('Maximum Product Stock', {
+        variant: 'error',
+        autoHideDuration: 1000,
+        preventDuplicate: true,
+      })
+      return navigate('/sales')
+    }
+  }, [sellerProductCount])
+
+  useEffect(() => {
+    if (isProductDataSuccess) {
+      setValues({
+        nama: productData?.data[0] ? productData.data[0].name : '',
+        harga: productData?.data[0] ? productData.data[0].price : '',
+        kategori: productData?.data[0] ? productData.data[0].Categories[0].Category.id : '',
+        deskripsi: productData?.data[0] ? productData.data[0].description : '',
+      })
+    }
+  }, [productData, isProductDataSuccess])
 
   useEffect(() => {
     if (isPostProductSuccess || isPutProductSuccess) {
@@ -337,7 +360,6 @@ const AddProductForm = (props) => {
       console.log('Response', isPostProductError)
       enqueueSnackbar('Error occurred', { variant: 'error', autoHideDuration: 1000 })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPostProductSuccess, isPutProductSuccess, isPostProductError, isPutProductError])
 
   useEffect(() => {
@@ -393,13 +415,13 @@ const AddProductForm = (props) => {
                 onChange={handleChange('kategori')}
                 sx={{ borderRadius: '1rem' }}
               >
-                {/* <MenuItem disabled value="">
+                <MenuItem disabled value="">
                   <em>
-                    {isProductSuccess && productId
+                    {isProductDataSuccess && productId
                       ? productData?.data[0].Categories[0].Category.id
                       : 'Pilih Kategori'}
                   </em>
-                </MenuItem> */}
+                </MenuItem>
                 <MenuItem value={1}>Hobi</MenuItem>
                 <MenuItem value={2}>Kendaraan</MenuItem>
                 <MenuItem value={3}>Baju</MenuItem>
