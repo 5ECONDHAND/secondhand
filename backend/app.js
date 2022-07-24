@@ -14,7 +14,10 @@ var cors = require('cors');
 var path = require('path');
 var middlewares = require(path.join(process.env.ROOT_PATH, 'middlewares'));
 var swaggerUi = require('swagger-ui-express');
-var swaggerFile = require(path.join(process.env.ROOT_PATH, 'swagger-output.json'));
+var swaggerFileName = process.env.NODE_ENV === 'production'
+  ? 'swagger-output-prod.json'
+  : 'swagger-output-dev.json';
+var swaggerFile = require(path.join(process.env.ROOT_PATH, swaggerFileName));
 
 var webRouter = require(path.join(process.env.ROOT_PATH, 'routes/web'));
 var apiRouter = require(path.join(process.env.ROOT_PATH, 'routes/api'));
