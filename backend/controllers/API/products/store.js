@@ -149,7 +149,10 @@ async function controller(req, res, next){
   }
 
   const data = await prisma.product.create({
-    data: dataPayload
+    data: dataPayload,
+    include: {
+      Photos: true
+    }
   }).catch(err => {
     return{
       error: true,
@@ -160,6 +163,36 @@ async function controller(req, res, next){
 
   if(data && data.error){
     return res.json(data)
+  }
+
+  const priceFormat = data.price
+    ? data.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
+  const notifData = {
+    title: 'Produk dibuat',
+    subTitle: data.name,
+    body: 'Rp. ' + priceFormat,
+    subBody: '',
+    imageId: data.Photos && data.Photos[0] && data.Photos[0].id,
+    seller: data.userId
+  }
+
+  const notificationSeller = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId: req.userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notificationSeller && notificationSeller.error){
+    return res.json(notificationSeller)
   }
 
   res.json({

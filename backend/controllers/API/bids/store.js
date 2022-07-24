@@ -157,12 +157,19 @@ async function controller(req, res, next){
     });
   }
 
+  const priceFormatReal = productData.price
+    ? productData.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
+  const priceFormatOffer = offeredPrice
+    ? offeredPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
   const notifData = {
     title: 'Produk ditawar',
-    productName: productData.name,
-    productId: productData.id,
-    realPrice: productData.price,
-    offeredPrice: offeredPrice,
+    subTitle: productData.name,
+    body: 'Rp. ' + priceFormatReal,
+    subBody: 'Ditawar Rp. ' + priceFormatOffer,
     imageId: productData.Photos && productData.Photos[0] && productData.Photos[0].id,
     bidder: req.userId
   }
