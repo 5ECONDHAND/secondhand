@@ -6,9 +6,10 @@ var rootController = path.join(process.env.ROOT_PATH, '/controllers/web');
 /**
  * Load web controllers
  */
-var nfHandler = require(path.join(rootController, '/nf'));
+// var nfHandler = require(path.join(rootController, '/nf'));
+var spaHandler = require(path.join(rootController, '/spa'));
 
 // catch 404 and forward to error handler
-router.all('/*', nfHandler);
+router.all('/*', spaHandler);
 
 module.exports = router;

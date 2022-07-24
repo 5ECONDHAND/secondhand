@@ -8,10 +8,146 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TransactionStatus {
+  ACCEPTED
+  DECIDING
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISH
+}
+
 // Table names are generally spelled in PascalCase. Column names in camelCase.
 // Model names should use the singular form (for example, User instead of user, users or Users)
-
 // Relation scalar naming conventions
 // Because a relation scalar field always belongs to a relation field, the following naming convention is common:
 // Relation field: author
 // Relation scalar field: authorId (relation field name + Id)
+
+// MAIN TABLE
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  fullname  String   @db.VarChar(255)
+  password  String   @db.VarChar(128)
+  phoneNo   String?  @unique @db.VarChar(30)
+  city      String?  @db.Text
+  address   String?  @db.Text
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  Products      Product[]
+  Notifications Notification[]
+  Transactions  TransactionsOnUsers[]
+  Photos        StoragesOnUsers[]
+}
+
+model Product {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(255)
+  price       Decimal       @default(0) @db.Decimal(12, 2)
+  description String        @db.Text
+  status      ProductStatus @default(DRAFT)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime      @default(now()) @db.Timestamptz(6)
+
+  User        User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  Transaction Transaction?
+  Categories  CategoriesOnProducts[]
+  Photos      ProductsOnStorages[]
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  Products CategoriesOnProducts[]
+}
+
+model Transaction {
+  id        Int               @id @default(autoincrement())
+  status    TransactionStatus @default(DECIDING)
+  createdAt DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime          @default(now()) @db.Timestamptz(6)
+
+  Product   Product               @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int                   @unique
+  Users     TransactionsOnUsers[]
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  data      String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+}
+
+model Storage {
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(128)
+  size      Int      @default(0)
+  mimetype  String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  Products ProductsOnStorages[]
+  Users    StoragesOnUsers[]
+}
+
+// PIVOT TABLE
+
+model TransactionsOnUsers {
+  offeredPrice Decimal  @db.Decimal(12, 2)
+  description  String?  @db.Text
+  accepted     Boolean  @default(false)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+
+  User          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  Transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId Int
+
+  @@id([userId, transactionId])
+}
+
+model CategoriesOnProducts {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  Category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+  Product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+
+  @@id([categoryId, productId])
+}
+
+model ProductsOnStorages {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  Storage   Storage @relation(fields: [storageId], references: [id], onDelete: Cascade)
+  storageId Int
+
+  @@id([storageId, productId])
+}
+
+model StoragesOnUsers {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  Storage   Storage @relation(fields: [storageId], references: [id], onDelete: Cascade)
+  storageId Int
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  @@id([storageId, userId])
+}

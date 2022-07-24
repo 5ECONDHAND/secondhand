@@ -1,0 +1,2593 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "7.7.7",
+    "title": "SecondHand",
+    "description": "SecondHand - API Documentation",
+    "contact": {
+      "name": "KELOMPOK 5",
+      "url": "https://github.com/5ECONDHAND/secondhand"
+    }
+  },
+  "host": "febesh5-dev.herokuapp.com",
+  "basePath": "/api",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "token": {
+      "type": "apiKey",
+      "name": "token",
+      "in": "header",
+      "description": "A valid token is required to access some resource"
+    }
+  },
+  "consumes": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json",
+    "image/png",
+    "image/jpeg",
+    "image/jpg"
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "description": "Sign in",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Field email,password is required"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop in response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "phoneNo": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "city": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "address": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "accessToken": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {},
+            "headers": {}
+          }
+        },
+        "summary": ""
+      }
+    },
+    "/register": {
+      "post": {
+        "description": "register or create new user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "fullname": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Please fill email, fullname, and password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "phoneNo": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "address": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "city": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "description": "Get all users or get user by id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "phoneNo": {
+                        "type": "string"
+                      },
+                      "address": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "Transactions": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "Photos": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "Notifications": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "Products": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": ""
+      },
+      "post": {
+        "description": "create a new user (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "fullname": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Field email,fullname,password is required"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "phoneNo": {
+                        "type": "string"
+                      },
+                      "address": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update user by id (with partial field)",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "email"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "fullname"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "password"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "phoneNo"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "city"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "address"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ],
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "phoneNo": {
+                        "type": "string"
+                      },
+                      "address": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update user by id (with partial field)",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "email"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "fullname"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "password"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "phoneNo"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "city"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "address"
+          },
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "files"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "fullname": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "phoneNo": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "address": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to delete user by id"
+      }
+    },
+    "/notifications/{id}": {
+      "get": {
+        "description": "to get all notifications or by id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "data": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "read": {
+                        "type": "boolean"
+                      },
+                      "User": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "fullname": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "phoneNo": {
+                            "type": "string"
+                          },
+                          "address": {
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "to create a new notifications (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "integer"
+                }
+              }
+            },
+            "description": "Please fill data and userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "phoneNo": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ],
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update notification by id",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string"
+                },
+                "read": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill read, and data fields (partially)"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update notification by id",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string"
+                },
+                "read": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill read, and data fields (partially)"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to delete notification by id"
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "description": "get all category or by id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "_count": {
+                        "type": "object",
+                        "properties": {
+                          "Products": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "create new category (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Please fill name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update category by id (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Please fill name"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill name"
+          }
+        ],
+        "description": "update category by id (admin only)"
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to delete category by id (admin only)"
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ]
+    },
+    "/transactions/{id}": {
+      "get": {
+        "description": "to get all transactions of product, or by id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "productId": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "Product": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string"
+                          },
+                          "Photos": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "createdAt": {
+                                  "type": "string"
+                                },
+                                "productId": {
+                                  "type": "integer"
+                                },
+                                "storageId": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Users": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "accepted": {
+                              "type": "boolean"
+                            },
+                            "offeredPrice": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "User": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "phoneNo": {
+                                  "type": "string"
+                                },
+                                "fullname": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "city": {
+                                  "type": "string"
+                                },
+                                "address": {
+                                  "type": "string"
+                                },
+                                "Photos": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "createdAt": {
+                                        "type": "string"
+                                      },
+                                      "storageId": {
+                                        "type": "integer"
+                                      },
+                                      "userId": {
+                                        "type": "integer"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "to create a new transactions (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "integer"
+                }
+              }
+            },
+            "description": "Please fill productId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update transaction (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill status"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update transaction (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill status"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "delete transaction (admin only)"
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ]
+    },
+    "/products/{id}": {
+      "get": {
+        "description": "to get all products or by id",
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "take",
+            "description": "Specify item to take from db, depends on skipped (pagination)",
+            "minimum": 1,
+            "default": 10
+          },
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "skip",
+            "description": "Skip item from db query (pagination)",
+            "minimum": 0
+          },
+          {
+            "type": "string",
+            "in": "query",
+            "name": "orderBy",
+            "description": "Specify field to orderby by orderByDirection (sorting)"
+          },
+          {
+            "type": "string",
+            "in": "query",
+            "name": "orderByDirection",
+            "description": "Specify direction to orderby, asc and desc (sorting)",
+            "pattern": "^[asc|desc]$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "integer"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "User": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "phoneNo": {
+                            "type": "string"
+                          },
+                          "fullname": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "Photos": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "createdAt": {
+                                  "type": "string"
+                                },
+                                "storageId": {
+                                  "type": "integer"
+                                },
+                                "userId": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "Photos": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "productId": {
+                              "type": "integer"
+                            },
+                            "storageId": {
+                              "type": "integer"
+                            },
+                            "Storage": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "filename": {
+                                  "type": "string"
+                                },
+                                "size": {
+                                  "type": "integer"
+                                },
+                                "mimetype": {
+                                  "type": "string"
+                                },
+                                "createdAt": {
+                                  "type": "string"
+                                },
+                                "updatedAt": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Categories": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "categoryId": {
+                              "type": "integer"
+                            },
+                            "productId": {
+                              "type": "integer"
+                            },
+                            "Category": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "createdAt": {
+                                  "type": "string"
+                                },
+                                "updatedAt": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Transaction": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "productId": {
+                            "type": "integer"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string"
+                          },
+                          "Users": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "accepted": {
+                                  "type": "boolean"
+                                },
+                                "offeredPrice": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                },
+                                "User": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "phoneNo": {
+                                      "type": "string"
+                                    },
+                                    "fullname": {
+                                      "type": "string"
+                                    },
+                                    "email": {
+                                      "type": "string"
+                                    },
+                                    "city": {
+                                      "type": "string"
+                                    },
+                                    "address": {
+                                      "type": "string"
+                                    },
+                                    "Photos": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "createdAt": {
+                                            "type": "string"
+                                          },
+                                          "storageId": {
+                                            "type": "integer"
+                                          },
+                                          "userId": {
+                                            "type": "integer"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "createdAt": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "to create a new product",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "name",
+            "description": "Product name",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "type": "number",
+            "name": "price",
+            "description": "Product price",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "name": "categoryId",
+            "description": "Category id",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "description": "Product description",
+            "name": "description",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "status",
+            "description": "Product status (DRAFT or PUBLISH)"
+          },
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "files",
+            "description": "Product photos"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "integer"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "Photos": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "productId": {
+                              "type": "integer"
+                            },
+                            "storageId": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "integer"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to update product by id",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "name",
+            "description": "Product name"
+          },
+          {
+            "in": "formData",
+            "type": "number",
+            "name": "price",
+            "description": "Product price"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "status",
+            "description": "Product status (DRAFT or PUBLISH)"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "description",
+            "description": "Product description"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "name": "categories",
+            "description": "Category id"
+          },
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "files",
+            "description": "Product photos"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "integer"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to update product by id",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "name",
+            "description": "Product name"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "price",
+            "description": "Product price"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "status",
+            "description": "Product status (DRAFT or PUBLISH)"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "description",
+            "description": "Product description"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "categories",
+            "description": "Category id"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "name": "files",
+            "description": "Product photos"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to delete product by id"
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ]
+    },
+    "/storages/{id}": {
+      "get": {
+        "description": "to get all storage or by id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "filename": {
+                        "type": "string"
+                      },
+                      "size": {
+                        "type": "integer"
+                      },
+                      "mimetype": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "to create a new storage (admin only)",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "files",
+            "description": "Photo to upload"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "mimetype": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to update storage by id",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "files",
+            "description": "Photo to change"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to update storage by id",
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "file",
+            "description": "Photo to change",
+            "name": "files"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to delete storage by id"
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ]
+    },
+    "/storages/{id}/preview": {
+      "get": {
+        "description": "to preview storage by id or filename",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            },
+            "examples": {},
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Preview content-type"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "By id or filename"
+        }
+      ]
+    },
+    "/bids/{id}": {
+      "post": {
+        "description": "to create a new bids",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "integer"
+                },
+                "offeredPrice": {
+                  "type": "integer"
+                }
+              }
+            },
+            "description": "Please fill productId, and offeredPrice"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "productId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "productId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update a bids by product id",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "offeredPrice": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill offeredPrice, description (partially)"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "productId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "update a bids by product id",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "offeredPrice": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Fill offeredPrice, description (partially)"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "productId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "to delete bids by id"
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "description": "Fill to replace {id}",
+          "allowEmptyValue": true
+        }
+      ]
+    },
+    "/bids/accept": {
+      "post": {
+        "description": "Accept bids",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "integer"
+                },
+                "userId": {
+                  "type": "integer"
+                }
+              }
+            },
+            "description": "Please fill productId, and userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All response to be expected 200, including error and success. Error can be determined by error prop on response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "productId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "token": []
+    }
+  ]
+}

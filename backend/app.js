@@ -1,6 +1,9 @@
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = __dirname;
+}
+
 // load environment variables from .env file
 if (!process.env.LOADED_ENV) {
-  process.env.ROOT_PATH = __dirname;
   require('dotenv').config({ path: process.env.ROOT_PATH + '/.env' });
   process.env.APP_NAME = process.env.APP_NAME ? process.env.APP_NAME : 'SecondHand Kel5';
 }
@@ -9,12 +12,15 @@ if (!process.env.LOADED_ENV) {
 var express = require('express');
 var cors = require('cors');
 var path = require('path');
-var middlewares = require(path.join(process.env.ROOT_PATH, './middlewares'));
+var middlewares = require(path.join(process.env.ROOT_PATH, 'middlewares'));
 var swaggerUi = require('swagger-ui-express');
-var swaggerFile = require(path.join(process.env.ROOT_PATH, '/swagger-output.json'));
+var swaggerFileName = process.env.NODE_ENV === 'production'
+  ? 'swagger-output-prod.json'
+  : 'swagger-output-dev.json';
+var swaggerFile = require(path.join(process.env.ROOT_PATH, swaggerFileName));
 
-var webRouter = require(path.join(process.env.ROOT_PATH, './routes/web'));
-var apiRouter = require(path.join(process.env.ROOT_PATH, './routes/api'));
+var webRouter = require(path.join(process.env.ROOT_PATH, 'routes/web'));
+var apiRouter = require(path.join(process.env.ROOT_PATH, 'routes/api'));
 
 var app = express();
 
