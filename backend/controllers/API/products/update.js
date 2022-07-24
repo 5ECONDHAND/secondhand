@@ -124,7 +124,7 @@ async function controller(req, res, next) {
       dataPayload.Photos.create.push({
         Storage: {
           create: {
-            filename: req.files[i].filename,
+            filename: req.files[i].filename || req.files[i].key,
             mimetype: req.files[i].mimetype,
             size: req.files[i].size
           }

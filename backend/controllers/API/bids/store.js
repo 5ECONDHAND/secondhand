@@ -46,6 +46,82 @@ async function controller(req, res, next){
     });
   }
 
+  const userData = await prisma.user.findFirst({
+    where: {
+      id: req.userId
+    },
+    select: {
+      city: true,
+      phoneNo: true,
+      address: true
+    }
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
+
+  if (userData && userData.error) {
+    return res.json(userData);
+  }
+
+  if (!userData) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
+  if (
+    !userData.address
+    || !userData.phoneNo
+    || !userData.city
+  ) {
+    return res.json({
+      error: true,
+      message: 'Please complete your profile first',
+      data: [],
+    })
+  }
+
+  const productData = await prisma.product.findFirst({
+    where: {
+      id: productId
+    },
+    include: {
+      Photos: true
+    }
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
+
+  if (productData && productData.error) {
+    return res.json(productData);
+  }
+
+  if (!productData) {
+    return res.json({
+      error: true,
+      message: 'Product not found',
+      data: [],
+    });
+  }
+
+  if (req.userId == productData.userId) {
+    return res.json({
+      error: true,
+      message: 'You cannot bid on your own product',
+      data: [],
+    });
+  }
+
   const data = await prisma.transaction.update({
     where: {
       productId,
@@ -58,13 +134,6 @@ async function controller(req, res, next){
         create: {
           offeredPrice,
           userId: req.userId,
-        }
-      }
-    },
-    include: {
-      Product: {
-        include: {
-          Photos: true
         }
       }
     }
@@ -88,20 +157,27 @@ async function controller(req, res, next){
     });
   }
 
+  const priceFormatReal = productData.price
+    ? productData.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
+  const priceFormatOffer = offeredPrice
+    ? offeredPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
   const notifData = {
-    title: 'Penawaran Produk',
-    productName: data.Product.name,
-    productId: data.Product.id,
-    realPrice: data.Product.price,
-    offeredPrice: offeredPrice,
-    imageId: data.Product.Photos && data.Product.Photos[0] && data.Product.Photos[0].id,
+    title: 'Produk ditawar',
+    subTitle: productData.name,
+    body: 'Rp. ' + priceFormatReal,
+    subBody: 'Ditawar Rp. ' + priceFormatOffer,
+    imageId: productData.Photos && productData.Photos[0] && productData.Photos[0].id,
     bidder: req.userId
   }
 
-  const notification = await prisma.notification.create({
+  const notificationSeller = await prisma.notification.create({
     data: {
       data: JSON.stringify(notifData),
-      userId: data.Product.userId,
+      userId: productData.userId,
     }
   }).catch(err => {
     return{
@@ -111,8 +187,29 @@ async function controller(req, res, next){
     }
   });
 
-  if(notification && notification.error){
-    return res.json(notification)
+  if(notificationSeller && notificationSeller.error){
+    return res.json(notificationSeller)
+  }
+
+  delete notifData.bidder;
+  notifData.title = 'Berhasil menawar produk';
+  notifData.seller = productData.userId;
+
+  const notificationBuyer = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId: req.userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notificationBuyer && notificationBuyer.error){
+    return res.json(notificationBuyer)
   }
 
   res.json({

@@ -52,9 +52,8 @@ async function controller(req, res, next) {
     where: {
       id: productId
     },
-    select: {
-      userId: true,
-      id: true,
+    include: {
+      Photos: true
     }
   }).catch((err) => {
     return {
@@ -85,8 +84,8 @@ async function controller(req, res, next) {
   }
 
   const pivotTable = await prisma.transactionsOnUsers.findFirst({
-    'where': {
-      'userId': userId
+    where: {
+      userId
     }
   }).catch((err) => {
     return {
@@ -114,14 +113,24 @@ async function controller(req, res, next) {
     },
     data: {
       Users: {
-        updateMany: {
-          where: {
-            userId
+        updateMany: [
+          {
+            where: {
+              accepted: true
+            },
+            data: {
+              accepted: false
+            }
           },
-          data: {
-            accepted: true
+          {
+            where: {
+              userId
+            },
+            data: {
+              accepted: true
+            }
           }
-        }
+        ]
       },
       status: 'ACCEPTED'
     }
@@ -132,6 +141,61 @@ async function controller(req, res, next) {
       data: [],
     };
   });
+
+  const priceFormatReal = productData.price
+    ? productData.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
+  const priceFormatOffer = pivotTable.offeredPrice
+    ? pivotTable.offeredPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
+  const notifData = {
+    title: 'Penawaran diterima',
+    subTitle: productData.name,
+    body: 'Rp. ' + priceFormatReal,
+    subBody: 'Ditawar Rp. ' + priceFormatOffer,
+    imageId: productData.Photos && productData.Photos[0] && productData.Photos[0].id,
+    seller: productData.userId
+  }
+
+  const notificationBuyer = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notificationBuyer && notificationBuyer.error){
+    return res.json(notificationBuyer)
+  }
+
+  delete notifData.seller;
+  notifData.title = 'Berhasil menerima penawaran';
+  notifData.bidder = userId;
+
+  const notificationSeller = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId: productData.userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notificationSeller && notificationSeller.error){
+    return res.json(notificationSeller)
+  }
 
   res.json({
     error: false,

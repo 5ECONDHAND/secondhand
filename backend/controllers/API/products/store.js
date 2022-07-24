@@ -39,6 +39,47 @@ async function controller(req, res, next){
     });
   }
 
+  const userData = await prisma.user.findFirst({
+    where: {
+      id: req.userId
+    },
+    select: {
+      city: true,
+      phoneNo: true,
+      address: true
+    }
+  }).catch((err) => {
+    return {
+      error: true,
+      message: err.message,
+      data: [],
+    };
+  });
+
+  if (userData && userData.error) {
+    return res.json(userData);
+  }
+
+  if (!userData) {
+    return res.json({
+      error: true,
+      message: 'Unauthorized access',
+      data: [],
+    })
+  }
+
+  if (
+    !userData.address
+    || !userData.phoneNo
+    || !userData.city
+  ) {
+    return res.json({
+      error: true,
+      message: 'Please complete your profile first',
+      data: [],
+    })
+  }
+
   const countProduct = await prisma.product.count({
     where: {
       userId: req.userId,
@@ -98,7 +139,7 @@ async function controller(req, res, next){
       dataPayload.Photos.create.push({
         Storage: {
           create: {
-            filename: req.files[i].filename,
+            filename: req.files[i].filename || req.files[i].key,
             mimetype: req.files[i].mimetype,
             size: req.files[i].size
           }
@@ -108,7 +149,10 @@ async function controller(req, res, next){
   }
 
   const data = await prisma.product.create({
-    data: dataPayload
+    data: dataPayload,
+    include: {
+      Photos: true
+    }
   }).catch(err => {
     return{
       error: true,
@@ -119,6 +163,36 @@ async function controller(req, res, next){
 
   if(data && data.error){
     return res.json(data)
+  }
+
+  const priceFormat = data.price
+    ? data.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+    : '0';
+
+  const notifData = {
+    title: 'Produk dibuat',
+    subTitle: data.name,
+    body: 'Rp. ' + priceFormat,
+    subBody: '',
+    imageId: data.Photos && data.Photos[0] && data.Photos[0].id,
+    seller: data.userId
+  }
+
+  const notificationSeller = await prisma.notification.create({
+    data: {
+      data: JSON.stringify(notifData),
+      userId: req.userId,
+    }
+  }).catch(err => {
+    return{
+      error: true,
+      message: err.message,
+      data: [],
+    }
+  });
+
+  if(notificationSeller && notificationSeller.error){
+    return res.json(notificationSeller)
   }
 
   res.json({

@@ -1,4 +1,4 @@
-name: Deployment Heroku DEV STAGE
+name: Deployment Heroku PROD STAGE
 
 env:
   CI: false
@@ -6,7 +6,7 @@ env:
 on:
   pull_request:
     branches:
-      - develop
+      - main
     types: [opened, synchronize, reopened, closed]
 
 jobs:
@@ -39,14 +39,14 @@ jobs:
           git config --global user.email 'github.action@users.noreply.github.com'
           openssl rand -hex 12 > ./backend/public/commit-sha.txt
           git add .
-          git commit -am "Automated commit (base-dev)"
+          git commit -am "Automated commit (base-prod)"
           git push
       - name: deploy from base_ref
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{secrets.DEV_HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.DEV_HEROKU_APP_NAME}} #Must be unique in Heroku
-          heroku_email: ${{secrets.DEV_HEROKU_EMAIL}}
+          heroku_api_key: ${{secrets.PROD_HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.PROD_HEROKU_APP_NAME}} #Must be unique in Heroku
+          heroku_email: ${{secrets.PROD_HEROKU_EMAIL}}
           branch: ${{ format('origin/{0}', github.base_ref) }}
           appdir: backend
   deploy_head:
@@ -78,13 +78,13 @@ jobs:
           git config --global user.email 'github.action@users.noreply.github.com'
           openssl rand -hex 12 > ./backend/public/commit-sha.txt
           git add .
-          git commit -am "Automated commit (head-dev)"
+          git commit -am "Automated commit (head-prod)"
           git push
       - name: deploy from head_ref
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{secrets.DEV_HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.DEV_HEROKU_APP_NAME}} #Must be unique in Heroku
-          heroku_email: ${{secrets.DEV_HEROKU_EMAIL}}
+          heroku_api_key: ${{secrets.PROD_HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.PROD_HEROKU_APP_NAME}} #Must be unique in Heroku
+          heroku_email: ${{secrets.PROD_HEROKU_EMAIL}}
           branch: ${{ format('origin/{0}', github.head_ref) }}
           appdir: backend
