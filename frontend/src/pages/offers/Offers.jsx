@@ -1,26 +1,40 @@
 import { Container, Grid, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
-import Loader from '../../components/atoms/global/Loader'
-import { BackButton, Navbar, ProfileCard } from '../../components/molecules/global'
+import { useParams } from 'react-router-dom'
+import { BackButton, ProfileCard } from '../../components/molecules/global'
 import OfferCard from '../../components/molecules/offers/OfferCard'
-import { selectUser } from '../../redux/slices/userSlice'
+import {
+  useGetTransactionByIdQuery,
+  useGetTransactionsQuery,
+} from '../../redux/services/productApi'
+
 const Offers = () => {
-  const user = useSelector(selectUser)
+  const { id } = useParams()
+  const { data: transactionData } = useGetTransactionByIdQuery({ id })
+  const { data: transactionsData } = useGetTransactionsQuery()
+
   return (
     <>
-      <Loader />
-      <Navbar />
       <Container maxWidth="lg" sx={{ pt: { xs: '1rem', md: '2rem' }, pb: '1rem' }}>
         <BackButton />
         <Grid container spacing={2} sx={{ justifyContent: { xs: 'flex-start', md: 'center' } }}>
           <Grid item xs={12} sm={12} md={8}>
-            <ProfileCard sellerName={user?.fullname} sellerCity={user?.city} />
+            <ProfileCard
+              profile={transactionData?.data[0]?.Users[0]?.User}
+              sellerName={transactionData?.data[0]?.Users[0]?.User?.fullname}
+              sellerCity={transactionData?.data[0]?.Users[0]?.User?.city}
+              // profile={buyerData.state.user.User}
+              // sellerName={buyerData.state.user.User.fullname}
+              // sellerCity={buyerData.state.user.User.city}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={8}>
             <Typography variant="body1" sx={{ fontWeight: 500, mb: 2 }}>
               Daftar Produkmu yang Ditawar
             </Typography>
-            <OfferCard />
+            <OfferCard
+              productData={transactionData?.data[0]?.Product}
+              buyerData={transactionData?.data[0]?.Users[0]}
+            />
           </Grid>
         </Grid>
       </Container>

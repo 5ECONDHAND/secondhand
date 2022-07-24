@@ -1,7 +1,6 @@
-import Loader from '../../components/atoms/global/Loader'
 import { Box, Container, Grid, Paper, Typography } from '@mui/material'
 import { FiFrown } from 'react-icons/fi'
-import { Navbar, ProductCardMini } from '../../components/molecules/global'
+import { ProductCardMini } from '../../components/molecules/global'
 import { useSelector } from 'react-redux'
 import { selectProductWishlist } from '../../redux/slices/productSlice'
 
@@ -10,8 +9,6 @@ const Wishlist = () => {
 
   return (
     <>
-      <Loader />
-      <Navbar />
       <Container maxWidth="lg" sx={{ pt: '2rem', pb: '1rem' }}>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 4 }}>
           Wishlist Saya

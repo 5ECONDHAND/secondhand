@@ -12,8 +12,9 @@ import {
   Wishlist,
 } from '../pages'
 import { useSelector } from 'react-redux'
-import ScrollToTop from '../components/atoms/global/ScrollToTop'
+// import ScrollToTop from '../components/atoms/global/ScrollToTop'
 import { selectUser } from '../redux/slices/userSlice'
+import { Layout } from '../components/templates'
 
 const Router = () => {
   const authenticated = useSelector(selectUser)
@@ -45,35 +46,37 @@ const Router = () => {
   return (
     <>
       <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/product/:productId" element={<Product />} />
-          <Route element={<AuthRoute isAllowed={!!authenticated} />}>
-            <Route path="/login" element={<Auth />} />
-            <Route path="/register" element={<Auth />} />
-          </Route>
-          <Route element={<ProtectedRoute isAllowed={authenticated} redirectPath="/login" />}>
-            <Route path="/edit/:userId" element={<Edit />} />
-            <Route path="/sales" element={<Sales />} />
-            <Route
-              element={
-                <ProtectedRoute
-                  isAllowed={isAuthorized(authenticated ? authenticated : { data: null })}
-                  redirectPath={`/edit/${authenticated?.id}`}
-                />
-              }
-            >
-              <Route path="/preview/:productId" element={<ProductPreview />} />
-              <Route path="/add" element={<AddProduct />} />
-              <Route path="/add/:productId" element={<AddProduct />} />
-              <Route path="/product/edit/:productId" element={<AddProduct />} />
-              <Route path="/offers/:id" element={<Offers />} />
-              <Route path="/wishlist" element={<Wishlist />} />
+        {/* <ScrollToTop /> */}
+        <Layout>
+          <Routes>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/product/:productId" element={<Product />} />
+            <Route element={<AuthRoute isAllowed={!!authenticated} />}>
+              <Route path="/login" element={<Auth />} />
+              <Route path="/register" element={<Auth />} />
             </Route>
-          </Route>
-        </Routes>
+            <Route element={<ProtectedRoute isAllowed={authenticated} redirectPath="/login" />}>
+              <Route path="/edit/:userId" element={<Edit />} />
+              <Route path="/sales" element={<Sales />} />
+              <Route
+                element={
+                  <ProtectedRoute
+                    isAllowed={isAuthorized(authenticated ? authenticated : { data: null })}
+                    redirectPath={`/edit/${authenticated?.id}`}
+                  />
+                }
+              >
+                <Route path="/preview/:productId" element={<ProductPreview />} />
+                <Route path="/add" element={<AddProduct />} />
+                <Route path="/add/:productId" element={<AddProduct />} />
+                <Route path="/product/edit/:productId" element={<AddProduct />} />
+                <Route path="/offers/:id" element={<Offers />} />
+                <Route path="/wishlist" element={<Wishlist />} />
+              </Route>
+            </Route>
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </>
   )

@@ -6,13 +6,14 @@ export const productApi = createApi({
     baseUrl: 'https://febesh5-dev.herokuapp.com/api',
   }),
   refetchOnMountOrArgChange: 15,
-  tagTypes: ['PutProduct', 'PostProduct', 'DeleteProduct'],
+  tagTypes: ['Products'],
   endpoints: (builder) => ({
-    // queries
+    // get all products (universal)
     getData: builder.query({
-      query: () => '/products',
+      query: (count) => `/products?${count}`,
+      providesTags: ['Products'],
     }),
-    // products seller
+    // get all products (seller)
     getProductsSeller: builder.query({
       query: (token) => ({
         url: '/products',
@@ -21,7 +22,9 @@ export const productApi = createApi({
           Authorization: 'Bearer ' + token,
         },
       }),
+      providesTags: ['Products'],
     }),
+    // get product by id
     getDataById: builder.query({
       query: ({ id, token }) => ({
         url: `/products/${id}`,
@@ -37,7 +40,7 @@ export const productApi = createApi({
         url: `/products/${id}`,
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
         body: {
@@ -48,7 +51,7 @@ export const productApi = createApi({
           files: files,
         },
       }),
-      providesTags: ['PutProduct'],
+      invalidatesTags: ['Products'],
     }),
     // store product
     postProduct: builder.mutation({
@@ -67,7 +70,7 @@ export const productApi = createApi({
           files: files,
         },
       }),
-      providesTags: ['PostProduct'],
+      invalidatesTags: ['Products'],
     }),
     // delete product
     deleteProduct: builder.mutation({
@@ -78,7 +81,41 @@ export const productApi = createApi({
           Authorization: `Bearer ${token}`,
         },
       }),
-      providesTags: ['DeleteProduct'],
+      invalidatesTags: ['Products'],
+    }),
+    // get notifications
+    getNotifications: builder.query({
+      query: (token) => ({
+        url: '/notifications',
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }),
+    }),
+    // get notification by id
+    getNotificationById: builder.query({
+      query: ({ id, token }) => ({
+        url: `/notifications/${id}`,
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }),
+    }),
+    // get transactions
+    getTransactions: builder.query({
+      query: () => ({
+        url: '/transactions',
+        method: 'GET',
+      }),
+    }),
+    // get transaction by id
+    getTransactionById: builder.query({
+      query: ({ id }) => ({
+        url: `/transactions/${id}`,
+        method: 'GET',
+      }),
     }),
   }),
 })
@@ -87,8 +124,11 @@ export const {
   useGetDataQuery,
   useGetProductsSellerQuery,
   useGetDataByIdQuery,
-  UseSearchMutation,
+  useGetNotificationsQuery,
+  useGetNotificationByIdQuery,
   usePutProductMutation,
   usePostProductMutation,
   useDeleteProductMutation,
+  useGetTransactionsQuery,
+  useGetTransactionByIdQuery,
 } = productApi

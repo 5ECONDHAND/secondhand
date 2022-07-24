@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.0956cf5a.css",
-    "main.js": "/static/js/main.cfa8a6ff.js",
+    "main.js": "/static/js/main.3f4b08d8.js",
     "static/js/787.2b3c71f0.chunk.js": "/static/js/787.2b3c71f0.chunk.js",
     "static/media/login-splash.webp": "/static/media/login-splash.c4ff8c75fed6e1a1420f.webp",
     "static/media/banner-image.png": "/static/media/banner-image.d67c39a860098a6cd6a1.png",
@@ -18,15 +18,16 @@
     "static/media/poppins-latin-ext-400-normal.woff2": "/static/media/poppins-latin-ext-400-normal.4f38b4331448d2313adc.woff2",
     "static/media/poppins-latin-ext-500-normal.woff2": "/static/media/poppins-latin-ext-500-normal.b59bcdf2f050e663ca29.woff2",
     "static/media/poppins-latin-ext-700-normal.woff2": "/static/media/poppins-latin-ext-700-normal.63d2a69665d58b22ceea.woff2",
+    "static/media/logo.svg": "/static/media/logo.e6c77da43224c73ba4a79506e1ebc382.svg",
     "static/media/carouselButtonLeft.svg": "/static/media/carouselButtonLeft.f9f0bbd0e4407f06aeb3.svg",
     "static/media/carouselButtonRight.svg": "/static/media/carouselButtonRight.bfbc9dab9bda33ca2885.svg",
     "index.html": "/index.html",
     "main.0956cf5a.css.map": "/static/css/main.0956cf5a.css.map",
-    "main.cfa8a6ff.js.map": "/static/js/main.cfa8a6ff.js.map",
+    "main.3f4b08d8.js.map": "/static/js/main.3f4b08d8.js.map",
     "787.2b3c71f0.chunk.js.map": "/static/js/787.2b3c71f0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0956cf5a.css",
-    "static/js/main.cfa8a6ff.js"
+    "static/js/main.3f4b08d8.js"
   ]
 }

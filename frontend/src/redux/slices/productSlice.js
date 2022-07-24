@@ -6,6 +6,7 @@ const initialState = {
   productActive: null,
   productPreview: null,
   productNotifications: [],
+  productNotifs: [],
   productSearch: null,
   productWishlist: [],
 }
@@ -32,6 +33,12 @@ export const productSlice = createSlice({
     setProductNotifications: (state, action) => {
       state.productNotifications = action.payload
     },
+    setProductNotifs: (state, action) => {
+      state.productNotifs = action.payload
+    },
+    resetProductNotifs: (state) => {
+      state.productNotifs = initialState.productNotifs
+    },
     setProductSearch: (state, action) => {
       state.productSearch = action.payload
     },
@@ -55,6 +62,7 @@ export const productSlice = createSlice({
 export const selectProduct = (state) => state.persist.products.products
 export const selectProductPreview = (state) => state.persist.products.productPreview
 export const selectProductNotifications = (state) => state.persist.products.productNotifications
+export const selectProductNotifs = (state) => state.persist.products.productNotifs
 export const selectProductSearch = (state) => state.persist.products.productSearch
 export const selectProductActive = (state) => state.persist.products.productActive
 export const selectProductWishlist = (state) => state.persist.products.productWishlist
