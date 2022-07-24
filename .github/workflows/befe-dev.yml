@@ -2,6 +2,10 @@ name: Deployment Heroku DEV STAGE
 
 env:
   CI: false
+  REACT_APP_DEV: true
+  REACT_APP_PROD: false
+  REACT_APP_DEV_URL: https://febesh5-dev.herokuapp.com/api
+  REACT_APP_PROD_URL: https://febesh5-prod.herokuapp.com/api
   
 on:
   pull_request:
