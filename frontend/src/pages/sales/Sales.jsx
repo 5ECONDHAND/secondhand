@@ -8,38 +8,51 @@ import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
-import { useGetProductsSellerQuery } from '../../redux/services/productApi'
+import { useGetProductsSellerQuery, useGetTransactionsQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 import { isProductMaxed } from '../../utils/functions'
 import { useGetUserQuery } from '../../redux/services/userApi'
 
 const Sales = () => {
+  // hook calls
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  // local states
+  const [displayData, setDisplayData] = useState()
+  const [dataCategory, setDataCategory] = useState('Semua Produk')
+  // store states
   const userActive = useSelector(selectUser)
-  const { data: productSellerData, isSuccess: isProductSellerSuccess } = useGetProductsSellerQuery(
-    userActive.accessToken,
-    { refetchOnMountOrArgChange: true }
-  )
+  const products = useSelector(selectProduct)
+  // queries
+  const {
+    data: productSellerData,
+    isSuccess: isProductSellerSuccess,
+    refetch: refetchProductSeller,
+  } = useGetProductsSellerQuery(userActive.accessToken, { refetchOnMountOrArgChange: true })
+
   const { data: userData } = useGetUserQuery(userActive.accessToken, {
     refetchOnMountOrArgChange: true,
   })
-  const products = useSelector(selectProduct)
-  const [displayData, setDisplayData] = useState()
-  const [dataCategory, setDataCategory] = useState('Semua Produk')
-  const { enqueueSnackbar } = useSnackbar()
 
+  const { data: transactionData, refetch: refetchTransaction } = useGetTransactionsQuery()
+
+  // local functions
   const dataSwitch = (dataCategory) => {
     switch (dataCategory) {
       case 'Semua Produk':
-        setDisplayData(products?.filter((item) => item.User?.fullname === userActive?.fullname))
+        setDisplayData(
+          productSellerData?.data?.filter((item) => item.User?.fullname === userActive?.fullname)
+        )
         break
       case 'Diminati':
         setDisplayData(
           products?.filter(
             (item) =>
-              item.User.fullname === userActive.fullname && item.Transaction.status === 'DECIDING' && item.Transaction.Users.length > 0
+              item.User?.fullname === userActive.fullname &&
+              item.Transaction?.status === 'DECIDING' &&
+              item.Transaction?.Users?.length > 0
           )
         )
         break
@@ -58,8 +71,6 @@ const Sales = () => {
     }
   }
 
-  console.log(displayData)
-
   const checkRender = (displayData) => {
     if (displayData.length === 0) {
       return <Empty dataCategory={dataCategory} />
@@ -76,32 +87,21 @@ const Sales = () => {
       } else if (dataCategory === 'Diminati') {
         // go to offer page
         const handleOffer = (item) => {
-          dispatch(productActions.setProductActive(displayData[0]))
-          navigate(`/offers/${displayData[0].id}`, { state: { user: item } })
+          // dispatch(productActions.setProductActive(displayData[0]))
+          // navigate(`/offers/${item?.Transaction?.Users?.id}`, { state: { user: item } })
+          navigate(`/offers/${item?.id}`, { state: { user: item } })
         }
-        return displayData[0]?.Transaction?.Users.map((item, index) => (
+
+        return displayData.map((item, index) => (
           <Grid item xs={12} key={index}>
             <Box onClick={() => handleOffer(item)}>
-              <OfferCardMini product={displayData} user={item} />
+              <OfferCardMini product={item} user={userActive} />
             </Box>
           </Grid>
         ))
       }
     }
   }
-
-  useEffect(() => {
-    dispatch(productActions.clearProducts())
-    if (isProductSellerSuccess) {
-      dispatch(productActions.setProducts(productSellerData?.data))
-    }
-  }, [products, productSellerData, isProductSellerSuccess])
-
-  useEffect(() => {
-    if (products) {
-      dataSwitch(dataCategory)
-    }
-  }, [dataCategory, products])
 
   const sellerProductCount = products?.filter(
     (item) => item.User.fullname === userActive.fullname
@@ -119,6 +119,22 @@ const Sales = () => {
     }
   }
 
+  // local effects
+  useEffect(() => {
+    dispatch(productActions.clearProducts())
+    if (isProductSellerSuccess) {
+      dispatch(productActions.setProducts(productSellerData?.data))
+    }
+  }, [products, productSellerData, isProductSellerSuccess])
+
+  useEffect(() => {
+    if (products) {
+      dataSwitch(dataCategory)
+      refetchProductSeller()
+    }
+  }, [dataCategory, products])
+
+  // local render
   const ProductAddArea = () => {
     return (
       <>

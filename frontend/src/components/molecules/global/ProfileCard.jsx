@@ -1,4 +1,5 @@
-import { Avatar, Button, Paper, Stack, Typography } from '@mui/material'
+import { useState } from 'react'
+import { Avatar, Box, Button, Paper, Skeleton, Stack, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectUser } from '../../../redux/slices/userSlice'
@@ -7,8 +8,13 @@ const ProfileCard = (props) => {
   const { display, sellerName, sellerCity, profile } = props
   const navigate = useNavigate()
   const userActive = useSelector(selectUser)
-  // console.log(profile)
+  const [loading, setLoading] = useState(true)
   const image_storage_url = `https://febesh5-dev.herokuapp.com/api/storages/${profile?.Photos[0]?.storageId}/preview`
+
+  const loadImage = () => {
+    setLoading(false)
+  }
+
   return (
     <>
       <Paper
@@ -26,11 +32,41 @@ const ProfileCard = (props) => {
           padding={2}
         >
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar
-              alt="A"
-              src={image_storage_url}
-              sx={{ width: 56, height: 56, borderRadius: '12px' }}
-            />
+            <Box>
+              {profile?.Photos.length !== 0 ? (
+                <>
+                  <Avatar
+                    alt="A"
+                    onLoad={loadImage}
+                    src={image_storage_url}
+                    sx={{
+                      display: loading ? 'none' : 'block',
+                      width: 56,
+                      height: 56,
+                      borderRadius: '12px',
+                    }}
+                  />
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{
+                      display: loading ? 'block' : 'none',
+                      width: 56,
+                      height: 56,
+                      borderRadius: '12px',
+                    }}
+                  />
+                </>
+              ) : (
+                <Avatar
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: '12px',
+                  }}
+                />
+              )}
+            </Box>
+
             <Stack direction="column">
               <Typography variant="body1" sx={{ fontWeight: '500' }}>
                 {sellerName ? sellerName : 'sellerName'}

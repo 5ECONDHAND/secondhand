@@ -9,5 +9,7 @@ export {
   usePutProductMutation,
   usePostProductMutation,
   useDeleteProductMutation,
+  useGetTransactionsQuery,
+  useGetTransactionByIdQuery,
 } from './productApi'
 export { userApi, useEditProfileMutation, useGetUserByIdQuery } from './userApi'

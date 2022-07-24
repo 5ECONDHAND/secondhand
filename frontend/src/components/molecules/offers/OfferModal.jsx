@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack'
 import { FiX } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { toRupiah } from '../../../utils/functions'
-import dummy from '../../../assets/images/dummy-image.jpg'
+// import dummy from '../../../assets/images/dummy-image.jpg'
 
 const ModalStyle = {
   position: 'absolute',
@@ -30,7 +30,7 @@ const ModalStyle = {
 }
 
 const ProductMiniCard = (props) => {
-  const { product, buyer } = props;
+  const { product, buyer } = props
   return (
     <>
       <Paper
@@ -52,13 +52,17 @@ const ProductMiniCard = (props) => {
           padding={2}
           pb={0}
         >
-          <Avatar alt="" src={''} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+          <Avatar
+            alt=""
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${buyer?.user?.User?.Photos[0]?.storageId}/preview`}
+            sx={{ width: 56, height: 56, borderRadius: '12px' }}
+          />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500' }}>
-              {buyer.user.User.fullname}
+              {buyer?.User?.fullname}
             </Typography>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
-              {buyer.user.User.city}
+              {buyer?.User?.city}
             </Typography>
           </Stack>
         </Stack>
@@ -69,7 +73,11 @@ const ProductMiniCard = (props) => {
           spacing={2}
           padding={2}
         >
-          <Avatar alt="" src={`https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`} sx={{ width: 56, height: 56, borderRadius: '12px' }} />
+          <Avatar
+            alt=""
+            src={`https://febesh5-dev.herokuapp.com/api/storages/${product?.Photos[0]?.storageId}/preview`}
+            sx={{ width: 56, height: 56, borderRadius: '12px' }}
+          />
           <Stack direction="column">
             <Typography variant="body1" sx={{ fontWeight: '500', mb: 0.5 }}>
               {product.name}
@@ -77,7 +85,7 @@ const ProductMiniCard = (props) => {
             <Typography variant="body2" sx={{ textDecoration: 'line-through', mb: 0.5 }}>
               {toRupiah(product.price)}
             </Typography>
-            <Typography variant="body2">Ditawar {toRupiah(buyer.user.offeredPrice)}</Typography>
+            <Typography variant="body2">Ditawar {toRupiah(buyer?.offeredPrice)}</Typography>
           </Stack>
         </Stack>
       </Paper>
@@ -87,7 +95,6 @@ const ProductMiniCard = (props) => {
 
 const OfferInput = (props) => {
   const { handleClose, handleAccept, phoneNum } = props
-  console.log(phoneNum)
   const handleSubmit = (event) => {
     event.preventDefault()
     window.open(`https://wa.me/${phoneNum}`)
@@ -131,7 +138,6 @@ const OfferInput = (props) => {
 
 const OfferModal = (props) => {
   const { open, handleClose, handleAccept, productData, buyerData } = props
-
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -148,7 +154,11 @@ const OfferModal = (props) => {
           {/* top modal with data */}
           <ProductMiniCard product={productData} buyer={buyerData} />
           {/* bottom modal button*/}
-          <OfferInput handleClose={handleClose} handleAccept={handleAccept} phoneNum={buyerData.user.User.phoneNo} />
+          <OfferInput
+            handleClose={handleClose}
+            handleAccept={handleAccept}
+            phoneNum={buyerData?.User?.phoneNo}
+          />
         </Box>
       </Modal>
     </>

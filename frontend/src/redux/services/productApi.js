@@ -40,7 +40,7 @@ export const productApi = createApi({
         url: `/products/${id}`,
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
         body: {
@@ -103,6 +103,20 @@ export const productApi = createApi({
         },
       }),
     }),
+    // get transactions
+    getTransactions: builder.query({
+      query: () => ({
+        url: '/transactions',
+        method: 'GET',
+      }),
+    }),
+    // get transaction by id
+    getTransactionById: builder.query({
+      query: ({ id }) => ({
+        url: `/transactions/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
@@ -115,4 +129,6 @@ export const {
   usePutProductMutation,
   usePostProductMutation,
   useDeleteProductMutation,
+  useGetTransactionsQuery,
+  useGetTransactionByIdQuery,
 } = productApi

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   AppBar,
   Badge,
@@ -31,7 +31,7 @@ import {
 import logo from '../../../assets/svg/logo.svg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useGetDataQuery, useGetNotificationsQuery } from '../../../redux/services/productApi'
+import { useGetNotificationsQuery } from '../../../redux/services/productApi'
 import {
   authActions,
   productActions,
@@ -43,7 +43,6 @@ import axios from 'axios'
 import NavDrawer from './NavDrawer'
 import { useEffect } from 'react'
 import { useSnackbar } from 'notistack'
-import { toRupiah } from '../../../utils/functions'
 import { selectProductNotifs } from '../../../redux/slices/productSlice'
 
 // Local components
@@ -51,20 +50,14 @@ const SearchField = () => {
   const { pathname } = useLocation()
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
-  const { data: productData, isSuccess: isProductDataSuccess } = useGetDataQuery(
-    {},
-    { refetchOnMountOrArgChange: true }
-  )
 
   const handleSearch = async () => {
     if (search === '') {
       dispatch(productActions.setProductSearch(null))
-      dispatch(productActions.setProducts(productData?.data))
     } else {
       axios
         .get(`https://febesh5-dev.herokuapp.com/api/products?search=${search}`)
         .then((response) => {
-          // console.log({ error: false, message: 'Success', data: response.data.data })
           dispatch(productActions.setProductSearch(response?.data.data))
         })
         .catch((e) => console.log(e))
@@ -124,11 +117,16 @@ const NavbarRemake = () => {
   const [popMenuUser, setPopMenuUser] = useState(null)
   const openNotif = Boolean(popMenuNotif)
   const openUser = Boolean(popMenuUser)
-  // const [notifChange, setNotifChange] = useState(false)
   // store states
   const userActive = useSelector(selectUser)
   const productActive = useSelector(selectProductActive)
   const productNotifs = useSelector(selectProductNotifs)
+  // queries
+  const {
+    data: notifData,
+    isSuccess: isNotifDataSuccess,
+    refetch: refetchNotifData,
+  } = useGetNotificationsQuery(userActive?.accessToken, { refetchOnMountOrArgChange: true })
   // local functions
   const handleLogout = () => {
     dispatch(authActions.clearCredentials())
@@ -142,46 +140,13 @@ const NavbarRemake = () => {
     setPopMenuNotif(null)
     setPopMenuUser(null)
   }
-
-  const { data: notifData, isSuccess: isNotifDataSuccess } = useGetNotificationsQuery(
-    userActive?.accessToken,
-    { refetchOnMountOrArgChange: true }
-  )
-
-  const { data: productData, isSuccess: isProductDataSuccess } = useGetDataQuery(
-    {},
-    { refetchOnMountOrArgChange: true }
-  )
-
-  // const checkNotifs = () => {
-  //   if (productNotifs?.length > 0) {
-  //     for (const x of productNotifs) {
-  //       if (x?.id === notifData?.data?.id) {
-  //         setNotifChange(true)
-  //         return true
-  //       }
-  //     }
-  //   }
-  //   return false
-  // }
-
-  // useEffect(() => {
-  //   checkNotifs()
-  // }, [notifChange])
-
-  // useEffect(() => {
-  //   console.log('fired')
-  //   if (notifChange === true) {
-  //     setNotifChange(false)
-  //   }
-  // }, [notifChange])
-
+  // local effects
   useEffect(() => {
-    if (isNotifDataSuccess && isProductDataSuccess) {
+    refetchNotifData()
+    if (isNotifDataSuccess) {
       dispatch(productActions.setProductNotifs(notifData?.data))
       // console.log('Notif fetched', notifData?.data)
-      // console.log('notif state', JSON.parse(productNotifs[0]?.data))
-      // console.log('Products fetched', productData?.data)
+      // console.log('notif state', productNotifs)
     }
   }, [productNotifs, notifData, pathname])
 
@@ -300,71 +265,84 @@ const NavbarRemake = () => {
                     <MenuItem>
                       {notifData?.data?.length !== 0 ? (
                         <Stack direction="column" spacing={2}>
-                          {notifData?.data.map((item, index) => (
-                            <Grid
-                              key={index}
-                              container
-                              sx={{
-                                gap: '1rem',
-                                p: 1,
-                                ':hover': { backgroundColor: '#F2F2F2' },
-                                borderRadius: '12px',
-                              }}
-                              onClick={() => {
-                                navigate(`/product/${JSON.parse(item?.data)?.productId}`)
-                                handleCloseTooltip()
-                              }}
-                            >
-                              <Grid>
-                                <img
-                                  src={logo}
-                                  // src={`https://febesh5-dev.herokuapp.com/api/storages/${
-                                  //   JSON.parse(item?.data)?.productId ===
-                                  //   productData?.data[index]?.id
-                                  //     ? productData?.data[index]?.Photos[0].storageId
-                                  //     : null
-                                  // }/preview`}
-                                  // src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.data?.data[0]?.Photos[0]?.storageId}/preview`}
-                                  alt="product-img"
-                                  width="64px"
-                                  height="64px"
-                                  style={{ borderRadius: '0.5rem' }}
-                                />
-                              </Grid>
-                              <Grid>
-                                <Typography variant="body2" sx={{ color: 'gray' }}>
-                                  {JSON.parse(item?.data)?.title}
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                  {JSON.parse(item?.data)?.productName}
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                  {toRupiah(JSON.parse(item?.data)?.realPrice)}
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                  Ditawar {toRupiah(JSON.parse(item?.data)?.offeredPrice)}
-                                </Typography>
-                              </Grid>
-                              <Grid sx={{ marginLeft: 'auto' }}>
-                                <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                  <Typography variant="body2">
-                                    {new Date(item?.createdAt).toISOString().substring(0, 10)}
+                          {productNotifs
+                            ?.slice(0)
+                            .reverse()
+                            .map((item, index) => (
+                              <Grid
+                                key={index}
+                                container
+                                sx={{
+                                  gap: '1rem',
+                                  p: 1,
+                                  ':hover': { backgroundColor: '#F2F2F2' },
+                                  borderRadius: '12px',
+                                }}
+                                onClick={() => {
+                                  handleCloseTooltip()
+                                }}
+                              >
+                                <Grid>
+                                  <img
+                                    src={logo}
+                                    // src={`https://febesh5-dev.herokuapp.com/api/storages/${
+                                    //   JSON.parse(item?.data)?.productId ===
+                                    //   productData?.data[index]?.id
+                                    //     ? productData?.data[index]?.Photos[0].storageId
+                                    //     : null
+                                    // }/preview`}
+                                    // src={`https://febesh5-dev.herokuapp.com/api/storages/${item?.data?.data[0]?.Photos[0]?.storageId}/preview`}
+                                    alt="product-img"
+                                    width="64px"
+                                    height="64px"
+                                    style={{ borderRadius: '0.5rem' }}
+                                  />
+                                </Grid>
+                                <Grid>
+                                  <Typography variant="body2" sx={{ color: 'gray' }}>
+                                    {JSON.parse(item?.data)?.title}
                                   </Typography>
-                                  {item?.read === false ? (
-                                    <Box
-                                      sx={{
-                                        width: '8px',
-                                        height: '8px',
-                                        backgroundColor: 'red',
-                                        borderRadius: '100%',
-                                      }}
-                                    />
-                                  ) : null}
-                                </Box>
+                                  <Typography variant="subtitle1">
+                                    {JSON.parse(item?.data)?.subTitle}
+                                  </Typography>
+                                  {JSON.parse(item?.data)?.title ===
+                                    'Berhasil menerima penawaran' ||
+                                  JSON.parse(item?.data)?.title === 'Penawaran diterima' ? (
+                                    <Typography
+                                      variant="subtitle1"
+                                      sx={{ textDecoration: 'line-through' }}
+                                    >
+                                      {JSON.parse(item?.data)?.body}
+                                    </Typography>
+                                  ) : (
+                                    <Typography variant="subtitle1">
+                                      {JSON.parse(item?.data)?.body}
+                                    </Typography>
+                                  )}
+                                  <Typography variant="subtitle1">
+                                    {JSON.parse(item?.data)?.subBody}
+                                  </Typography>
+                                </Grid>
+                                <Grid sx={{ marginLeft: 'auto' }}>
+                                  <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <Typography variant="body2">
+                                      {new Date(item?.createdAt).toISOString().substring(0, 10)}
+                                    </Typography>
+                                    {item?.read === false ? (
+                                      <Box
+                                        sx={{
+                                          width: '8px',
+                                          height: '8px',
+                                          backgroundColor: 'red',
+                                          borderRadius: '100%',
+                                        }}
+                                      />
+                                    ) : null}
+                                  </Box>
+                                </Grid>
+                                <Divider />
                               </Grid>
-                              <Divider />
-                            </Grid>
-                          ))}
+                            ))}
                         </Stack>
                       ) : (
                         <Typography variant="subtitle2" sx={{ color: 'black' }}>

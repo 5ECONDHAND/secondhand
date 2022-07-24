@@ -48,32 +48,35 @@ const OfferStatusInput = (props) => {
     handleClose()
     switch (values) {
       case 'sold':
-        axios.post('https://febesh5-dev.herokuapp.com/api/bids/accept', {
-          productId: productData.id,
-          userId: buyerData.user.User.id
-        }, {
-          headers: {
-            Authorization: `Bearer ${userActive.accessToken}`
-          }
-        }).then(
-          fireAlert('Status produk berhasil diperbarui', 'success'),
-          navigate('/sales')
-        ).catch(e => console.log(e))
+        axios
+          .post(
+            'https://febesh5-dev.herokuapp.com/api/bids/accept',
+            {
+              productId: productData.id,
+              userId: buyerData?.User?.id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${userActive.accessToken}`,
+              },
+            }
+          )
+          .then(fireAlert('Status produk berhasil diperbarui', 'success'), navigate('/sales'))
+          .catch((e) => console.log(e))
         break
       case 'cancelled':
-        axios.delete(`https://febesh5-dev.herokuapp.com/api/bids/${productData.id}`, {
-          headers: {
-            Authorization: `Bearer ${userActive.accessToken}`
-          }
-        }).then(
-          fireAlert('Status produk berhasil diperbarui', 'success'),
-          navigate('/sales')
-        ).catch(e => console.log(e))
+        axios
+          .delete(`https://febesh5-dev.herokuapp.com/api/bids/${productData.id}`, {
+            headers: {
+              Authorization: `Bearer ${userActive.accessToken}`,
+            },
+          })
+          .then(fireAlert('Status produk berhasil diperbarui', 'success'), navigate('/sales'))
+          .catch((e) => console.log(e))
         break
       default:
-        break;
+        break
     }
-
 
     console.log('FORM VALUES', values)
   }
@@ -147,7 +150,11 @@ const OfferStatusModal = (props) => {
           <Typography variant="body1" sx={{ fontWeight: '500', mb: 2 }}>
             Perbarui status penjualan produkmu
           </Typography>
-          <OfferStatusInput handleClose={handleClose} productData={props.productData} buyerData={props.buyerData} />
+          <OfferStatusInput
+            handleClose={handleClose}
+            productData={props.productData}
+            buyerData={props.buyerData}
+          />
         </Box>
       </Modal>
     </>

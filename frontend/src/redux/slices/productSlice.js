@@ -35,7 +35,6 @@ export const productSlice = createSlice({
     },
     setProductNotifs: (state, action) => {
       state.productNotifs = action.payload
-      // state.productNotifs = [...state.productNotifs, action.payload]
     },
     resetProductNotifs: (state) => {
       state.productNotifs = initialState.productNotifs

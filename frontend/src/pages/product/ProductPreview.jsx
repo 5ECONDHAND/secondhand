@@ -42,6 +42,7 @@ const ProductPreview = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <ProfileCard
+                    profile={previewProduct?.data[0]?.User}
                     sellerName={previewProduct?.data[0]?.User.fullname}
                     sellerCity={previewProduct?.data[0]?.User.city}
                   />

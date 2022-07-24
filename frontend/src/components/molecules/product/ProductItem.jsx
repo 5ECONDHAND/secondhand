@@ -260,25 +260,27 @@ const ProductItem = ({ product, type }) => {
                 </>
               ) : (
                 <>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disableElevation
-                    sx={{
-                      borderRadius: '1rem',
-                      textTransform: 'none',
-                      background: '#ffffff',
-                      color: '#000000',
-                      border: '1px solid #7126B5',
-                      py: '10px',
-                      mb: '10px',
-                      '&:hover': { color: '#ffffff', background: '#631fa1' },
-                    }}
-                    onClick={() => handleEdit(product?.id)}
-                  >
-                    Edit
-                  </Button>
+                  {product?.Transaction?.status === 'ACCEPTED' ? null : (
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      size="large"
+                      disableElevation
+                      sx={{
+                        borderRadius: '1rem',
+                        textTransform: 'none',
+                        background: '#ffffff',
+                        color: '#000000',
+                        border: '1px solid #7126B5',
+                        py: '10px',
+                        mb: '10px',
+                        '&:hover': { color: '#ffffff', background: '#631fa1' },
+                      }}
+                      onClick={() => handleEdit(product?.id)}
+                    >
+                      Edit
+                    </Button>
+                  )}
                   <Button
                     fullWidth
                     variant="contained"
@@ -301,7 +303,9 @@ const ProductItem = ({ product, type }) => {
               )
             ) : (
               <>
-                {product?.User?.id === userActive?.id || userActive === null ? null : (
+                {product?.User?.id === userActive?.id ||
+                userActive === null ||
+                product?.Transaction?.status === 'ACCEPTED' ? null : (
                   <Button
                     onClick={handleOpen}
                     fullWidth

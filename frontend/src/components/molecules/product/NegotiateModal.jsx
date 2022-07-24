@@ -101,7 +101,6 @@ const NegotiateInput = (props) => {
             variant: 'success',
             autoHideDuration: 1000,
           })
-          // location.reload()
           navigate('/')
           // dispatch(productActions.setProductNotifs(response.data.data[0]))
           // dispatch(productActions.setProductNotifs({ notif: response.data.data[0] }))
