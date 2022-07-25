@@ -70,19 +70,19 @@ const OfferCard = (props) => {
                   Penawaran Produk
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: '500', mb: 0.5 }}>
-                  {productData?.name}
+                  {productData ? productData?.name : null}
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: '500', mb: 0.5 }}>
-                  {toRupiah(productData?.price)}
+                  {productData ? toRupiah(productData?.price) : null}
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: '500' }}>
-                  Ditawar {toRupiah(buyerData?.offeredPrice)}
+                  {buyerData ? 'Ditawar' + toRupiah(buyerData?.offeredPrice) : null}
                 </Typography>
               </Stack>
             </Stack>
             <Typography variant="body2" sx={{ color: '#8A8A8A' }}>
               {/* {productData?.createdAt} */}
-              {new Date(productData?.updatedAt).toISOString().substring(0, 10)}
+              {productData ? new Date(productData?.updatedAt).toISOString().substring(0, 10) : null}
             </Typography>
           </Stack>
         </Grid>
