@@ -27,7 +27,7 @@ const ProductCardMini = ({ product, index }) => {
               <Stack direction="row" spacing={2} alignItems="flex-start">
                 <Avatar
                   alt=""
-                  src={image_storage_url}
+                  src={image_storage_url || dummy}
                   sx={{ width: 56, height: 56, borderRadius: '12px' }}
                 />
                 <Stack direction="column">
