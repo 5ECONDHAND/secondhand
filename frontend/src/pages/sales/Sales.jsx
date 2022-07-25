@@ -8,7 +8,7 @@ import { CategoryMenu, OfferCardMini } from '../../components/molecules/sales'
 import empty from '../../assets/images/empty.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { productActions, selectProduct } from '../../redux/slices/productSlice'
-import { useGetProductsSellerQuery, useGetTransactionsQuery } from '../../redux/services/productApi'
+import { useGetProductsSellerQuery } from '../../redux/services/productApi'
 import { selectUser } from '../../redux/slices/userSlice'
 import { useSnackbar } from 'notistack'
 import { isProductMaxed } from '../../utils/functions'
@@ -35,8 +35,6 @@ const Sales = () => {
   const { data: userData } = useGetUserQuery(userActive.accessToken, {
     refetchOnMountOrArgChange: true,
   })
-
-  const { data: transactionData, refetch: refetchTransaction } = useGetTransactionsQuery()
 
   // local functions
   const dataSwitch = (dataCategory) => {

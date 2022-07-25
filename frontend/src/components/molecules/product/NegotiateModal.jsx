@@ -17,8 +17,8 @@ import { validateNegotiateAmount } from '../../../utils/validators'
 import { useSnackbar } from 'notistack'
 import { toRupiah } from '../../../utils/functions'
 import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux'
-import { productActions, selectUser } from '../../../redux/slices'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../../redux/slices'
 import { useNavigate } from 'react-router-dom'
 
 const ModalStyle = {
@@ -73,7 +73,6 @@ const NegotiateInput = (props) => {
   const [values, setValues] = useState({
     amount: 0,
   })
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const { handleClose, productId } = props
   const { enqueueSnackbar } = useSnackbar()
