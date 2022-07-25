@@ -1,15 +1,18 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import Navbar from '../components/molecules/global/Navbar'
+import Navbar from '../components/atoms/global/Navbar'
 import { store } from '../redux/store'
+import { SnackbarWrapper } from '../components/templates'
 
 const MockNavbar = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Navbar />
-      </BrowserRouter>
+      <SnackbarWrapper>
+        <BrowserRouter>
+          <Navbar />
+        </BrowserRouter>
+      </SnackbarWrapper>
     </Provider>
   )
 }
@@ -25,5 +28,4 @@ test('onchange input', () => {
   const inputElement = screen.getByPlaceholderText('Cari di sini ...')
   fireEvent.change(inputElement, { target: { value: 'jam tangan' } })
   expect(inputElement).toBeInTheDocument()
-
 })

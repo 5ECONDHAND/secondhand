@@ -1,13 +1,11 @@
 import React from 'react'
-import { Loader, NavbarRemake } from '../atoms/global/'
-// import { Navbar } from '../molecules/global'
+import { Loader, Navbar } from '../atoms/global/'
 
 const Layout = ({ children }) => {
   return (
     <>
       <Loader />
-      <NavbarRemake />
-      {/* <Navbar /> */}
+      <Navbar />
       <main>{children}</main>
     </>
   )
