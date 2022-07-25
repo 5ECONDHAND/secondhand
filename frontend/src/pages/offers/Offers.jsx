@@ -2,15 +2,11 @@ import { Container, Grid, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { BackButton, ProfileCard } from '../../components/molecules/global'
 import OfferCard from '../../components/molecules/offers/OfferCard'
-import {
-  useGetTransactionByIdQuery,
-  useGetTransactionsQuery,
-} from '../../redux/services/productApi'
+import { useGetTransactionByIdQuery } from '../../redux/services/productApi'
 
 const Offers = () => {
   const { id } = useParams()
   const { data: transactionData } = useGetTransactionByIdQuery({ id })
-  const { data: transactionsData } = useGetTransactionsQuery()
 
   return (
     <>

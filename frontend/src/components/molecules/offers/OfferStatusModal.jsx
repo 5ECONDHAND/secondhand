@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { useState } from 'react'
 import {
   Button,
   FormControl,
@@ -12,7 +12,6 @@ import {
 import { Box } from '@mui/system'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
 import { FiX } from 'react-icons/fi'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'

@@ -1,21 +1,9 @@
-import { useEffect, useState } from 'react'
-import {
-  Avatar,
-  Button,
-  FormControl,
-  FormHelperText,
-  Modal,
-  OutlinedInput,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Avatar, Button, Modal, Paper, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { useSnackbar } from 'notistack'
 import { FiX } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { toRupiah } from '../../../utils/functions'
-// import dummy from '../../../assets/images/dummy-image.jpg'
+import dummy from '../../../assets/images/dummy-image.jpg'
 
 const ModalStyle = {
   position: 'absolute',
@@ -54,7 +42,10 @@ const ProductMiniCard = (props) => {
         >
           <Avatar
             alt=""
-            src={`https://febesh5-dev.herokuapp.com/api/storages/${buyer?.user?.User?.Photos[0]?.storageId}/preview`}
+            src={
+              `https://febesh5-dev.herokuapp.com/api/storages/${buyer?.user?.User?.Photos[0]?.storageId}/preview` ||
+              dummy
+            }
             sx={{ width: 56, height: 56, borderRadius: '12px' }}
           />
           <Stack direction="column">
